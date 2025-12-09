@@ -27,20 +27,7 @@ const locations = [
       sunday: "11:00 AM - 9:00 PM",
     },
     mapUrl: "https://maps.google.com",
-  },
-  {
-    id: 3,
-    name: "Brooklyn Heights",
-    address: "789 Smoke Lane, Brooklyn Heights",
-    city: "Brooklyn, NY 11201",
-    phone: "+1 (718) 555-0300",
-    hours: {
-      weekday: "11:00 AM - 10:00 PM",
-      weekend: "11:00 AM - 11:00 PM",
-      sunday: "12:00 PM - 9:00 PM",
-    },
-    mapUrl: "https://maps.google.com",
-  },
+  }
 ];
 
 const Locations = () => {
@@ -64,7 +51,7 @@ const Locations = () => {
       {/* Locations Grid */}
       <section className="section-padding bg-card">
         <div className="container-luxury px-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
             {locations.map((location) => (
               <div
                 key={location.id}
