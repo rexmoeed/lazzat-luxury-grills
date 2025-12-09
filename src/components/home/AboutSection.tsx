@@ -38,33 +38,7 @@ export const AboutSection = () => {
               </p>
             </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 mt-10 pt-10 border-t border-primary/20">
-              <div className="text-center">
-                <span className="font-serif text-3xl md:text-4xl text-primary block">
-                  11
-                </span>
-                <span className="text-xs font-sans text-muted-foreground uppercase tracking-widest">
-                  Signature Sauces
-                </span>
-              </div>
-              <div className="text-center">
-                <span className="font-serif text-3xl md:text-4xl text-primary block">
-                  100%
-                </span>
-                <span className="text-xs font-sans text-muted-foreground uppercase tracking-widest">
-                  Fresh Daily
-                </span>
-              </div>
-              <div className="text-center">
-                <span className="font-serif text-3xl md:text-4xl text-primary block">
-                  5★
-                </span>
-                <span className="text-xs font-sans text-muted-foreground uppercase tracking-widest">
-                  Rated
-                </span>
-              </div>
-            </div>
+            
           </div>
 
           {/* Images Grid */}
