@@ -65,9 +65,9 @@ const Contact = () => {
                       Visit Us
                     </h4>
                     <p className="font-sans text-sm text-muted-foreground">
-                      123 Grill Street, Downtown District
+                      143 Clarence St Unit #10
                       <br />
-                      New York, NY 10001
+                      Brampton, ON L6W 1T2, Canada
                     </p>
                   </div>
                 </div>
