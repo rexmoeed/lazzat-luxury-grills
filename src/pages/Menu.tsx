@@ -59,7 +59,8 @@ interface MenuItem {
   id: number;
   name: string;
   description: string;
-  price: number;
+  // price intentionally kept in data but NOT shown or used in UI
+  price?: number;
   image: string;
   category: string;
   subCategory?: string;
@@ -80,14 +81,21 @@ const categories = [
   "Biryani",
 ];
 
-/* 🔥 UPDATED SORT OPTIONS (Option A at top) */
+/* 🔥 REFINED SORT / FILTER OPTIONS
+   Removed: Most Popular, New Arrivals, Price (both UI and logic)
+   Kept: explicit food-type quick filters + spice sorting
+*/
 const sortOptions = [
-  // Food type filters
+  { value: "none", label: "Default" },
+
+  // Grill & Skewers quick filters
   { value: "chicken", label: "Chicken" },
   { value: "lamb", label: "Lamb" },
   { value: "salmon", label: "Salmon" },
   { value: "seekh", label: "Seekh" },
+  { value: "biryani", label: "Biryani" },
 
+  // Desserts
   { value: "fruit-entremet", label: "Fruit Entremet" },
   { value: "cheesecakes", label: "Cheesecakes" },
   { value: "tiramisu", label: "Tiramisu" },
@@ -96,21 +104,14 @@ const sortOptions = [
   { value: "cakes", label: "Cakes" },
   { value: "tres-leches", label: "Tres Leches" },
 
+  // Drinks
   { value: "shakes", label: "Shakes" },
   { value: "juices", label: "Juices" },
 
-  // Divider
-  { value: "divider", label: "──────────" },
-
-  // Existing sorting
-  { value: "popular", label: "Most Popular" },
-  { value: "new", label: "New Arrivals" },
+  // Spice sorts
   { value: "spice-low", label: "Spice: Low to High" },
   { value: "spice-high", label: "Spice: High to Low" },
-  { value: "price-low", label: "Price: Low to High" },
-  { value: "price-high", label: "Price: High to Low" },
 ];
-
 
 /* Sauces (from PDF) */
 const sauces = [
@@ -124,9 +125,9 @@ const sauces = [
   { name: "BBQ sauce", level: 8, description: "Tomato Ketchup, Brown Sugar, Soya Sauce, Hot Sauce, Garlic Powder" },
 ];
 
-/* Build full menu (only new items from your Word doc + sauces) */
+/* Build full menu (data kept intact, UI will not show price) */
 const menuItems: MenuItem[] = [
-  // Grills & Skewers (from Word doc)
+  // Grills & Skewers
   {
     id: 1,
     name: "Chicken Skewers",
@@ -318,10 +319,13 @@ const menuItems: MenuItem[] = [
   { id: 101, name: "Fresh Mint Lemonade", description: "Refreshing lemonade with fresh mint leaves and a touch of honey.", price: 4.99, image: imgJuiceMintLemonade, category: "Shakes & Juices", subCategory: "Juices", heatLevel: 0, saucePairings: [], customizations: ["Less Sweet", "Extra Mint", "Sparkling"] },
 ];
 
+/* Utility: slugify strings for reliable matching between sort values and item subCategory/name */
+const slugify = (s?: string) => (s || "").toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+
 /* Component */
 const MenuPage: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [sortBy, setSortBy] = useState<string>("popular");
+  const [sortBy, setSortBy] = useState<string>("none");
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
 
@@ -329,20 +333,24 @@ const MenuPage: React.FC = () => {
 
   const filteredSauces = useMemo(() => {
     switch (sauceFilter) {
-      case "low": return sauces.filter(s => s.level <= 3);
-      case "mid": return sauces.filter(s => s.level >= 4 && s.level <= 6);
-      case "high": return sauces.filter(s => s.level >= 7);
-      default: return sauces;
+      case "low":
+        return sauces.filter((s) => s.level <= 3);
+      case "mid":
+        return sauces.filter((s) => s.level >= 4 && s.level <= 6);
+      case "high":
+        return sauces.filter((s) => s.level >= 7);
+      default:
+        return sauces;
     }
   }, [sauceFilter]);
 
-  /* 🔥 FOOD TYPE MATCH LOGIC */
+  /* 🔥 FOOD TYPE MATCH LOGIC (slug-safe) */
   const matchesFoodType = (item: MenuItem, type: string) => {
-    const t = type.toLowerCase();
+    const t = slugify(type);
     return (
-      item.subCategory?.toLowerCase() === t ||
-      item.category.toLowerCase() === t ||
-      item.name.toLowerCase().includes(t)
+      slugify(item.subCategory) === t ||
+      slugify(item.category) === t ||
+      slugify(item.name).includes(t)
     );
   };
 
@@ -352,43 +360,44 @@ const MenuPage: React.FC = () => {
 
     let items = menuItems.slice();
 
-    // category filtering (unchanged)
+    // category filtering
     if (activeCategory !== "All") {
       items = items.filter(
-        (item) =>
-          item.category === activeCategory ||
-          item.subCategory === activeCategory
+        (item) => item.category === activeCategory || item.subCategory === activeCategory
       );
     }
 
-    // 🔥 EXCLUSIVE FOOD TYPE FILTERING
+    // food-type quick filters (if selected)
     const foodTypes = [
-      "chicken", "lamb", "salmon", "seekh",
-      "fruit-entremet", "cheesecakes", "tiramisu",
-      "brownies", "cinnamon-rolls", "cakes", "tres-leches",
-      "shakes", "juices"
+      "chicken",
+      "lamb",
+      "salmon",
+      "seekh",
+      "biryani",
+      "fruit-entremet",
+      "cheesecakes",
+      "tiramisu",
+      "brownies",
+      "cinnamon-rolls",
+      "cakes",
+      "tres-leches",
+      "shakes",
+      "juices",
     ];
 
     if (foodTypes.includes(sortBy)) {
       return items.filter((item) => matchesFoodType(item, sortBy));
     }
 
-    // 🔥 normal sorting below untouched
+    // spice sorts
     switch (sortBy) {
-      case "new":
-        return items.sort((a, b) => (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0));
       case "spice-low":
         return items.sort((a, b) => a.heatLevel - b.heatLevel);
       case "spice-high":
         return items.sort((a, b) => b.heatLevel - a.heatLevel);
-      case "price-low":
-        return items.sort((a, b) => a.price - b.price);
-      case "price-high":
-        return items.sort((a, b) => b.price - a.price);
       default:
-        return items.sort(
-          (a, b) => (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0)
-        );
+        // default ordering: keep original order (or you can keep isPopular/new badges visible)
+        return items;
     }
   }, [activeCategory, sortBy]);
 
@@ -565,7 +574,7 @@ const MenuPage: React.FC = () => {
                     <div className="p-6">
                       <div className="flex items-start justify-between gap-4 mb-2">
                         <h3 className="font-serif text-xl text-foreground group-hover:text-primary transition-colors duration-300">{item.name}</h3>
-                        <span className="font-serif text-xl text-primary">${item.price.toFixed(2)}</span>
+                        {/* PRICE REMOVED FROM CARD */}
                       </div>
                       <p className="text-sm font-sans text-muted-foreground line-clamp-2">{item.description}</p>
                       <div className="mt-4 text-xs font-sans text-primary uppercase tracking-wider">{item.category}{item.subCategory ? ` • ${item.subCategory}` : ""}</div>
@@ -612,7 +621,8 @@ const MenuPage: React.FC = () => {
                   </div>
 
                   <h2 className="font-serif text-3xl text-foreground mb-2">{selectedItem.name}</h2>
-                  <p className="font-serif text-2xl text-primary mb-6">${selectedItem.price.toFixed(2)}</p>
+
+                  {/* PRICE REMOVED FROM MODAL */}
 
                   <p className="font-sans text-muted-foreground mb-8 leading-relaxed">{selectedItem.description}</p>
 
@@ -650,4 +660,3 @@ const MenuPage: React.FC = () => {
 };
 
 export default MenuPage;
-
