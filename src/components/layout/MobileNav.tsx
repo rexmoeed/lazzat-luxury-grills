@@ -18,22 +18,19 @@ export const MobileNav = () => {
         {navItems.map((item) => {
           const isActive = location.pathname === item.href;
           const Icon = item.icon;
-          
+
           return (
             <Link
               key={item.href}
               to={item.href}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
-                "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors duration-300",
-                isActive ? "text-primary" : "text-muted-foreground"
+                "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors duration-300 text-primary"
               )}
             >
               <Icon
                 size={20}
-                className={cn(
-                  "transition-all duration-300",
-                  isActive && "drop-shadow-[0_0_8px_hsl(43,56%,52%)]"
-                )}
+                className="transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)]"
               />
               <span className="text-[10px] font-sans tracking-wider uppercase">
                 {item.label}
