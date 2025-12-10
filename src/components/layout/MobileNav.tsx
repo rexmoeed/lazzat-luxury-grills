@@ -24,15 +24,18 @@ export const MobileNav = () => {
               key={item.href}
               to={item.href}
               aria-current={isActive ? "page" : undefined}
-              className={cn(
-                "flex flex-col items-center justify-center gap-1 w-full h-full transition-colors duration-300 text-primary"
-              )}
+              className="flex flex-col items-center justify-center gap-1 w-full h-full transition-colors duration-300"
             >
               <Icon
                 size={20}
-                className="transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)]"
+                className="transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)] text-primary"
               />
-              <span className="text-[10px] font-sans tracking-wider uppercase">
+              <span
+                className={cn(
+                  "text-[10px] font-sans tracking-wider uppercase transition-colors duration-300",
+                  isActive ? "text-primary" : "text-white"
+                )}
+              >
                 {item.label}
               </span>
             </Link>
