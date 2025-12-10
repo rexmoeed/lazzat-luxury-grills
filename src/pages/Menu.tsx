@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Flame, X, Filter, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/* IMAGE IMPORTS (place matching .jpeg files into src/assets/) */
+/* IMAGE IMPORTS */
 import heroGrill from "@/assets/hero-grill.jpeg";
 import imgChickenSkewers from "@/assets/chicken-skewers.jpeg";
 import imgLambSkewers from "@/assets/lamb-skewers.jpeg";
@@ -81,7 +81,7 @@ const categories = [
   "Biryani",
 ];
 
-/* 🔥 REFINED SORT / FILTER OPTIONS
+/*  REFINED SORT / FILTER OPTIONS
    Removed: Most Popular, New Arrivals, Price (both UI and logic)
    Kept: explicit food-type quick filters + spice sorting
 */
@@ -344,7 +344,7 @@ const MenuPage: React.FC = () => {
     }
   }, [sauceFilter]);
 
-  /* 🔥 FOOD TYPE MATCH LOGIC (slug-safe) */
+  /*  FOOD TYPE MATCH LOGIC (slug-safe) */
   const matchesFoodType = (item: MenuItem, type: string) => {
     const t = slugify(type);
     return (
@@ -354,7 +354,7 @@ const MenuPage: React.FC = () => {
     );
   };
 
-  /* 🔥 UPDATED filteredItems LOGIC */
+  /*  UPDATED filteredItems LOGIC */
   const filteredItems = useMemo(() => {
     if (activeCategory === "Sauces") return [];
 
