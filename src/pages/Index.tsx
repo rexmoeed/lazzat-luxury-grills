@@ -1,7 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { AboutSection } from "@/components/home/AboutSection";
-import { SignatureFlavors } from "@/components/home/SignatureFlavors";
+//import SignatureFlavors from "@/components/shared/SignatureFlavors";
 import { FeaturedItems } from "@/components/home/FeaturedItems";
 import { AmbienceGallery } from "@/components/home/AmbienceGallery";
 import { HealthyPromise } from "@/components/home/HealthyPromise";
@@ -13,7 +13,7 @@ const Index = () => {
     <Layout>
       <HeroSlider />
       <AboutSection />
-      <SignatureFlavors />
+      
       <FeaturedItems />
       <AmbienceGallery />
       <HealthyPromise />

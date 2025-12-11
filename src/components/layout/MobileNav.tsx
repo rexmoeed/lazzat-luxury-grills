@@ -1,11 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
-import { Home, UtensilsCrossed, ShoppingBag, MapPin } from "lucide-react";
+import { Home, UtensilsCrossed, Flame, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/", icon: Home, label: "Home" },
   { href: "/menu", icon: UtensilsCrossed, label: "Menu" },
-  { href: "/order", icon: ShoppingBag, label: "Order" },
+  { href: "/flavours", icon: Flame, label: "Flavours" },
   { href: "/locations", icon: MapPin, label: "Locations" },
 ];
 
@@ -30,6 +30,7 @@ export const MobileNav = () => {
                 size={20}
                 className="transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)] text-primary"
               />
+
               <span
                 className={cn(
                   "text-[10px] font-sans tracking-wider uppercase transition-colors duration-300",
