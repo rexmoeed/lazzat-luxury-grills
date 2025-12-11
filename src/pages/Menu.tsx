@@ -499,49 +499,67 @@ const MenuPage: React.FC = () => {
       <section className="section-padding bg-background">
         <div className="container-luxury px-4">
           {activeCategory === "Sauces" ? (
-            /* Sauces grid with spice filter */
-            <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="font-serif text-3xl text-foreground">Signature <span className="text-primary">Sauces</span></h2>
-                  <p className="text-sm text-muted-foreground">Filter sauces by spice level.</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <select
-                    value={sauceFilter}
-                    onChange={(e) => setSauceFilter(e.target.value as any)}
-                    className="bg-secondary text-foreground text-sm px-3 py-2 rounded border border-primary/30"
-                  >
-                    <option value="all">All Levels</option>
-                    <option value="low">Level 1–3</option>
-                    <option value="mid">Level 4–6</option>
-                    <option value="high">Level 7+</option>
-                  </select>
-                </div>
-              </div>
+  /* Sauces grid with spice filter */
+  <div>
+    <div className="flex items-center justify-between mb-6">
+      <div>
+        <h2 className="font-serif text-3xl text-foreground">
+          Signature <span className="text-primary">Sauces</span>
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Filter sauces by spice level.
+        </p>
+      </div>
+      <div className="flex items-center gap-2">
+        <select
+          value={sauceFilter}
+          onChange={(e) => setSauceFilter(e.target.value as any)}
+          className="bg-secondary text-foreground text-sm px-3 py-2 rounded border border-primary/30"
+        >
+          <option value="all">All Levels</option>
+          <option value="low">Level 1–3</option>
+          <option value="mid">Level 4–6</option>
+          <option value="high">Level 7+</option>
+        </select>
+      </div>
+    </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {filteredSauces.map((sauce, i) => (
-                  <div key={sauce.name} className="card-luxury p-4 md:p-6 group">
-                    <div className="flex items-center gap-2 mb-3">
-                      {Array.from({ length: Math.min(sauce.level, 5) }).map((_, idx) => (
-                        <Flame key={idx} size={14} className={cn(
-                          sauce.level <= 3 ? "text-primary" : sauce.level <= 6 ? "text-orange-500" : "text-red-500",
-                          "group-hover:animate-pulse"
-                        )} />
-                      ))}
-                      {sauce.level > 5 && <span className="text-xs text-muted-foreground ml-1">+{sauce.level - 5}</span>}
-                    </div>
-                    <h3 className="font-serif text-lg mb-1 group-hover:text-primary transition-colors duration-300">{sauce.name}</h3>
-                    <p className="text-xs text-muted-foreground line-clamp-4">{sauce.description}</p>
-                    <div className="mt-4 flex items-center justify-between">
-                      <span className={cn("text-xs font-sans uppercase tracking-widest", sauce.level <= 3 ? "text-primary" : sauce.level <= 6 ? "text-orange-500" : "text-red-500")}>Level {sauce.level}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ) : (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      {filteredSauces.map((sauce) => (
+        <div key={sauce.name} className="card-luxury p-4 md:p-6 group flex flex-col justify-between">
+          <h3 className="font-serif text-lg mb-2 group-hover:text-primary transition-colors duration-300">
+            {sauce.name}
+          </h3>
+          <p className="text-xs text-muted-foreground line-clamp-4 mb-4">
+            {sauce.description}
+          </p>
+          {/* Flames below description */}
+          <div className="flex items-center gap-1 mt-auto">
+            {Array.from({ length: Math.min(sauce.level, 5) }).map((_, idx) => (
+              <Flame
+                key={idx}
+                size={14}
+                className={cn(
+                  sauce.level <= 3
+                    ? "text-primary"
+                    : sauce.level <= 6
+                    ? "text-orange-500"
+                    : "text-red-500",
+                  "group-hover:animate-pulse"
+                )}
+              />
+            ))}
+            {sauce.level > 5 && (
+              <span className="text-xs text-muted-foreground ml-1">
+                +{sauce.level - 5}
+              </span>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+) : (
             /* Regular menu grid */
             <>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
