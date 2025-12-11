@@ -266,3 +266,10 @@
     padding: 14px 0 !important;
   }
 }
+/* Prevent background scroll when Drawer is open */
+html.vaul-open,
+body.vaul-open {
+  overflow: hidden !important;
+  touch-action: none;
+}
+
