@@ -51,6 +51,29 @@ const sortOptions = [
   { value: "spice-high", label: "Spice: High to Low" },
 ];
 
+/* --- NEW: multi-select filter definitions --- */
+/* quickFilters are protein / type shortcuts (map to existing quick sorts) */
+/* dietaryFilters: these ideally should be flags on your menuItems (vegan/vegetarian/gluten-free) — currently we use heuristics */
+/* spiceFilter options are handled separately via sauce heat or item.heatLevel */
+const quickFilters = [
+  { id: "chicken", label: "Chicken" },
+  { id: "lamb", label: "Lamb" },
+  { id: "salmon", label: "Salmon" },
+  { id: "seekh", label: "Seekh" },
+  { id: "biryani", label: "Biryani" },
+];
+
+const dietaryFilters = [
+  { id: "vegan", label: "Vegan" },
+  { id: "vegetarian", label: "Vegetarian" },
+  { id: "contains-nuts", label: "Contains Nuts" },
+  { id: "gluten-free", label: "Gluten-free" },
+];
+
+const miscFilters = [
+  { id: "spicy", label: "Spicy" }, // heuristic: heatLevel >= 4
+];
+
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("none");
@@ -60,6 +83,23 @@ export default function MenuPage() {
   const [sauceFilter, setSauceFilter] = useState<
     "all" | "low" | "mid" | "high"
   >("all");
+
+  /* Drawer open */
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  /* selected multi-filters (OR semantics) */
+  const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
+
+  const toggleFilter = (id: string) => {
+    setSelectedFilters((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const clearFilters = () => setSelectedFilters(new Set());
 
   /* FILTER SAUCES */
   const filteredSauces = useMemo(() => {
@@ -85,11 +125,46 @@ export default function MenuPage() {
     );
   };
 
-  /* FILTER MENU ITEMS */
+  /* Heuristics for dietary filters.
+     IMPORTANT: These are heuristics because your menu data doesn't currently include explicit `diet` fields.
+     - Ideally: add { diet: ["vegan","vegetarian","gluten-free"] } to menu item objects and replace heuristics below.
+  */
+  const heuristicsMatchDiet = (item: MenuItem, dietId: string) => {
+    const name = item.name.toLowerCase();
+    const cat = (item.category || "").toLowerCase();
+    const sub = (item.subCategory || "").toLowerCase();
+
+    if (dietId === "vegan") {
+      // heuristic: desserts that are fruit-based OR items with "coconut", "mango" etc. Not perfect.
+      return (
+        item.heatLevel === 0 &&
+        (cat.includes("dessert") || /coconut|mango|fruit|vegan/.test(name + sub + cat))
+      );
+    }
+    if (dietId === "vegetarian") {
+      return (
+        item.heatLevel === 0 ||
+        /cheese|cheesecake|paneer|vegetarian|veggie/.test(name + sub + cat)
+      );
+    }
+    if (dietId === "contains-nuts") {
+      return /pistachio|almond|nut|biscoff|pecan/.test(name + sub + cat);
+    }
+    if (dietId === "gluten-free") {
+      // heuristic: biryani and shakes likely gluten-free; desserts rarely
+      return /biryani|shake|parfait|panna cotta|entremet|tres leches/.test(name + sub + cat);
+    }
+    return false;
+  };
+
+  /* FILTER MENU ITEMS
+     We implement OR semantics: if no selectedFilters -> behave like earlier
+     If filters selected -> include an item if ANY selected filter matches it (quickFilters/diet/misc)
+  */
   const filteredItems = useMemo(() => {
     let items = [...menuItemsFlat];
 
-    // category filter
+    // category filter (preserve your existing behavior)
     if (activeCategory !== "All" && activeCategory !== "Sauces") {
       items = items.filter(
         (item) =>
@@ -98,7 +173,38 @@ export default function MenuPage() {
       );
     }
 
-    // food type quick sort
+    // If user used the drawer multi-select filters -> apply OR semantics
+    const selected = Array.from(selectedFilters);
+
+    if (selected.length > 0) {
+      items = items.filter((item) => {
+        // quick filters (protein/type)
+        const quickMatch = selected.some((f) => quickFilters.some(q => q.id === f && matchesFoodType(item, f)));
+
+        // dietary heuristics
+        const dietMatch = selected.some((f) => dietaryFilters.some(d => d.id === f && heuristicsMatchDiet(item, f)));
+
+        // misc: spicy
+        const miscMatch = selected.some((f) => {
+          if (f === "spicy") return item.heatLevel >= 4;
+          return false;
+        });
+
+        return quickMatch || dietMatch || miscMatch;
+      });
+
+      // still allow sortBy spice sorts if selected separately (keeps previous spice-high/spice-low)
+      if (sortBy === "spice-low") {
+        items = items.sort((a, b) => a.heatLevel - b.heatLevel);
+      }
+      if (sortBy === "spice-high") {
+        items = items.sort((a, b) => b.heatLevel - a.heatLevel);
+      }
+
+      return items;
+    }
+
+    // If no multi-filters selected, preserve older sortBy behavior:
     const quickTypes = [
       "chicken",
       "lamb",
@@ -120,7 +226,6 @@ export default function MenuPage() {
       return items.filter((i) => matchesFoodType(i, sortBy));
     }
 
-    // spice sorts
     if (sortBy === "spice-low") {
       return items.sort((a, b) => a.heatLevel - b.heatLevel);
     }
@@ -129,7 +234,187 @@ export default function MenuPage() {
     }
 
     return items;
-  }, [activeCategory, sortBy]);
+  }, [activeCategory, sortBy, selectedFilters]);
+
+  /* --- Right-side glass drawer component (embedded) --- */
+const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className={cn(
+          "fixed inset-0 z-40 bg-black/40 backdrop-blur-xl transition-opacity",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+      />
+
+      {/* PANEL CONTAINER */}
+      <div
+        className={cn(
+          "fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 md:p-8 transition-all",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        aria-modal="true"
+        role="dialog"
+      >
+        {/* PANEL */}
+        <div
+          className={cn(
+            "w-full",
+            "md:max-w-2xl md:rounded-2xl md:border md:border-primary/20 md:bg-background/70 md:backdrop-blur-2xl md:shadow-2xl",
+            "bg-background h-full md:h-auto",
+            "transform transition-transform duration-300",
+            open
+              ? "md:scale-100 md:translate-y-0"
+              : "md:scale-90 md:translate-y-4"
+          )}
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 border-b border-primary/10">
+            <div>
+              <h3 className="font-serif text-lg">Filters & Sort</h3>
+              <p className="text-xs text-muted-foreground">
+                Select multiple — results are combined (OR)
+              </p>
+            </div>
+
+            <button
+              onClick={onClose}
+              className="p-2 rounded-md hover:bg-background/80"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          {/* CONTENT */}
+          <div className="overflow-y-auto max-h-[75vh] md:max-h-[60vh] px-4 py-4 space-y-6">
+
+            {/* QUICK FILTERS */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Quick Filters</h4>
+              <div className="flex flex-wrap gap-2">
+                {quickFilters.map((q) => {
+                  const active = selectedFilters.has(q.id);
+                  return (
+                    <button
+                      key={q.id}
+                      onClick={() => toggleFilter(q.id)}
+                      className={cn(
+                        "px-3 py-1.5 rounded-full text-sm transition",
+                        active
+                          ? "bg-primary text-primary-foreground shadow"
+                          : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+                      )}
+                    >
+                      {q.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* DIETARY */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Dietary</h4>
+              <div className="flex flex-col gap-2">
+                {dietaryFilters.map((d) => {
+                  const checked = selectedFilters.has(d.id);
+                  return (
+                    <label key={d.id} className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleFilter(d.id)}
+                        className="h-4 w-4 rounded border"
+                      />
+                      <span className="text-sm">{d.label}</span>
+                    </label>
+                  );
+                })}
+
+                <p className="text-xs text-muted-foreground mt-1">
+                  Dietary filters use heuristics until you add exact diet flags.
+                </p>
+              </div>
+            </div>
+
+            {/* MISC */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Other</h4>
+              <div className="flex flex-col gap-2">
+                {miscFilters.map((m) => {
+                  const checked = selectedFilters.has(m.id);
+                  return (
+                    <label key={m.id} className="flex items-center gap-3">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={() => toggleFilter(m.id)}
+                        className="h-4 w-4 rounded border"
+                      />
+                      <span className="text-sm">{m.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* SORT */}
+            <div>
+              <h4 className="text-sm font-medium mb-2">Sort</h4>
+              <div className="flex flex-wrap gap-2">
+                {sortOptions.map((s) => (
+                  <button
+                    key={s.value}
+                    onClick={() => setSortBy(s.value)}
+                    className={cn(
+                      "px-3 py-1.5 rounded-full text-sm transition",
+                      sortBy === s.value
+                        ? "bg-primary text-primary-foreground shadow"
+                        : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+                    )}
+                  >
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* FOOTER */}
+          <div className="px-4 py-3 border-t border-primary/10 flex items-center gap-3">
+            <button
+              onClick={onClose}
+              className="flex-1 px-4 py-2 rounded bg-secondary text-sm"
+            >
+              Close
+            </button>
+
+            <button
+              onClick={() => {
+                clearFilters();
+                setSortBy("none");
+              }}
+              className="px-4 py-2 rounded border border-primary/20 text-sm"
+            >
+              Reset
+            </button>
+
+            <button
+              onClick={onClose}
+              className="px-4 py-2 rounded btn-gold text-sm"
+            >
+              Apply
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
 
   return (
     <Layout>
@@ -167,17 +452,13 @@ export default function MenuPage() {
               />
             </button>
 
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-secondary text-sm px-3 py-2 rounded border border-primary/30"
+            {/* OPEN DRAWER INSTEAD OF SELECT */}
+            <button
+              onClick={() => setDrawerOpen(true)}
+              className="bg-secondary text-sm px-3 py-2 rounded border border-primary/30 flex items-center gap-2"
             >
-              {sortOptions.map((s) => (
-                <option key={s.value} value={s.value}>
-                  {s.label}
-                </option>
-              ))}
-            </select>
+              Sort / Filters
+            </button>
           </div>
 
           {/* Category Filters */}
@@ -188,37 +469,35 @@ export default function MenuPage() {
             )}
           >
             <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
-              <div className="flex flex-wrap gap-2 md:gap-3">
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setActiveCategory(category)}
-                    className={cn(
-                      "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all",
-                      activeCategory === category
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-muted-foreground hover:bg-primary/20"
-                    )}
-                  >
-                    {category}
-                  </button>
-                ))}
+              <div className="overflow-x-auto w-full md:w-auto">
+                {/* Make category tabs horizontally scrollable on small screens */}
+                <div className="flex gap-2 md:gap-3 px-2">
+                  {categories.map((category) => (
+                    <button
+                      key={category}
+                      onClick={() => setActiveCategory(category)}
+                      className={cn(
+                        "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all whitespace-nowrap",
+                        activeCategory === category
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-secondary text-muted-foreground hover:bg-primary/20"
+                      )}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
               </div>
 
-              {/* Desktop Sort */}
+              {/* Desktop Sort -> open drawer */}
               <div className="hidden md:flex items-center gap-3">
-                <span className="text-sm text-muted-foreground">Sort by:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
+                <span className="text-sm text-muted-foreground">Sort / Filters:</span>
+                <button
+                  onClick={() => setDrawerOpen(true)}
                   className="bg-secondary px-4 py-2 text-sm rounded border border-primary/30"
                 >
-                  {sortOptions.map((s) => (
-                    <option key={s.value} value={s.value}>
-                      {s.label}
-                    </option>
-                  ))}
-                </select>
+                  Open
+                </button>
               </div>
             </div>
           </div>
@@ -491,6 +770,9 @@ export default function MenuPage() {
           </div>
         </div>
       )}
+
+      {/* Filter Drawer - render at root of page so it's above everything */}
+      <FilterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </Layout>
   );
 }
