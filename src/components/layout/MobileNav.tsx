@@ -28,7 +28,10 @@ export const MobileNav = () => {
             >
               <Icon
                 size={20}
-                className="transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)] text-primary"
+                className={cn(
+                  "transition-all duration-300 drop-shadow-[0_0_8px_hsl(43,56%,52%)] text-primary",
+                  isActive && "animate-softpulse"
+                )}
               />
 
               <span
