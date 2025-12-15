@@ -142,6 +142,12 @@ export default function MenuPage() {
      IMPORTANT: These are heuristics because your menu data doesn't currently include explicit `diet` fields.
      - Ideally: add { diet: ["vegan","vegetarian","gluten-free"] } to menu item objects and replace heuristics below.
   */
+const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
+  if (!item.allergens || item.allergens.length === 0) return false;
+  return item.allergens.includes(allergen);
+};
+
+
   const heuristicsMatchDiet = (item: MenuItem, dietId: string) => {
     const name = item.name.toLowerCase();
     const cat = (item.category || "").toLowerCase();
@@ -182,91 +188,99 @@ export default function MenuPage() {
      If filters selected -> include an item if ANY selected filter matches it (quickFilters/diet/misc)
   */
   const filteredItems = useMemo(() => {
-    let items = [...menuItemsFlat];
+  let items = [...menuItemsFlat];
 
-    // category filter (preserve your existing behavior)
-    if (activeCategory !== "All" && activeCategory !== "Sauces") {
-  items = items.filter(
-    (item) => item.category === activeCategory
+  /* CATEGORY FILTER (unchanged) */
+  if (activeCategory !== "All" && activeCategory !== "Sauces") {
+    items = items.filter(
+      (item) => item.category === activeCategory
+    );
+  }
+
+  const selected = Array.from(selectedFilters);
+
+  /* -------------------------------
+     ALLERGEN EXCLUSIONS (HARD RULE)
+     ------------------------------- */
+  const excludedAllergens = selected.filter(
+    (f): f is Allergen =>
+      allergenFilters.some((a) => a.id === f)
   );
-}
 
+  if (excludedAllergens.length > 0) {
+    items = items.filter(
+      (item) =>
+        !excludedAllergens.some((a) =>
+          itemHasAllergen(item, a)
+        )
+    );
+  }
 
-    // If user used the drawer multi-select filters -> apply OR semantics
-    const selected = Array.from(selectedFilters);
+  /* ---------------------------------
+     POSITIVE FILTERS (OR SEMANTICS)
+     --------------------------------- */
+  const positiveFilters = selected.filter(
+    (f) => !excludedAllergens.includes(f as Allergen)
+  );
 
-    if (selected.length > 0) {
-      items = items.filter((item) => {
-        // quick filters (protein/type)
-        const quickMatch = selected.some((f) => quickFilters.some(q => q.id === f && matchesFoodType(item, f)));
+  if (positiveFilters.length > 0) {
+    items = items.filter((item) => {
+      const quickMatch = positiveFilters.some((f) =>
+        quickFilters.some(
+          (q) => q.id === f && matchesFoodType(item, f)
+        )
+      );
 
-        // dietary heuristics
-        const dietMatch = selected.some((f) => dietaryFilters.some(d => d.id === f && heuristicsMatchDiet(item, f)));
+      const dietMatch = positiveFilters.some((f) =>
+        dietaryFilters.some(
+          (d) => d.id === f && heuristicsMatchDiet(item, f)
+        )
+      );
 
-        // misc: spicy
-        const miscMatch = selected.some((f) => {
-          if (f === "spicy") return item.heatLevel >= 4;
-          return false;
-        });
-
-        // allergen exclusion (OR semantics)
-const hasExcludedAllergen = selected.some((f) =>
-  allergenFilters.some(
-    (a) =>
-      a.id === f &&
-      item.allergens &&
-      item.allergens.includes(a.id)
-  )
-);
-
-if (hasExcludedAllergen) return false;
-
-return quickMatch || dietMatch || miscMatch;
-
+      const miscMatch = positiveFilters.some((f) => {
+        if (f === "spicy") return item.heatLevel >= 4;
+        return false;
       });
 
-      // still allow sortBy spice sorts if selected separately (keeps previous spice-high/spice-low)
-      if (sortBy === "spice-low") {
-        items = items.sort((a, b) => a.heatLevel - b.heatLevel);
-      }
-      if (sortBy === "spice-high") {
-        items = items.sort((a, b) => b.heatLevel - a.heatLevel);
-      }
+      return quickMatch || dietMatch || miscMatch;
+    });
+  }
 
-      return items;
-    }
+  /* -------------------------------
+     SORTING (unchanged)
+     ------------------------------- */
+  if (sortBy === "spice-low") {
+    return [...items].sort((a, b) => a.heatLevel - b.heatLevel);
+  }
 
-    // If no multi-filters selected, preserve older sortBy behavior:
-    const quickTypes = [
-      "chicken",
-      "lamb",
-      "salmon",
-      "seekh",
-      "biryani",
-      "fruit-entremet",
-      "cheesecakes",
-      "tiramisu",
-      "brownies",
-      "cinnamon-rolls",
-      "cakes",
-      "tres-leches",
-      "shakes",
-      "juices",
-    ];
+  if (sortBy === "spice-high") {
+    return [...items].sort((a, b) => b.heatLevel - a.heatLevel);
+  }
 
-    if (quickTypes.includes(sortBy)) {
-      return items.filter((i) => matchesFoodType(i, sortBy));
-    }
+  const quickTypes = [
+    "chicken",
+    "lamb",
+    "salmon",
+    "seekh",
+    "biryani",
+    "fruit-entremet",
+    "cheesecakes",
+    "tiramisu",
+    "brownies",
+    "cinnamon-rolls",
+    "cakes",
+    "tres-leches",
+    "shakes",
+    "juices",
+  ];
 
-    if (sortBy === "spice-low") {
-      return items.sort((a, b) => a.heatLevel - b.heatLevel);
-    }
-    if (sortBy === "spice-high") {
-      return items.sort((a, b) => b.heatLevel - a.heatLevel);
-    }
+  if (quickTypes.includes(sortBy)) {
+    return items.filter((i) => matchesFoodType(i, sortBy));
+  }
 
-    return items;
-  }, [activeCategory, sortBy, selectedFilters]);
+  return items;
+}, [activeCategory, sortBy, selectedFilters]);
+
 
   /* --- Right-side glass drawer component (embedded) --- */
 const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
