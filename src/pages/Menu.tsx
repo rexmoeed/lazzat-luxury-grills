@@ -463,24 +463,26 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
             {/* SORT */}
             <div>
-              <h4 className="text-sm font-medium mb-2">Sort</h4>
-              <div className="flex flex-wrap gap-2">
-                {sortOptions.map((s) => (
-                  <button
-                    key={s.value}
-                    onClick={() => setSortBy(s.value)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-full text-sm transition",
-                      sortBy === s.value
-                        ? "bg-primary text-primary-foreground shadow"
-                        : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-                    )}
-                  >
-                    {s.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+  <h4 className="text-sm font-medium mb-2">Sort</h4>
+
+  <div className="flex gap-2 overflow-x-auto whitespace-nowrap pb-2 -mx-4 px-4 scrollbar-hide">
+    {sortOptions.map((s) => (
+      <button
+        key={s.value}
+        onClick={() => setSortBy(s.value)}
+        className={cn(
+          "px-3 py-1.5 rounded-full text-sm transition shrink-0",
+          sortBy === s.value
+            ? "bg-primary text-primary-foreground shadow"
+            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+        )}
+      >
+        {s.label}
+      </button>
+    ))}
+  </div>
+</div>
+
           </div>
 
           {/* FOOTER */}
