@@ -9,7 +9,8 @@ import {
 } from "@/lib/menu-data";
 
 import { sauces } from "@/lib/sauces-data";
-import type { MenuItem } from "@/lib/menu-types";
+import type { MenuItem, Allergen } from "@/lib/menu-types";
+
 
 /* Utility */
 const slugify = (s?: string) =>
@@ -66,9 +67,21 @@ const quickFilters = [
 const dietaryFilters = [
   { id: "vegan", label: "Vegan" },
   { id: "vegetarian", label: "Vegetarian" },
-  { id: "contains-nuts", label: "Contains Nuts" },
   { id: "gluten-free", label: "Gluten-free" },
+  { id: "allergen-free", label: "Allergen-free" },
 ];
+
+const allergenFilters: { id: Allergen; label: string }[] = [
+  { id: "milk", label: "Milk" },
+  { id: "eggs", label: "Eggs" },
+  { id: "gluten", label: "Gluten" },
+  { id: "tree-nuts", label: "Tree Nuts" },
+  { id: "peanuts", label: "Peanuts" },
+  { id: "soy", label: "Soy" },
+  { id: "sesame", label: "Sesame" },
+  { id: "shellfish", label: "Shellfish" },
+];
+
 
 const miscFilters = [
   { id: "spicy", label: "Spicy" }, // heuristic: heatLevel >= 4
@@ -154,8 +167,15 @@ export default function MenuPage() {
       // heuristic: biryani and shakes likely gluten-free; desserts rarely
       return /biryani|shake|parfait|panna cotta|entremet|tres leches/.test(name + sub + cat);
     }
+    if (dietId === "allergen-free") {
+  // true if item has NO allergens or empty allergens array
+  return !item.allergens || item.allergens.length === 0;
+}
     return false;
   };
+
+  
+
 
   /* FILTER MENU ITEMS
      We implement OR semantics: if no selectedFilters -> behave like earlier
@@ -166,12 +186,11 @@ export default function MenuPage() {
 
     // category filter (preserve your existing behavior)
     if (activeCategory !== "All" && activeCategory !== "Sauces") {
-      items = items.filter(
-        (item) =>
-          item.category === activeCategory ||
-          item.subCategory === activeCategory
-      );
-    }
+  items = items.filter(
+    (item) => item.category === activeCategory
+  );
+}
+
 
     // If user used the drawer multi-select filters -> apply OR semantics
     const selected = Array.from(selectedFilters);
@@ -190,7 +209,20 @@ export default function MenuPage() {
           return false;
         });
 
-        return quickMatch || dietMatch || miscMatch;
+        // allergen exclusion (OR semantics)
+const hasExcludedAllergen = selected.some((f) =>
+  allergenFilters.some(
+    (a) =>
+      a.id === f &&
+      item.allergens &&
+      item.allergens.includes(a.id)
+  )
+);
+
+if (hasExcludedAllergen) return false;
+
+return quickMatch || dietMatch || miscMatch;
+
       });
 
       // still allow sortBy spice sorts if selected separately (keeps previous spice-high/spice-low)
@@ -316,29 +348,49 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             {/* DIETARY */}
-            <div>
-              <h4 className="text-sm font-medium mb-2">Dietary</h4>
-              <div className="flex flex-col gap-2">
-                {dietaryFilters.map((d) => {
-                  const checked = selectedFilters.has(d.id);
-                  return (
-                    <label key={d.id} className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleFilter(d.id)}
-                        className="h-4 w-4 rounded border"
-                      />
-                      <span className="text-sm">{d.label}</span>
-                    </label>
-                  );
-                })}
+           <div>
+  <h4 className="text-sm font-medium mb-2">Dietary</h4>
+  <div className="flex flex-col gap-2">
+    {dietaryFilters.map((d) => {
+      const checked = selectedFilters.has(d.id);
+      return (
+        <label key={d.id} className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={() => toggleFilter(d.id)}
+            className="h-4 w-4 rounded border"
+          />
+          <span className="text-sm">{d.label}</span>
+        </label>
+      );
+    })}
 
-                <p className="text-xs text-muted-foreground mt-1">
-                  Dietary filters use heuristics until you add exact diet flags.
-                </p>
-              </div>
-            </div>
+    
+  </div>
+</div>
+
+{/* ALLERGEN EXCLUSIONS */}
+<div>
+  <h4 className="text-sm font-medium mb-2">Exclude Allergens</h4>
+  <div className="flex flex-col gap-2">
+    {allergenFilters.map((a) => {
+      const checked = selectedFilters.has(a.id);
+      return (
+        <label key={a.id} className="flex items-center gap-3">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={() => toggleFilter(a.id)}
+            className="h-4 w-4 rounded border"
+          />
+          <span className="text-sm">{a.label}</span>
+        </label>
+      );
+    })}
+  </div>
+</div>
+
 
             {/* MISC */}
             <div>

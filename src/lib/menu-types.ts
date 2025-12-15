@@ -1,4 +1,44 @@
-// src/lib/menu-types.ts
+/** Common food allergens (halal omitted) */
+export type Allergen =
+  | "milk"
+  | "eggs"
+  | "gluten"
+  | "tree-nuts"
+  | "peanuts"
+  | "soy"
+  | "sesame"
+  | "shellfish"
+  | "fish"
+  | "mustard";
+
+/** Dietary preferences / exclusions */
+export type DietaryFlag =
+  | "vegan"
+  | "vegetarian"
+  | "gluten-free"
+  | "dairy-free"
+  | "nut-free";
+
+/** Flavor profile (used for filters & icons) */
+export type FlavorProfile =
+  | "sweet"
+  | "spicy"
+  | "tangy"
+  | "savory"
+  | "salty"
+  | "smoky"
+  | "fruity";
+
+/** Texture / mouth-feel */
+export type TextureProfile =
+  | "creamy"
+  | "crispy"
+  | "juicy"
+  | "soft"
+  | "chewy"
+  | "light";
+
+/* Main menu Item */
 
 export interface MenuItem {
   id: number;
@@ -6,17 +46,44 @@ export interface MenuItem {
   description: string;
   price?: number;
   image: string;
+
+  /** High-level grouping */
   category: string;
   subCategory?: string;
+
+  /** Spice / heat (0 for desserts, shakes, juices) */
   heatLevel: number;
+
+  /** Badges */
   isNew?: boolean;
   isPopular?: boolean;
+
+  /** Pairings & options */
   saucePairings: string[];
   customizations: string[];
+
+  /* Enriched Meta Data */
+
+  /** Allergens contained in this item */
+  allergens?: Allergen[];
+
+  /** Dietary suitability flags */
+  dietary?: DietaryFlag[];
+
+  /** Flavor characteristics */
+  flavors?: FlavorProfile[];
+
+  /** Texture characteristics */
+  textures?: TextureProfile[];
 }
+
+/* Sauce Items */
 
 export interface SauceItem {
   name: string;
   level: number;
   description: string;
+
+  /** Allergens contained in this sauce */
+  allergens?: Allergen[];
 }
