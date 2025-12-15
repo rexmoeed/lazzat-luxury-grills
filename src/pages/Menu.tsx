@@ -11,6 +11,29 @@ import {
 import { sauces } from "@/lib/sauces-data";
 import type { MenuItem, Allergen } from "@/lib/menu-types";
 
+import {
+  Milk,
+  Egg,
+  Wheat,
+  Nut,
+  Fish,
+  Leaf,
+} from "lucide-react";
+
+/* ALLERGEN ICON MAP */
+const allergenIconMap: Partial<Record<
+  Allergen,
+  { icon: any; label: string }
+>> = {
+  milk: { icon: Milk, label: "Milk" },
+  eggs: { icon: Egg, label: "Eggs" },
+  gluten: { icon: Wheat, label: "Gluten" },
+  "tree-nuts": { icon: Nut, label: "Tree Nuts" },
+  peanuts: { icon: Nut, label: "Peanuts" },
+  soy: { icon: Leaf, label: "Soy" },
+  sesame: { icon: Leaf, label: "Sesame" },
+  shellfish: { icon: Fish, label: "Shellfish" },
+};
 
 /* Utility */
 const slugify = (s?: string) =>
@@ -389,23 +412,27 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 <div>
   <h4 className="text-sm font-medium mb-2">Exclude Allergens</h4>
   <div className="flex flex-wrap gap-2">
-  {allergenFilters.map((a) => {
-    const active = selectedFilters.has(a.id);
-    return (
-      <button
-        key={a.id}
-        onClick={() => toggleFilter(a.id)}
-        className={cn(
-          "px-3 py-1.5 rounded-full text-sm transition border",
-          active
-            ? "bg-destructive text-destructive-foreground border-destructive"
-            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-        )}
-      >
-        {a.label}
-      </button>
-    );
-  })}
+ {allergenFilters.map((a) => {
+  const active = selectedFilters.has(a.id);
+  const Icon = allergenIconMap[a.id]?.icon;
+
+  return (
+    <button
+      key={a.id}
+      onClick={() => toggleFilter(a.id)}
+      className={cn(
+        "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition border",
+        active
+          ? "bg-destructive text-destructive-foreground border-destructive"
+          : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+      )}
+    >
+      {Icon && <Icon size={14} />}
+      <span>{a.label}</span>
+    </button>
+  );
+})}
+
 </div>
 </div>
 
@@ -677,30 +704,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                         )}
                       </div>
 
-                      {item.heatLevel > 0 && (
-                        <div className="absolute bottom-4 right-4 flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
-                          {Array.from({
-                            length: Math.min(item.heatLevel, 5),
-                          }).map((_, i) => (
-                            <Flame
-                              key={i}
-                              size={12}
-                              className={
-                                item.heatLevel <= 3
-                                  ? "text-primary"
-                                  : item.heatLevel <= 6
-                                  ? "text-orange-500"
-                                  : "text-red-500"
-                              }
-                            />
-                          ))}
-                          {item.heatLevel > 5 && (
-                            <span className="text-xs text-muted-foreground">
-                              +{item.heatLevel - 5}
-                            </span>
-                          )}
-                        </div>
-                      )}
+                    
                     </div>
 
                     <div className="p-6">
@@ -714,6 +718,61 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                         {item.category}
                         {item.subCategory ? ` • ${item.subCategory}` : ""}
                       </div>
+                      {/* Bottom meta row */}
+<div className="mt-4 flex items-center justify-between gap-3">
+  {/* Heat */}
+  {item.heatLevel > 0 && (
+    <div className="flex items-center gap-1">
+      {Array.from({ length: Math.min(item.heatLevel, 5) }).map((_, i) => (
+        <Flame
+          key={i}
+          size={14}
+          className={
+            item.heatLevel <= 3
+              ? "text-primary"
+              : item.heatLevel <= 6
+              ? "text-orange-500"
+              : "text-red-500"
+          }
+        />
+      ))}
+      {item.heatLevel > 5 && (
+        <span className="text-xs text-muted-foreground ml-1">
+          +{item.heatLevel - 5}
+        </span>
+      )}
+    </div>
+  )}
+  {/* Allergens */}
+{item.allergens && item.allergens.length > 0 && (
+  <div className="flex items-center gap-2">
+    {item.allergens.map((a) => {
+      const Icon = allergenIconMap[a]?.icon;
+      const label = allergenIconMap[a]?.label;
+      if (!Icon) return null;
+
+      return (
+        <div
+          key={a}
+          className="group relative"
+        >
+          <Icon
+            size={14}
+            className="text-muted-foreground group-hover:text-primary transition"
+          />
+
+          {/* Tooltip */}
+          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
+            {label}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+)}
+
+</div>
+
                     </div>
                   </div>
                 ))}
@@ -799,6 +858,33 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                   <p className="text-muted-foreground mb-8 leading-relaxed">
                     {selectedItem.description}
                   </p>
+                  {/* Allergens */}
+{selectedItem.allergens && selectedItem.allergens.length > 0 && (
+  <div className="mb-6">
+    <h4 className="font-serif text-sm mb-2 uppercase tracking-wider">
+      Contains Allergens
+    </h4>
+
+    <div className="flex flex-wrap gap-3">
+      {selectedItem.allergens.map((a) => {
+        const Icon = allergenIconMap[a]?.icon;
+        const label = allergenIconMap[a]?.label;
+        if (!Icon) return null;
+
+        return (
+          <div
+            key={a}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-primary/20 text-xs"
+          >
+            <Icon size={14} />
+            <span>{label}</span>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
 
                   {selectedItem.saucePairings.length > 0 && (
                     <div className="mb-6">
