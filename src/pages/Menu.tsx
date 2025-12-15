@@ -364,67 +364,74 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             {/* DIETARY */}
            <div>
   <h4 className="text-sm font-medium mb-2">Dietary</h4>
-  <div className="flex flex-col gap-2">
-    {dietaryFilters.map((d) => {
-      const checked = selectedFilters.has(d.id);
-      return (
-        <label key={d.id} className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={() => toggleFilter(d.id)}
-            className="h-4 w-4 rounded border"
-          />
-          <span className="text-sm">{d.label}</span>
-        </label>
-      );
-    })}
-
-    
-  </div>
+  <div className="flex flex-wrap gap-2">
+  {dietaryFilters.map((d) => {
+    const active = selectedFilters.has(d.id);
+    return (
+      <button
+        key={d.id}
+        onClick={() => toggleFilter(d.id)}
+        className={cn(
+          "px-3 py-1.5 rounded-full text-sm transition",
+          active
+            ? "bg-primary text-primary-foreground shadow"
+            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+        )}
+      >
+        {d.label}
+      </button>
+    );
+  })}
+</div>
 </div>
 
 {/* ALLERGEN EXCLUSIONS */}
 <div>
   <h4 className="text-sm font-medium mb-2">Exclude Allergens</h4>
-  <div className="flex flex-col gap-2">
-    {allergenFilters.map((a) => {
-      const checked = selectedFilters.has(a.id);
-      return (
-        <label key={a.id} className="flex items-center gap-3">
-          <input
-            type="checkbox"
-            checked={checked}
-            onChange={() => toggleFilter(a.id)}
-            className="h-4 w-4 rounded border"
-          />
-          <span className="text-sm">{a.label}</span>
-        </label>
-      );
-    })}
-  </div>
+  <div className="flex flex-wrap gap-2">
+  {allergenFilters.map((a) => {
+    const active = selectedFilters.has(a.id);
+    return (
+      <button
+        key={a.id}
+        onClick={() => toggleFilter(a.id)}
+        className={cn(
+          "px-3 py-1.5 rounded-full text-sm transition border",
+          active
+            ? "bg-destructive text-destructive-foreground border-destructive"
+            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+        )}
+      >
+        {a.label}
+      </button>
+    );
+  })}
+</div>
 </div>
 
 
             {/* MISC */}
             <div>
               <h4 className="text-sm font-medium mb-2">Other</h4>
-              <div className="flex flex-col gap-2">
-                {miscFilters.map((m) => {
-                  const checked = selectedFilters.has(m.id);
-                  return (
-                    <label key={m.id} className="flex items-center gap-3">
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        onChange={() => toggleFilter(m.id)}
-                        className="h-4 w-4 rounded border"
-                      />
-                      <span className="text-sm">{m.label}</span>
-                    </label>
-                  );
-                })}
-              </div>
+              <div className="flex flex-wrap gap-2">
+  {miscFilters.map((m) => {
+    const active = selectedFilters.has(m.id);
+    return (
+      <button
+        key={m.id}
+        onClick={() => toggleFilter(m.id)}
+        className={cn(
+          "px-3 py-1.5 rounded-full text-sm transition",
+          active
+            ? "bg-orange-500 text-white shadow"
+            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+        )}
+      >
+        {m.label}
+      </button>
+    );
+  })}
+</div>
             </div>
 
             {/* SORT */}
@@ -671,7 +678,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       </div>
 
                       {item.heatLevel > 0 && (
-                        <div className="absolute top-4 right-4 flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
+                        <div className="absolute bottom-4 right-4 flex items-center gap-1 bg-background/80 px-2 py-1 rounded">
                           {Array.from({
                             length: Math.min(item.heatLevel, 5),
                           }).map((_, i) => (
