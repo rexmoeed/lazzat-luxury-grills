@@ -693,6 +693,17 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
       key={sauce.name}
       className="card-luxury p-4 md:p-6 group flex flex-col"
     >
+      {/* Sauce Image */}
+      {sauce.image && (
+        <div className="mb-3 overflow-hidden rounded-md">
+          <img
+            src={sauce.image}
+            alt={sauce.name}
+            className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        </div>
+      )}
+
       <h3 className="font-serif text-lg mb-2 group-hover:text-primary">
         {sauce.name}
       </h3>
@@ -753,6 +764,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
     </div>
   ))}
 </div>
+
 
             </>
           ) : (

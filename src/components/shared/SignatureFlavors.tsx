@@ -2,16 +2,8 @@ import { useState } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const sauces = [
-  { name: "Maple Mustard", level: 1, description: "Mayo, cream, mustard, maple syrup" },
-  { name: "Mushroom sauce", level: 2, description: "Cream, Milk, Mushrooms, Black Pepper, Salt, Chicken Powder" },
-  { name: "Mint sauce", level: 3, description: "Mint, Coriander, Salt, Yogurt, Green Chilli" },
-  { name: "Chipotle sauce", level: 4, description: "Mayo, Chipotle Sauce" },
-  { name: "Sweet and spicy", level: 5, description: "Sriracha Sauce, Sweet Chili Sauce, Tabasco Sauce, Bell Peppers Chopped, Jalapeno and Maple Syrup" },
-  { name: "Spicy tomato sauce", level: 6, description: "Tomato Fresh, Thai Green Chilli, Tabasco Hot Sauce, Onion" },
-  { name: "Jalapeno chipotle sauce", level: 7, description: "Chipotle Sauce, Jalapeno, Fresh Garlic, Sriracha Sauce" },
-  { name: "BBQ sauce", level: 8, description: "Tomato Ketchup, Brown Sugar, Soya Sauce, Hot Sauce, Garlic Powder" },
-];
+/* ✅ USE CENTRAL SAUCE DATA */
+import { sauces } from "@/lib/sauces-data";
 
 const filters = [
   { label: "All", value: "all" },
@@ -60,6 +52,17 @@ const SignatureFlavors = () => {
             className="card-luxury p-4 md:p-6 group cursor-pointer"
             style={{ animationDelay: `${index * 50}ms` }}
           >
+            {/* ✅ IMAGE */}
+            {sauce.image && (
+              <div className="mb-3 overflow-hidden rounded-md">
+                <img
+                  src={sauce.image}
+                  alt={sauce.name}
+                  className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+            )}
+
             <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors duration-300">
               {sauce.name}
             </h3>

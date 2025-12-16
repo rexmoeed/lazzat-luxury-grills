@@ -83,6 +83,7 @@ export interface SauceItem {
   name: string;
   level: number;
   description: string;
+  image?: string;
 
   /** Allergens contained in this sauce */
   allergens?: Allergen[];
