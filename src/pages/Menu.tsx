@@ -115,6 +115,8 @@ export default function MenuPage() {
   const [sortBy, setSortBy] = useState<string>("none");
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
+
 
   const [sauceFilter, setSauceFilter] = useState<
     "all" | "low" | "mid" | "high"
@@ -169,6 +171,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
   if (!item.allergens || item.allergens.length === 0) return false;
   return item.allergens.includes(allergen);
 };
+
 
 
   const heuristicsMatchDiet = (item: MenuItem, dietId: string) => {
@@ -368,6 +371,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                   const active = selectedFilters.has(q.id);
                   return (
                     <button
+                      type="button"
                       key={q.id}
                       onClick={() => toggleFilter(q.id)}
                       className={cn(
@@ -392,6 +396,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
     const active = selectedFilters.has(d.id);
     return (
       <button
+      type="button"
         key={d.id}
         onClick={() => toggleFilter(d.id)}
         className={cn(
@@ -418,6 +423,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
   return (
     <button
+    type="button"
       key={a.id}
       onClick={() => toggleFilter(a.id)}
       className={cn(
@@ -445,6 +451,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
     const active = selectedFilters.has(m.id);
     return (
       <button
+      type="button"
         key={m.id}
         onClick={() => toggleFilter(m.id)}
         className={cn(
