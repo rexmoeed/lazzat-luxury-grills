@@ -166,22 +166,27 @@ const Locations = () => {
                   </div>
                 </div>
 
-                <a
-                  href={getMapsLink(location.address)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-gold w-full flex justify-center gap-2 py-2 mb-3"
-                >
-                  <Navigation className="w-4 h-4" />
-                  Open in {isIOS() ? "Apple Maps" : "Google Maps"}
-                </a>
+                <div className="flex flex-col items-center gap-2 mb-3">
+  {/* Open Maps */}
+  <a
+    href={getMapsLink(location.address)}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="btn-gold inline-flex items-center gap-2 px-6 py-2 w-full max-w-xs justify-center"
+  >
+    <Navigation className="w-4 h-4" />
+    Open in Google Maps
+  </a>
 
-                <button
-                  className="btn-gold w-full md:hidden mb-2"
-                  onClick={() => toggleMap(location.id)}
-                >
-                  {isOpen ? "Hide Map" : "Show Map"}
-                </button>
+  {/* Toggle Map (mobile only) */}
+  <button
+    onClick={() => toggleMap(location.id)}
+    className="btn-gold w-full max-w-xs md:hidden"
+  >
+    {isOpen ? "Hide Map" : "Show Map"}
+  </button>
+</div>
+
 
                 {/* Map – name appears on pin */}
                 <div
