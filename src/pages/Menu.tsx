@@ -50,6 +50,28 @@ const categories = [
   "Shakes & Juices",
   "Biryani",
 ];
+const categoryHeadings: Record<
+  string,
+  { title: string; subtitle?: string }
+> = {
+  "Grills & Skewers": {
+    title: "Grills & Skewers",
+    subtitle: "Flame-grilled perfection, served fresh.",
+  },
+  Desserts: {
+    title: "Desserts",
+    subtitle: "Sweet endings made to indulge.",
+  },
+  "Shakes & Juices": {
+    title: "Shakes & Juices",
+    subtitle: "Chilled, refreshing & handcrafted.",
+  },
+  Biryani: {
+    title: "Biryani",
+    subtitle: "Slow-cooked rice with aromatic spices.",
+  },
+};
+
 
 const sortOptions = [
   { value: "none", label: "Default" },
@@ -141,17 +163,39 @@ export default function MenuPage() {
 
   /* FILTER SAUCES */
   const filteredSauces = useMemo(() => {
-    switch (sauceFilter) {
-      case "low":
-        return sauces.filter((s) => s.level <= 3);
-      case "mid":
-        return sauces.filter((s) => s.level >= 4 && s.level <= 6);
-      case "high":
-        return sauces.filter((s) => s.level >= 7);
-      default:
-        return sauces;
+  let result = sauces;
+
+  // Heat filter
+  if (sauceFilter === "low") {
+    result = result.filter((s) => s.level <= 3);
+  } else if (sauceFilter === "mid") {
+    result = result.filter((s) => s.level >= 4 && s.level <= 6);
+  } else if (sauceFilter === "high") {
+    result = result.filter((s) => s.level >= 7);
+  }
+
+  // Exclude allergens selected in drawer
+  const excludedAllergens = Array.from(selectedFilters).filter(
+    (f): f is Allergen =>
+      allergenFilters.some((a) => a.id === f)
+  );
+
+  if (excludedAllergens.length === 0) {
+    return result;
+  }
+
+  return result.filter((sauce) => {
+    if (!sauce.allergens || sauce.allergens.length === 0) {
+      return true;
     }
-  }, [sauceFilter]);
+
+    return !excludedAllergens.some((a) =>
+      sauce.allergens.includes(a)
+    );
+  });
+}, [sauceFilter, selectedFilters]);
+
+
 
   /* MATCH FOOD TYPES */
   const matchesFoodType = (item: MenuItem, type: string) => {
@@ -644,46 +688,88 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                {filteredSauces.map((sauce) => (
-                  <div
-                    key={sauce.name}
-                    className="card-luxury p-4 md:p-6 group flex flex-col justify-between"
-                  >
-                    <h3 className="font-serif text-lg mb-2 group-hover:text-primary">
-                      {sauce.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground mb-4 line-clamp-4">
-                      {sauce.description}
-                    </p>
+  {filteredSauces.map((sauce) => (
+    <div
+      key={sauce.name}
+      className="card-luxury p-4 md:p-6 group flex flex-col"
+    >
+      <h3 className="font-serif text-lg mb-2 group-hover:text-primary">
+        {sauce.name}
+      </h3>
 
-                    <div className="flex items-center gap-1 mt-auto">
-                      {Array.from({
-                        length: Math.min(sauce.level, 5),
-                      }).map((_, i) => (
-                        <Flame
-                          key={i}
-                          size={14}
-                          className={
-                            sauce.level <= 3
-                              ? "text-primary"
-                              : sauce.level <= 6
-                              ? "text-orange-500"
-                              : "text-red-500"
-                          }
-                        />
-                      ))}
-                      {sauce.level > 5 && (
-                        <span className="text-xs ml-1 text-muted-foreground">
-                          +{sauce.level - 5}
-                        </span>
-                      )}
-                    </div>
+      <p className="text-xs text-muted-foreground mb-4 line-clamp-4">
+        {sauce.description}
+      </p>
+
+      {/* Bottom row: Allergens (LEFT) + Heat (RIGHT) */}
+      <div className="mt-auto flex items-center justify-between min-h-[20px]">
+        {/* Allergens */}
+        {sauce.allergens && sauce.allergens.length > 0 ? (
+          <div className="flex items-center gap-2">
+            {sauce.allergens.map((a) => {
+              const Icon = allergenIconMap[a]?.icon;
+              const label = allergenIconMap[a]?.label;
+              if (!Icon) return null;
+
+              return (
+                <div key={a} className="group relative">
+                  <Icon
+                    size={14}
+                    className="text-muted-foreground group-hover:text-primary transition"
+                  />
+                  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
+                    {label}
                   </div>
-                ))}
-              </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <span className="w-6" />
+        )}
+
+        {/* Heat */}
+        <div className="flex items-center gap-1">
+          {Array.from({ length: Math.min(sauce.level, 5) }).map((_, i) => (
+            <Flame
+              key={i}
+              size={14}
+              className={
+                sauce.level <= 3
+                  ? "text-primary"
+                  : sauce.level <= 6
+                  ? "text-orange-500"
+                  : "text-red-500"
+              }
+            />
+          ))}
+          {sauce.level > 5 && (
+            <span className="text-xs ml-1 text-muted-foreground">
+              +{sauce.level - 5}
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
             </>
           ) : (
             <>
+              {/* CATEGORY HEADING (except Sauces & All) */}
+  {activeCategory !== "All" &&
+    activeCategory !== "Sauces" &&
+    categoryHeadings[activeCategory] && (
+      <div className="mb-6">
+        <h2 className="font-serif text-3xl">
+          {categoryHeadings[activeCategory].title}
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          {categoryHeadings[activeCategory].subtitle}
+        </p>
+      </div>
+    )}
               {/* MAIN MENU GRID */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredItems.map((item) => (
