@@ -5,9 +5,9 @@ export const biryaniItems: Record<string, MenuItem[]> = {
   Classic: [
     {
       id: 20,
-      name: "Royal Lamb Biryani",
+      name: "Biryani",
       description:
-        "Aromatic basmati rice layered with slow-cooked lamb, saffron and caramelized onions.",
+        "Aromatic basmati rice layered with slow-cooked meat, saffron and caramelized onions.",
       price: 19.99,
       image: imgBiryaniClassic,
       category: "Biryani",
