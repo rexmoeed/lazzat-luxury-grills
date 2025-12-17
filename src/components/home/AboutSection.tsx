@@ -39,26 +39,20 @@ export const AboutSection = () => {
           </div>
 
           {/* Images Grid */}
-          <div className="order-1 lg:order-2 grid grid-cols-1 gap-4">
-            {/* Main Image */}
-            <div className="overflow-hidden rounded-lg gold-border">
-              <img
-                src={images[0].src}
-                alt={images[0].alt}
-                className="w-full h-64 md:h-96 object-cover hover-zoom"
-                loading="lazy"
-              />
-            </div>
-
-            {/* Secondary Image */}
-            <div className="overflow-hidden rounded-lg gold-border">
-              <img
-                src={images[1].src}
-                alt={images[1].alt}
-                className="w-full h-48 md:h-56 object-cover hover-zoom"
-                loading="lazy"
-              />
-            </div>
+          <div className="order-1 lg:order-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {images.map((img, index) => (
+              <div
+                key={index}
+                className="relative aspect-[4/3] overflow-hidden rounded-lg gold-border"
+              >
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  className="absolute inset-0 w-full h-full object-cover hover-zoom"
+                  loading="lazy"
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
