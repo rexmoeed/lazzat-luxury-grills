@@ -765,13 +765,13 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
     >
       {/* Sauce Image */}
       {sauce.image && (
-        <div className="mb-3 overflow-hidden rounded-md">
-          <img
-            src={sauce.image}
-            alt={sauce.name}
-            className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110"
-          />
-        </div>
+        <div className="mb-3 overflow-hidden rounded-md aspect-[4/3]">
+  <img
+    src={sauce.image}
+    alt={sauce.name}
+    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+  />
+</div>
       )}
 
       <h3 className="font-serif text-lg mb-2 group-hover:text-primary">

@@ -52,16 +52,17 @@ const SignatureFlavors = () => {
             className="card-luxury p-4 md:p-6 group cursor-pointer"
             style={{ animationDelay: `${index * 50}ms` }}
           >
+            
             {/* ✅ IMAGE */}
-            {sauce.image && (
-              <div className="mb-3 overflow-hidden rounded-md">
-                <img
-                  src={sauce.image}
-                  alt={sauce.name}
-                  className="w-full h-32 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-              </div>
-            )}
+{sauce.image && (
+  <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-md">
+    <img
+      src={sauce.image}
+      alt={sauce.name}
+      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+  </div>
+)}
 
             <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors duration-300">
               {sauce.name}
