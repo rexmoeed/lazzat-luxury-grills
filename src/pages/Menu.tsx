@@ -1,7 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Flame, X, Filter, ChevronDown } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRef } from "react";
 
 import {
   menuItemsFlat,
@@ -113,7 +115,6 @@ const dietaryFilters = [
   { id: "vegan", label: "Vegan" },
   { id: "vegetarian", label: "Vegetarian" },
   { id: "gluten-free", label: "Gluten-free" },
-  { id: "allergen-free", label: "Allergen-free" },
 ];
 
 const allergenFilters: { id: Allergen; label: string }[] = [
@@ -138,6 +139,31 @@ export default function MenuPage() {
   const [showFilters, setShowFilters] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
+
+    // Scroll ref for Sort buttons (inside Filter Drawer)
+  const sortScrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollSort = (dir: "left" | "right") => {
+    if (!sortScrollRef.current) return;
+
+    sortScrollRef.current.scrollBy({
+      left: dir === "left" ? -200 : 200,
+      behavior: "smooth",
+    });
+  };
+
+  // Scroll ref for CATEGORY buttons (mobile)
+const categoryScrollRef = useRef<HTMLDivElement>(null);
+
+const scrollCategories = (dir: "left" | "right") => {
+  if (!categoryScrollRef.current) return;
+
+  categoryScrollRef.current.scrollBy({
+    left: dir === "left" ? -200 : 200,
+    behavior: "smooth",
+  });
+};
+
 
 
   const [sauceFilter, setSauceFilter] = useState<
@@ -243,10 +269,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
       // heuristic: biryani and shakes likely gluten-free; desserts rarely
       return /biryani|shake|parfait|panna cotta|entremet|tres leches/.test(name + sub + cat);
     }
-    if (dietId === "allergen-free") {
-  // true if item has NO allergens or empty allergens array
-  return !item.allergens || item.allergens.length === 0;
-}
+    
     return false;
   };
 
@@ -516,7 +539,21 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             <div>
   <h4 className="text-sm font-medium mb-2">Sort</h4>
 
-  <div className="flex gap-2 overflow-x-auto whitespace-nowrap pb-2 -mx-4 px-4 scrollbar-hide">
+  <div className="relative -mx-4 px-4">
+  {/* LEFT ARROW */}
+  <button
+    type="button"
+    onClick={() => scrollSort("left")}
+    className="absolute left-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+  >
+    <ChevronLeft size={16} />
+  </button>
+
+  {/* SCROLLABLE SORT BUTTONS */}
+  <div
+    ref={sortScrollRef}
+    className="flex items-center gap-2 overflow-x-auto whitespace-nowrap h-12 px-10 scrollbar-hide"
+  >
     {sortOptions.map((s) => (
       <button
         key={s.value}
@@ -532,6 +569,17 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
       </button>
     ))}
   </div>
+
+  {/* RIGHT ARROW */}
+  <button
+    type="button"
+    onClick={() => scrollSort("right")}
+    className="absolute right-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+  >
+    <ChevronRight size={16} />
+  </button>
+</div>
+
 </div>
 
           </div>
@@ -622,25 +670,47 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             )}
           >
             <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
-              <div className="overflow-x-auto w-full md:w-auto">
-                {/* Make category tabs horizontally scrollable on small screens */}
-                <div className="flex gap-2 md:gap-3 px-2">
-                  {categories.map((category) => (
-                    <button
-                      key={category}
-                      onClick={() => setActiveCategory(category)}
-                      className={cn(
-                        "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all whitespace-nowrap",
-                        activeCategory === category
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-secondary text-muted-foreground hover:bg-primary/20"
-                      )}
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <div className="relative w-full md:w-auto">
+  {/* LEFT ARROW — mobile only */}
+  <button
+    type="button"
+    onClick={() => scrollCategories("left")}
+    className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+  >
+    <ChevronLeft size={16} />
+  </button>
+
+  {/* SCROLLABLE CATEGORY PILLS */}
+  <div
+    ref={categoryScrollRef}
+    className="flex gap-2 md:gap-3 px-10 overflow-x-auto whitespace-nowrap scrollbar-hide"
+  >
+    {categories.map((category) => (
+      <button
+        key={category}
+        onClick={() => setActiveCategory(category)}
+        className={cn(
+          "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all shrink-0",
+          activeCategory === category
+            ? "bg-primary text-primary-foreground"
+            : "bg-secondary text-muted-foreground hover:bg-primary/20"
+        )}
+      >
+        {category}
+      </button>
+    ))}
+  </div>
+
+  {/* RIGHT ARROW — mobile only */}
+  <button
+    type="button"
+    onClick={() => scrollCategories("right")}
+    className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+  >
+    <ChevronRight size={16} />
+  </button>
+</div>
+
 
               {/* Desktop Sort -> open drawer */}
               <div className="hidden md:flex items-center gap-3">
