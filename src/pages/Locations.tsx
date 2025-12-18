@@ -60,9 +60,8 @@ const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => 
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 };
 
-// =====================
-// Component
-// =====================
+// component for location
+
 const Locations = () => {
   const [nearestId, setNearestId] = useState<number | null>(null);
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
