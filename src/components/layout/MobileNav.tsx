@@ -13,8 +13,22 @@ export const MobileNav = () => {
   const location = useLocation();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-lg border-t border-primary/30 safe-area-pb">
-      <div className="flex items-center justify-around h-16">
+    <nav
+      className="
+        md:hidden
+        fixed bottom-0 left-0 right-0
+        z-40
+        bg-background/95
+        border-t border-primary/30
+        safe-area-pb
+        isolate
+      "
+    >
+      {/* BLUR LAYER (never transformed) */}
+      <div className="absolute inset-0 bg-background/80 supports-[backdrop-filter]:backdrop-blur-lg" />
+
+      {/* CONTENT LAYER */}
+      <div className="relative z-10 flex items-center justify-around h-16">
         {navItems.map((item) => {
           const isActive = location.pathname === item.href;
           const Icon = item.icon;

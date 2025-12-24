@@ -2,18 +2,35 @@ import * as React from "react";
 import { Drawer as DrawerPrimitive } from "vaul";
 import { cn } from "@/lib/utils";
 
-/* ——— NO BODY SCROLL LOCK ———  
-   We remove scroll locking completely */
-const useBodyScrollLock = (_open: boolean) => {};
+/* ——— BODY SCROLL LOCK (FIX MOBILE SCROLL) ——— */
+const useBodyScrollLock = (open: boolean) => {
+  React.useEffect(() => {
+    if (!open) return;
 
+    const scrollY = window.scrollY;
+
+    document.documentElement.style.overflow = "hidden";
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+
+      window.scrollTo(0, scrollY);
+    };
+  }, [open]);
+};
+
+/* ——— ROOT DRAWER ——— */
 const Drawer = ({
-  shouldScaleBackground = false, // MUST stay false
   open,
   onOpenChange,
   ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => {
-
-  // do NOT lock scrolling
   useBodyScrollLock(Boolean(open));
 
   return (
@@ -21,7 +38,7 @@ const Drawer = ({
       modal
       open={open}
       onOpenChange={onOpenChange}
-      shouldScaleBackground={false} // keep disabled
+      shouldScaleBackground={false}
       {...props}
     />
   );
@@ -33,29 +50,37 @@ const DrawerTrigger = DrawerPrimitive.Trigger;
 const DrawerPortal = DrawerPrimitive.Portal;
 const DrawerClose = DrawerPrimitive.Close;
 
-/* ——— FIXED OVERLAY THAT ALWAYS BLURS ——— */
+/* ——— STATIC BACKDROP (NO BLUR – MOBILE SAFE) ——— */
+const DrawerBackdrop = () => (
+  <div
+    className="
+      fixed inset-0 z-40
+      bg-black/60
+      pointer-events-none
+    "
+  />
+);
+
+/* ——— VAUL OVERLAY (NO BLUR) ——— */
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
-    className={cn(
-      "fixed inset-0 z-40 bg-black/40 backdrop-blur-xl supports-[backdrop-filter]:backdrop-blur-xl",
-      className
-    )}
+    className={cn("fixed inset-0 z-40 bg-transparent", className)}
     {...props}
   />
 ));
 DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
-/* ——— DRAWER CONTENT (scroll inside independently) ——— */
+/* ——— DRAWER CONTENT ——— */
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
   <DrawerPortal>
-    {/* Blur stays fixed even if page scrolls */}
+    <DrawerBackdrop />
     <DrawerOverlay />
 
     <DrawerPrimitive.Content
@@ -66,10 +91,10 @@ const DrawerContent = React.forwardRef<
       )}
       {...props}
     >
-      {/* Handle bar */}
+      {/* Handle */}
       <div className="mx-auto mt-4 h-1.5 w-14 rounded-full bg-muted" />
 
-      {/* Drawer inner scroll */}
+      {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto px-4 pb-6">
         {children}
       </div>
@@ -78,26 +103,20 @@ const DrawerContent = React.forwardRef<
 ));
 DrawerContent.displayName = "DrawerContent";
 
+/* ——— HEADER / FOOTER / TEXT ——— */
 const DrawerHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)} {...props} />
+  <div className={cn("grid gap-1.5 p-4", className)} {...props} />
 );
-
-DrawerHeader.displayName = "DrawerHeader";
 
 const DrawerFooter = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div
-    className={cn("mt-auto flex flex-col gap-2 p-4", className)}
-    {...props}
-  />
+  <div className={cn("mt-auto flex flex-col gap-2 p-4", className)} {...props} />
 );
-
-DrawerFooter.displayName = "DrawerFooter";
 
 const DrawerTitle = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Title>,
@@ -109,7 +128,6 @@ const DrawerTitle = React.forwardRef<
     {...props}
   />
 ));
-DrawerTitle.displayName = DrawerPrimitive.Title.displayName;
 
 const DrawerDescription = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Description>,
@@ -121,7 +139,6 @@ const DrawerDescription = React.forwardRef<
     {...props}
   />
 ));
-DrawerDescription.displayName = DrawerPrimitive.Description.displayName;
 
 export {
   Drawer,

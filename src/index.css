@@ -289,3 +289,7 @@ body.vaul-open {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none;    /* Firefox */
 }
+html, body {
+  overscroll-behavior: none;
+  height: 100%;
+}
