@@ -25,7 +25,7 @@ const locations = [
     address: "Lazzat Grill and Shakes 143 Clarence St, Unit 10 Brampton ON L6W 1T2",
     lat: 43.6847,
     lng: -79.7599,
-    phone: "+1 (212) 555-0200",
+    phone: "+1 (234) 567-8200",
     hours: {
       weekday: "10:00 AM - 10:00 PM",
       weekend: "10:00 AM - 11:00 PM",
