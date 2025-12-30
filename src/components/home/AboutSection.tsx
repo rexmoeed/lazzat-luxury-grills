@@ -14,41 +14,43 @@ export const AboutSection = () => {
 
         {/* Story Wall – Museum Highlight */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          <div>
-            <img
-              src={lazzatWall}
-              alt="Lazzat Story Wall"
-              className="w-full rounded-lg gold-border shadow-xl lazzat-glow"
-            />
-          </div>
+  <div>
+    {/* GLOW WRAPPER */}
+    <div className="story-glow-image">
+      <img
+        src={lazzatWall}
+        alt="Lazzat Story Wall"
+        className="w-full rounded-lg gold-border relative z-10"
+      />
+    </div>
+  </div>
 
-          <div>
-            <div className="gold-divider w-16 mb-6" />
-            <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-              A Story Told Through <span className="text-primary">Flavor</span>
-            </h2>
+  <div>
+    <div className="gold-divider w-16 mb-6" />
+    <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+      A Story Told Through <span className="text-primary">Flavor</span>
+    </h2>
 
-            <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
-              <p>
-                At Lazzat, food is more than what’s on the plate—it’s an experience
-                shaped by flavors from the world’s most vibrant kitchens. Each
-                creation is thoughtfully crafted to take you beyond the ordinary.
-              </p>
+    <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
+      <p>
+        At Lazzat, food is more than what’s on the plate—it’s an experience
+        shaped by flavors from the world’s most vibrant kitchens. Each
+        creation is thoughtfully crafted to take you beyond the ordinary.
+      </p>
 
-              <p>
-                Takeout doesn’t have to feel rushed or forgettable. Here, it’s
-                reimagined with fresh, high-quality ingredients and careful
-                preparation—balancing comfort with quality.
-              </p>
+      <p>
+        Takeout doesn’t have to feel rushed or forgettable. Here, it’s
+        reimagined with fresh, high-quality ingredients and careful
+        preparation—balancing comfort with quality.
+      </p>
 
-              <p>
-                Food is more than fuel; it’s a bridge that connects us. Every bite
-                celebrates flavors that unite us, no matter where we’re from.
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <p>
+        Food is more than fuel; it’s a bridge that connects us. Every bite
+        celebrates flavors that unite us, no matter where we’re from.
+      </p>
+    </div>
+  </div>
+</div>
         {/* Existing About Content */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content */}

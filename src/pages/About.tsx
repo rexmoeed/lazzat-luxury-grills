@@ -26,14 +26,16 @@ const About = () => {
       {/* Story Narrative – Museum / Heritage */}
       <section className="section-padding bg-background">
         <div className="container-luxury">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            
+          {/*  EDIT: ambient wrapper */}
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <div>
-              <img
-  src={lazzatWall}
-  alt="Lazzat Wall Story Design"
-  className="w-full rounded-lg gold-border shadow-xl lazzat-glow"
-/>
+              <div className="story-glow-image p-3">
+  <img
+    src={lazzatWall}
+    alt="Lazzat Wall Story Design"
+    className="w-full rounded-lg gold-border relative z-10"
+  />
+</div>
             </div>
 
             <div>
@@ -44,25 +46,16 @@ const About = () => {
               <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
                 <p>
                   At Lazzat, food is more than what’s on the plate—it’s an experience
-                  shaped by flavors from the world’s most vibrant kitchens. Each
-                  creation is thoughtfully crafted to take you beyond the ordinary,
-                  offering bold tastes and a refined touch without trying too hard.
+                  shaped by flavors from the world’s most vibrant kitchens.
                 </p>
-
                 <p>
                   Takeout doesn’t have to feel rushed or forgettable. Here, it’s
                   reimagined with fresh, high-quality ingredients and careful
-                  preparation, striking a balance between comfort and quality.
-                  Whether you’re looking for plant-based options, gluten-free
-                  choices, or simply a meal that feels elevated yet satisfying,
-                  every order is designed to leave a lasting impression.
+                  preparation.
                 </p>
-
                 <p>
-                  Food is more than fuel; it’s a bridge that connects us. With every
-                  bite, we celebrate the flavors that unite us, no matter where
-                  we’re from. At Lazzat, great food isn’t just about eating—it’s
-                  about enjoying the finer things in life, together.
+                  Food is more than fuel; it’s a bridge that connects us—celebrating
+                  flavors that unite us.
                 </p>
               </div>
             </div>
@@ -70,81 +63,10 @@ const About = () => {
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="section-padding bg-card">
-        <div className="container-luxury">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div>
-              <img
-                src={heroRestaurant}
-                alt="Lazzat Restaurant"
-                className="w-full rounded-lg gold-border"
-              />
-            </div>
-            <div>
-              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-                Where It All <span className="text-primary">Began</span>
-              </h2>
-              <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
-                <p>
-                  Lazzat was born from a simple belief: that everyone deserves
-                  access to premium-quality grilled cuisine without the pretense
-                  or the wait. Our founder, inspired by the street food traditions
-                  of South Asia and the Mediterranean, envisioned a space where
-                  luxury meets accessibility.
-                </p>
-                <p>
-                  The name "Lazzat" means "flavor" in Urdu—a testament to our
-                  commitment to bringing authentic, bold tastes to every plate.
-                  What started as a single grill station has grown into a
-                  celebrated dining destination.
-                </p>
-                <p>
-                  Today, we continue that legacy with our open kitchen concept,
-                  where guests can watch their meals being prepared over live
-                  flames, ensuring transparency and freshness in every dish.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ⭐ EDIT: spacer to visually separate glow layers */}
+      <div className="h-20 bg-background" />
 
-      {/* Open Kitchen */}
-      <section className="section-padding bg-background">
-        <div className="container-luxury">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <div className="order-2 lg:order-1">
-              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-                The <span className="text-primary">Open Kitchen</span> Philosophy
-              </h2>
-              <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
-                <p>
-                  At Lazzat, we believe in complete transparency. Our open kitchen
-                  isn't just a design choice—it's a promise.
-                </p>
-                <p>
-                  Our chefs are trained in traditional grilling techniques from
-                  around the world, blending time-honored methods with modern
-                  precision.
-                </p>
-                <p>
-                  No preservatives, no shortcuts—just pure, honest flavor.
-                </p>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2">
-              <img
-                src={aboutKitchen}
-                alt="Open Kitchen"
-                className="w-full rounded-lg gold-border"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
+      {/* Values – MOVED UP + GLOW */}
       <section className="section-padding bg-card">
         <div className="container-luxury">
           <div className="text-center mb-16">
@@ -174,7 +96,7 @@ const About = () => {
             ].map((value) => (
               <div
                 key={value.title}
-                className="text-center p-8 border border-primary/20 rounded-lg hover:border-primary/50 transition-colors duration-500"
+                className="text-center p-8 rounded-lg lazzat-glow-soft"
               >
                 <h3 className="font-serif text-xl text-foreground mb-4">
                   {value.title}
@@ -184,6 +106,66 @@ const About = () => {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Where It All Began */}
+      <section className="section-padding bg-card">
+        <div className="container-luxury">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <img
+                src={heroRestaurant}
+                alt="Lazzat Restaurant"
+                className="w-full rounded-lg gold-border"
+              />
+            </div>
+            <div>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+                Where It All <span className="text-primary">Began</span>
+              </h2>
+              <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
+                <p>
+                  Lazzat was born from a simple belief: premium-quality grilled
+                  cuisine should be accessible without compromise.
+                </p>
+                <p>
+                  Inspired by South Asian and Mediterranean street food traditions,
+                  what began as a single grill station became a destination.
+                </p>
+                <p>
+                  Today, our open kitchen ensures transparency and freshness in
+                  every dish.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Open Kitchen */}
+      <section className="section-padding bg-background">
+        <div className="container-luxury">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div className="order-2 lg:order-1">
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+                The <span className="text-primary">Open Kitchen</span> Philosophy
+              </h2>
+              <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
+                <p>Every flame, every sizzle, every detail—on display.</p>
+                <p>
+                  Traditional techniques meet modern precision, without shortcuts.
+                </p>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <img
+                src={aboutKitchen}
+                alt="Open Kitchen"
+                className="w-full rounded-lg gold-border"
+              />
+            </div>
           </div>
         </div>
       </section>
