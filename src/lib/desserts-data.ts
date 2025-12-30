@@ -17,7 +17,7 @@ import imgTiramisuMango from "@/assets/dessert-tiramisu-mango.jpeg";
 import imgTiramisuChocolate from "@/assets/dessert-tiramisu-chocolate.jpeg";
 import imgTiramisuCoffee from "@/assets/dessert-tiramisu-coffee.jpeg";
 import imgTiramisuBlueberry from "@/assets/dessert-tiramisu-blueberry.jpeg";
-import imgTiramisuGrape from "@/assets/dessert-tiramisu-grape.jpeg";
+
 
 import imgBrowniePistachio from "@/assets/dessert-brownie-pistachio.jpeg";
 
@@ -28,6 +28,8 @@ import imgCinnamonBiscoff from "@/assets/dessert-cinnamon-biscoff.jpeg";
 
 import imgCakeVanilla from "@/assets/dessert-cake-vanilla.jpeg";
 import imgCakeChocolate from "@/assets/dessert-cake-chocolate.jpeg";
+import imgCakeDubai17Layer from "@/assets/Dubai17layerchocolatecak.jpeg";
+
 
 import imgTresLechesPistachio from "@/assets/dessert-tresleches-pistachio.jpeg";
 import imgTresLechesCoconut from "@/assets/dessert-tresleches-coconut.jpeg";
@@ -238,20 +240,7 @@ export const desserts: Record<string, MenuItem[]> = {
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
     },
-    {
-      id: 54,
-      name: "Grape Tiramisu",
-      description:
-        "A delicate twist on classic tiramisu with grape compote.",
-      price: 6.99,
-      image: imgTiramisuGrape,
-      category: "Desserts",
-      subCategory: "Tiramisu",
-      heatLevel: 0,
-      saucePairings: [],
-      customizations: [],
-      allergens: ["milk", "eggs", "gluten"],
-    },
+    
   ],
 
   Brownies: [
@@ -359,6 +348,23 @@ export const desserts: Record<string, MenuItem[]> = {
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
     },
+    {
+  id: 82,
+  name: "Dubai 17 Layer Chocolate Cake",
+  description:
+    "Dubai-style 17-layer chocolate cake enriched with dark Belgian chocolate ganache between every layer.",
+  price: 7.99,
+  image: imgCakeDubai17Layer,
+  category: "Desserts",
+  subCategory: "Cakes",
+  heatLevel: 0,
+  isNew: true,          
+  saucePairings: [],
+  customizations: [],
+  allergens: ["milk", "eggs", "gluten", "soy"],
+},
+
+
   ],
 
   "Tres Leches": [
