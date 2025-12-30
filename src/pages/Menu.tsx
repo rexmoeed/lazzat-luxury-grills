@@ -44,6 +44,14 @@ const slugify = (s?: string) =>
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-]/g, "");
 
+const hashCode = (str: string) => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
 const categories = [
   "All",
   "Grills & Skewers",
@@ -761,9 +769,25 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
   {filteredSauces.map((sauce) => (
     <div
-      key={sauce.name}
-      className="card-luxury p-4 md:p-6 group flex flex-col"
-    >
+    key={sauce.name}
+    onClick={() =>
+      setSelectedItem({
+        id: hashCode(sauce.name),
+        name: sauce.name,
+        description: sauce.description,
+        image: sauce.image,
+        category: "Sauces",
+        subCategory: "Signature Sauce",
+        heatLevel: sauce.level,
+        allergens: sauce.allergens || [],
+        saucePairings: [],
+        customizations: [],
+        isNew: false,
+        isPopular: false,
+      })
+    }
+    className="card-luxury p-4 md:p-6 group flex flex-col cursor-pointer"
+  >
       {/* Sauce Image */}
       {sauce.image && (
         <div className="mb-3 overflow-hidden rounded-md aspect-[4/3]">

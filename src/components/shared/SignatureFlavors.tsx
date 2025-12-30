@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/* ✅ USE CENTRAL SAUCE DATA */
+/*  USE CENTRAL SAUCE DATA */
 import { sauces } from "@/lib/sauces-data";
 
 const filters = [
@@ -14,6 +14,7 @@ const filters = [
 
 const SignatureFlavors = () => {
   const [filter, setFilter] = useState("all");
+  const [selectedSauce, setSelectedSauce] = useState<any | null>(null);
 
   const filteredSauces = sauces.filter((s) => {
     if (filter === "all") return true;
@@ -25,7 +26,6 @@ const SignatureFlavors = () => {
 
   return (
     <div className="w-full">
-
       {/* FILTER BUTTONS */}
       <div className="flex flex-wrap gap-3 mb-8 justify-center">
         {filters.map((f) => (
@@ -49,54 +49,121 @@ const SignatureFlavors = () => {
         {filteredSauces.map((sauce, index) => (
           <div
             key={sauce.name}
+            onClick={() => setSelectedSauce(sauce)}
             className="card-luxury p-4 md:p-6 group cursor-pointer"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            
-            {/* ✅ IMAGE */}
-{sauce.image && (
-  <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-md">
-    <img
-      src={sauce.image}
-      alt={sauce.name}
-      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-    />
-  </div>
-)}
+            {sauce.image && (
+              <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-md">
+                <img
+                  src={sauce.image}
+                  alt={sauce.name}
+                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+              </div>
+            )}
 
-            <h3 className="font-serif text-lg text-foreground mb-1 group-hover:text-primary transition-colors duration-300">
+            <h3 className="font-serif text-lg mb-1 group-hover:text-primary transition-colors">
               {sauce.name}
             </h3>
 
-            <p className="text-xs font-sans text-muted-foreground mb-4">
+            <p className="text-xs text-muted-foreground mb-4">
               {sauce.description}
             </p>
 
-            <div className="flex items-center gap-1 pt-1">
+            <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(sauce.level, 5) }).map((_, i) => (
                 <Flame
                   key={i}
                   size={16}
-                  className={cn(
-                    "transition-colors duration-300 group-hover:animate-pulse",
+                  className={
                     sauce.level <= 3
                       ? "text-primary"
                       : sauce.level <= 6
                       ? "text-orange-500"
                       : "text-red-500"
-                  )}
+                  }
                 />
               ))}
-
-              {sauce.level > 5 && (
-                <span className="text-xs font-sans text-muted-foreground ml-1">
-                  +{sauce.level - 5}
-                </span>
-              )}
             </div>
           </div>
         ))}
       </div>
+
+      {/* MODAL – MENU STYLE (IMAGE LEFT, CONTENT RIGHT) */}
+      {selectedSauce && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setSelectedSauce(null)}
+        >
+          <div
+  className="relative w-full max-w-5xl overflow-hidden rounded-xl bg-background 
+            ring-1 ring-primary/40 
+shadow-[0_20px_60px_-20px_rgba(0,0,0,0.7),0_0_40px_rgba(218,170,67,0.25)]
+             grid grid-cols-1 md:grid-cols-2"
+  onClick={(e) => e.stopPropagation()}
+>
+            {/* LEFT IMAGE */}
+            <div className="relative h-64 md:h-full overflow-hidden">
+              {selectedSauce.image && (
+                <img
+                  src={selectedSauce.image}
+                  alt={selectedSauce.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
+            </div>
+
+            {/* RIGHT CONTENT */}
+            <div className="p-6 md:p-8 flex flex-col justify-between">
+              <div>
+                <div className="text-xs uppercase tracking-wider text-primary mb-2">
+                  Sauces • Signature
+                </div>
+
+                <h2 className="font-serif text-3xl mb-3">
+                  {selectedSauce.name}
+                </h2>
+
+                <p className="text-muted-foreground mb-6 leading-relaxed">
+                  {selectedSauce.description}
+                </p>
+
+                <div className="flex items-center gap-1">
+                  {Array.from({
+                    length: Math.min(selectedSauce.level, 5),
+                  }).map((_, i) => (
+                    <Flame
+                      key={i}
+                      size={18}
+                      className={
+                        selectedSauce.level <= 3
+                          ? "text-primary"
+                          : selectedSauce.level <= 6
+                          ? "text-orange-500"
+                          : "text-red-500"
+                      }
+                    />
+                  ))}
+                </div>
+              </div>
+
+              <button className="mt-6 w-full rounded-md bg-primary py-3 font-semibold text-black hover:opacity-90 transition">
+                Add to Order
+              </button>
+            </div>
+
+            {/* CLOSE */}
+            <button
+              onClick={() => setSelectedSauce(null)}
+              className="absolute top-4 right-4 rounded-full bg-black/60 p-2 text-white hover:bg-black"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      )}
 
       {filteredSauces.length === 0 && (
         <p className="text-center text-muted-foreground mt-6">
