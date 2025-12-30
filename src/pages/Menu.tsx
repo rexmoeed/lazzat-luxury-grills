@@ -133,6 +133,7 @@ const miscFilters = [
   { id: "spicy", label: "Spicy" }, // heuristic: heatLevel >= 4
 ];
 
+
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("none");
@@ -852,108 +853,116 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         </p>
       </div>
     )}
-              {/* MAIN MENU GRID */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredItems.map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => setSelectedItem(item)}
-                    className="card-luxury cursor-pointer group"
-                  >
-                    <div className="relative aspect-[4/3] overflow-hidden">
-                      <img
-                        src={item.image}
-                        alt={item.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {filteredItems.map((item, index) => {
+    const showDessertHeading =
+      item.category === "Desserts" &&
+      (index === 0 ||
+        filteredItems[index - 1]?.subCategory !== item.subCategory);
 
-                      <div className="absolute top-4 left-4 flex gap-2">
-                        {item.isNew && (
-                          <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">
-                            New
-                          </span>
-                        )}
-                        {item.isPopular && (
-                          <span className="bg-foreground text-background text-xs px-3 py-1 rounded">
-                            Popular
-                          </span>
-                        )}
-                      </div>
+    return (
+      <React.Fragment key={item.id}>
+        {/* DESSERT SUBCATEGORY HEADING */}
+        {showDessertHeading && (
+          <div className="col-span-full">
+            <h3 className="font-serif text-2xl mb-4 border-b border-primary/20 pb-2">
+              {item.subCategory}
+            </h3>
+          </div>
+        )}
 
-                    
-                    </div>
-
-                    <div className="p-6">
-                      <h3 className="font-serif text-xl group-hover:text-primary transition-colors">
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
-                        {item.description}
-                      </p>
-                      <div className="mt-3 text-xs text-primary uppercase tracking-wider">
-                        {item.category}
-                        {item.subCategory ? ` • ${item.subCategory}` : ""}
-                      </div>
-                      {/* Bottom meta row */}
-<div className="mt-4 flex items-center justify-between gap-3">
-  {/* Heat */}
-  {item.heatLevel > 0 && (
-    <div className="flex items-center gap-1">
-      {Array.from({ length: Math.min(item.heatLevel, 5) }).map((_, i) => (
-        <Flame
-          key={i}
-          size={14}
-          className={
-            item.heatLevel <= 3
-              ? "text-primary"
-              : item.heatLevel <= 6
-              ? "text-orange-500"
-              : "text-red-500"
-          }
-        />
-      ))}
-      {item.heatLevel > 5 && (
-        <span className="text-xs text-muted-foreground ml-1">
-          +{item.heatLevel - 5}
-        </span>
-      )}
-    </div>
-  )}
-  {/* Allergens */}
-{item.allergens && item.allergens.length > 0 && (
-  <div className="flex items-center gap-2">
-    {item.allergens.map((a) => {
-      const Icon = allergenIconMap[a]?.icon;
-      const label = allergenIconMap[a]?.label;
-      if (!Icon) return null;
-
-      return (
         <div
-          key={a}
-          className="group relative"
+          onClick={() => setSelectedItem(item)}
+          className="card-luxury cursor-pointer group"
         >
-          <Icon
-            size={14}
-            className="text-muted-foreground group-hover:text-primary transition"
-          />
+          <div className="relative aspect-[4/3] overflow-hidden">
+            <img
+              src={item.image}
+              alt={item.name}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
 
-          {/* Tooltip */}
-          <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
-            {label}
+            <div className="absolute top-4 left-4 flex gap-2">
+              {item.isNew && (
+                <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">
+                  New
+                </span>
+              )}
+              {item.isPopular && (
+                <span className="bg-foreground text-background text-xs px-3 py-1 rounded">
+                  Popular
+                </span>
+              )}
+            </div>
+          </div>
+
+          <div className="p-6">
+            <h3 className="font-serif text-xl group-hover:text-primary transition-colors">
+              {item.name}
+            </h3>
+
+            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+              {item.description}
+            </p>
+
+            <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+              {item.category}
+              {item.subCategory ? ` • ${item.subCategory}` : ""}
+            </div>
+
+            {/* Bottom meta row */}
+            <div className="mt-4 flex items-center justify-between gap-3">
+              {/* Heat */}
+              {item.heatLevel > 0 && (
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: Math.min(item.heatLevel, 5) }).map(
+                    (_, i) => (
+                      <Flame
+                        key={i}
+                        size={14}
+                        className={
+                          item.heatLevel <= 3
+                            ? "text-primary"
+                            : item.heatLevel <= 6
+                            ? "text-orange-500"
+                            : "text-red-500"
+                        }
+                      />
+                    )
+                  )}
+                </div>
+              )}
+
+              {/* Allergens */}
+              {item.allergens && item.allergens.length > 0 && (
+                <div className="flex items-center gap-2">
+                  {item.allergens.map((a) => {
+                    const Icon = allergenIconMap[a]?.icon;
+                    const label = allergenIconMap[a]?.label;
+                    if (!Icon) return null;
+
+                    return (
+                      <div key={a} className="group relative">
+                        <Icon
+                          size={14}
+                          className="text-muted-foreground group-hover:text-primary transition"
+                        />
+                        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
+                          {label}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      );
-    })}
-  </div>
-)}
-
+      </React.Fragment>
+    );
+  })}
 </div>
-
-                    </div>
-                  </div>
-                ))}
-              </div>
 
               {filteredItems.length === 0 && (
                 <div className="text-center py-16">
