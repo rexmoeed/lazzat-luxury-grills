@@ -97,23 +97,24 @@ const SignatureFlavors = () => {
           onClick={() => setSelectedSauce(null)}
         >
           <div
-  className="relative w-full max-w-5xl overflow-hidden rounded-xl bg-background 
-            ring-1 ring-primary/40 
-shadow-[0_20px_60px_-20px_rgba(0,0,0,0.7),0_0_40px_rgba(218,170,67,0.25)]
-             grid grid-cols-1 md:grid-cols-2"
+  className="relative w-full max-w-4xl max-h-[80vh] overflow-hidden rounded-xl bg-background 
+ring-1 ring-primary/40 
+shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7),0_0_32px_rgba(218,170,67,0.22)]
+grid grid-cols-1 md:grid-cols-2"
   onClick={(e) => e.stopPropagation()}
 >
             {/* LEFT IMAGE */}
-            <div className="relative h-64 md:h-full overflow-hidden">
-              {selectedSauce.image && (
-                <img
-                  src={selectedSauce.image}
-                  alt={selectedSauce.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-transparent" />
-            </div>
+            <div className="relative w-full aspect-[4/3] md:aspect-auto md:h-full overflow-hidden bg-black">
+  {selectedSauce.image && (
+    <img
+      src={selectedSauce.image}
+      alt={selectedSauce.name}
+      className="w-full h-full object-contain md:object-cover"
+    />
+  )}
+
+  <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+</div>
 
             {/* RIGHT CONTENT */}
             <div className="p-6 md:p-8 flex flex-col justify-between">
