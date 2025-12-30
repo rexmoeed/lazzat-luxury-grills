@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import heroRestaurant from "@/assets/hero-restaurant.jpg";
 import aboutKitchen from "@/assets/about-kitchen.jpg";
 import heroGrill from "@/assets/hero-grill.jpg";
+import lazzatWall from "@/assets/Lazzat-wall-Design.jpg";
 
 const About = () => {
   return (
@@ -18,6 +19,53 @@ const About = () => {
               From humble beginnings to becoming a destination for premium grills,
               Lazzat's journey is one of passion, tradition, and innovation.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Story Narrative – Museum / Heritage */}
+      <section className="section-padding bg-background">
+        <div className="container-luxury">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
+            <div>
+              <img
+  src={lazzatWall}
+  alt="Lazzat Wall Story Design"
+  className="w-full rounded-lg gold-border shadow-xl lazzat-glow"
+/>
+            </div>
+
+            <div>
+              <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
+                A Story Told Through <span className="text-primary">Flavor</span>
+              </h2>
+
+              <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
+                <p>
+                  At Lazzat, food is more than what’s on the plate—it’s an experience
+                  shaped by flavors from the world’s most vibrant kitchens. Each
+                  creation is thoughtfully crafted to take you beyond the ordinary,
+                  offering bold tastes and a refined touch without trying too hard.
+                </p>
+
+                <p>
+                  Takeout doesn’t have to feel rushed or forgettable. Here, it’s
+                  reimagined with fresh, high-quality ingredients and careful
+                  preparation, striking a balance between comfort and quality.
+                  Whether you’re looking for plant-based options, gluten-free
+                  choices, or simply a meal that feels elevated yet satisfying,
+                  every order is designed to leave a lasting impression.
+                </p>
+
+                <p>
+                  Food is more than fuel; it’s a bridge that connects us. With every
+                  bite, we celebrate the flavors that unite us, no matter where
+                  we’re from. At Lazzat, great food isn’t just about eating—it’s
+                  about enjoying the finer things in life, together.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -73,20 +121,15 @@ const About = () => {
               <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
                 <p>
                   At Lazzat, we believe in complete transparency. Our open kitchen
-                  isn't just a design choice—it's a promise. When you dine with us,
-                  you see every flame, every sizzle, every moment of culinary
-                  artistry.
+                  isn't just a design choice—it's a promise.
                 </p>
                 <p>
                   Our chefs are trained in traditional grilling techniques from
                   around the world, blending time-honored methods with modern
-                  precision. From the smoky depths of charcoal to the aromatic
-                  spice rubs, every element is crafted with intention.
+                  precision.
                 </p>
                 <p>
-                  This philosophy extends to our ingredients. We source fresh,
-                  never frozen meats, seasonal vegetables, and house-made marinades
-                  daily. No preservatives, no shortcuts—just pure, honest flavor.
+                  No preservatives, no shortcuts—just pure, honest flavor.
                 </p>
               </div>
             </div>
@@ -116,17 +159,17 @@ const About = () => {
               {
                 title: "Quality First",
                 description:
-                  "Premium ingredients, expert preparation, and uncompromising standards in everything we serve.",
+                  "Premium ingredients, expert preparation, and uncompromising standards.",
               },
               {
                 title: "Cultural Roots",
                 description:
-                  "Honoring the diverse culinary traditions that inspire our menu while innovating for modern palates.",
+                  "Honoring global traditions while innovating for modern palates.",
               },
               {
                 title: "Genuine Hospitality",
                 description:
-                  "Creating memorable experiences through warm service, beautiful spaces, and attention to detail.",
+                  "Warm service, thoughtful spaces, and lasting impressions.",
               },
             ].map((value) => (
               <div
@@ -157,8 +200,8 @@ const About = () => {
             Experience the <span className="text-primary">Lazzat</span> Difference
           </h2>
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto mb-8">
-            Come taste what sets us apart. From our first spark to your last bite,
-            we're dedicated to delivering an extraordinary dining experience.
+            Great food isn’t just about eating — it’s about enjoying the finer
+            things in life, together.
           </p>
           <a href="/locations" className="btn-gold inline-block">
             Find a Location
