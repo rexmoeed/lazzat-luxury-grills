@@ -33,7 +33,7 @@ export const AboutSection = () => {
 
     <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
       <p>
-        At Lazzat, food is more than what’s on the plate—it’s an experience
+        At Lazzat, food is more than what’s on the plate, it’s an experience
         shaped by flavors from the world’s most vibrant kitchens. Each
         creation is thoughtfully crafted to take you beyond the ordinary.
       </p>
