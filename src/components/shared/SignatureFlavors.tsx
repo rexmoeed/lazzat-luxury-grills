@@ -151,7 +151,7 @@ grid grid-cols-1 md:grid-cols-2"
               </div>
 
               <button className="mt-6 w-full rounded-md bg-primary py-3 font-semibold text-black hover:opacity-90 transition">
-                Add to Order
+                Order Now
               </button>
             </div>
 

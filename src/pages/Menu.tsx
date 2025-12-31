@@ -1149,7 +1149,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                     </div>
                   )}
 
-                  <button className="btn-gold w-full">Add to Order</button>
+                  <button className="btn-gold w-full">Order Now</button>
                 </div>
               </div>
             </div>
