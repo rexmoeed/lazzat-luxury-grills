@@ -45,7 +45,7 @@ const About = () => {
 
               <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
                 <p>
-                  At Lazzat, food is more than what’s on the plate—it’s an experience
+                  At Lazzat, food is more than what’s on the plate,it’s an experience
                   shaped by flavors from the world’s most vibrant kitchens.
                 </p>
                 <p>
@@ -54,7 +54,7 @@ const About = () => {
                   preparation.
                 </p>
                 <p>
-                  Food is more than fuel; it’s a bridge that connects us—celebrating
+                  Food is more than fuel; it’s a bridge that connects us, celebrating
                   flavors that unite us.
                 </p>
               </div>
@@ -127,7 +127,7 @@ const About = () => {
               </h2>
               <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
                 <p>
-                  Lazzat was born from a simple belief: premium-quality grilled
+                  Lazzat was born from a simple belief: premium quality grilled
                   cuisine should be accessible without compromise.
                 </p>
                 <p>
@@ -153,7 +153,7 @@ const About = () => {
                 The <span className="text-primary">Open Kitchen</span> Philosophy
               </h2>
               <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
-                <p>Every flame, every sizzle, every detail—on display.</p>
+                <p>Every flame, every sizzle, every detail on display.</p>
                 <p>
                   Traditional techniques meet modern precision, without shortcuts.
                 </p>
@@ -182,7 +182,7 @@ const About = () => {
             Experience the <span className="text-primary">Lazzat</span> Difference
           </h2>
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto mb-8">
-            Great food isn’t just about eating — it’s about enjoying the finer
+            Great food isn’t just about eating it’s about enjoying the finer
             things in life, together.
           </p>
           <a href="/locations" className="btn-gold inline-block">
