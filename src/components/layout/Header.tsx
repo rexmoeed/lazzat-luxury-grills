@@ -49,7 +49,7 @@ export const Header = () => {
 
   return (
     <>
-      {/* 🔥 BLUR OVERLAY (stays when menu opens anywhere) */}
+      {/* BLUR OVERLAY (stays when menu opens anywhere) */}
       {isMobileMenuOpen && (
         <div
           className="fixed inset-0 z-40 bg-black/30 backdrop-blur-xl"
@@ -97,7 +97,7 @@ export const Header = () => {
             {/* Order Button */}
             <Link
               to="/order"
-              className="hidden md:block btn-gold text-sm tracking-widest uppercase py-3 px-6"
+              className="hidden md:block btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-6"
             >
               Order Now
             </Link>
@@ -131,7 +131,7 @@ export const Header = () => {
               ))}
               <Link
                 to="/order"
-                className="btn-gold text-sm tracking-widest uppercase py-3 px-8 mt-2"
+                className="btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-8 mt-2"
               >
                 Order Now
               </Link>
