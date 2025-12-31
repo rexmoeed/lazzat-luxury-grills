@@ -1006,19 +1006,36 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
           className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg overflow-y-auto"
           onClick={() => setSelectedItem(null)}
         >
-          <div className="min-h-screen flex items-center justify-center p-4">
+          <div className="min-h-screen flex md:items-center justify-center p-4">
             <div
-              className="relative w-full max-w-4xl bg-card border border-primary/30 rounded-lg overflow-hidden animate-zoom-in"
+              className="relative
+              w-full
+              max-w-lg md:max-w-4xl
+              bg-card
+              border border-primary/30
+              rounded-lg
+              overflow-hidden
+              animate-zoom-in
+              max-h-[90vh]
+              flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 onClick={() => setSelectedItem(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center hover:text-primary"
+                className="absolute
+                          top-3 right-3
+                          z-20
+                          w-9 h-9
+                          rounded-full
+                          bg-background/90
+                          backdrop-blur
+                          flex items-center justify-center
+                          hover:text-primary"
               >
                 <X size={20} />
               </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 h-full">
                 <div className="relative aspect-square md:aspect-auto">
                   <img
                     src={selectedItem.image}
@@ -1027,7 +1044,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                   />
                 </div>
 
-                <div className="p-6 md:p-8">
+                <div className="p-6 md:p-8 overflow-y-auto">
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-xs text-primary uppercase tracking-widest">
                       {selectedItem.category}
