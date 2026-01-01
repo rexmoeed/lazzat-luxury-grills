@@ -9,6 +9,11 @@ import imgGarlicBread from "@/assets/GARLIC-BREAD.jpg";
 import imgGrilledVegetables from "@/assets/GRILLED-VEGETABLES.jpg";
 import imgSideSalad from "@/assets/SIDE-SALAD.jpg";
 
+/* NAAN IMAGES */
+import imgButterNaan from "@/assets/Butter Naan.jpg";
+import imgCheeseStuffedNaan from "@/assets/Cheese-Stuffed Naan.jpg";
+import imgGarlicHerbNaan from "@/assets/Garlic & Herb Naan.jpg";
+
 export const sidesItems: Record<string, MenuItem[]> = {
   Classic: [
     {
@@ -105,6 +110,55 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Dressing", "Add Olives"],
       allergens: [],
       dietary: ["vegetarian", "gluten-free"],
+    },
+
+    /* NAAN ITEMS */
+    {
+      id: 210,
+      name: "Classic Butter Naan",
+      description:
+        "Soft, pillowy naan brushed with melted butter. Warm, fragrant, and perfect for pairing with any dish.",
+      price: 2.99,
+      image: imgButterNaan,
+      category: "Sides",
+      subCategory: "Naan",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Butter"],
+      allergens: ["milk", "gluten"],
+      dietary: ["vegetarian"],
+    },
+
+    {
+      id: 211,
+      name: "Cheese-Stuffed Naan",
+      description:
+        "Soft naan filled with gooey, melted cheese. Rich, indulgent, and a crowd favorite with every bite.",
+      price: 3.99,
+      image: imgCheeseStuffedNaan,
+      category: "Sides",
+      subCategory: "Naan",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Cheese"],
+      allergens: ["milk", "gluten"],
+      dietary: ["vegetarian"],
+    },
+
+    {
+      id: 212,
+      name: "Garlic & Herb Naan",
+      description:
+        "Freshly baked naan topped with minced garlic and aromatic herbs. Savory, flavorful, and irresistibly fragrant.",
+      price: 3.49,
+      image: imgGarlicHerbNaan,
+      category: "Sides",
+      subCategory: "Naan",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Garlic"],
+      allergens: ["milk", "gluten"],
+      dietary: ["vegetarian"],
     },
   ],
 };
