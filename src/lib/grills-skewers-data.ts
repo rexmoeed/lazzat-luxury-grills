@@ -8,6 +8,7 @@ import imgSalmonTikka from "@/assets/salmon-tikka.jpeg";
 import imgChickenSeekh from "@/assets/chicken-seekh.jpeg";
 import imgLambSeekh from "@/assets/lamb-seekh.jpeg";
 import imgLambChops from "@/assets/lamb-chops.jpeg";
+import imgPaneerTikka from "@/assets/paneer-tikka.jpg";
 
 export const grillsAndSkewers: Record<string, MenuItem[]> = {
   Chicken: [
@@ -104,4 +105,24 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       allergens: ["fish", "milk"], // salmon + yogurt-based tikka marinade
     },
   ],
+
+    Vegetarian: [
+    {
+      id: 7,
+      name: "Paneer Tikka",
+      description:
+        "Tender cubes of fresh paneer, marinated in aromatic spices and char-grilled to smoky perfection. Finished with your choice of Lazzat’s signature sauce for a bold, irresistible kick. A vegetarian favorite elevated to a bold, indulgent, and unforgettable experience.",
+      price: 13.99,
+      image: imgPaneerTikka,
+      category: "Grills & Skewers",
+      subCategory: "Vegetarian",
+      heatLevel: 3,
+      isPopular: true,
+      saucePairings: ["Mint sauce", "Classic Mild", "Garlic Supreme"],
+      customizations: ["Extra Char", "Extra Sauce"],
+      allergens: ["milk"], // paneer = cheese (dairy)
+      dietary: ["vegetarian"],
+    },
+  ],
+
 };
