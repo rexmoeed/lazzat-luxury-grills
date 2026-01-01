@@ -12,7 +12,7 @@ import imgSideSalad from "@/assets/SIDE-SALAD.jpg";
 export const sidesItems: Record<string, MenuItem[]> = {
   Classic: [
     {
-      id: 101,
+      id: 200,
       name: "Crispy Fries",
       description:
         "Golden, crispy fries served with a sprinkle of seasoning.",
@@ -28,7 +28,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
 
     {
-      id: 102,
+      id: 201,
       name: "Garlic Bread",
       description:
         "Soft, buttery bread with a garlic infusion, perfect for dipping.",
@@ -44,7 +44,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
 
     {
-      id: 103,
+      id: 202,
       name: "Grilled Vegetables",
       description:
         "A mix of seasonal veggies grilled to perfection, lightly seasoned.",
@@ -60,7 +60,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
 
     {
-      id: 104,
+      id: 203,
       name: "Coleslaw",
       description:
         "Creamy, tangy coleslaw with shredded cabbage, carrots, and a hint of vinegar.",
@@ -76,7 +76,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
 
     {
-      id: 105,
+      id: 204,
       name: "Corn on the Cob",
       description:
         "Grilled corn with butter and a sprinkle of paprika.",
@@ -92,7 +92,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
 
     {
-      id: 106,
+      id: 205,
       name: "Side Salad",
       description:
         "Fresh, mixed greens with a light vinaigrette dressing.",

@@ -55,18 +55,20 @@ const hashCode = (str: string) => {
 const categories = [
   "All",
   "Grills & Skewers",
+  "Sides",
   "Sauces",
   "Desserts",
   "Shakes & Juices",
   "Biryani",
 ];
-const categoryHeadings: Record<
-  string,
-  { title: string; subtitle?: string }
-> = {
+const categoryHeadings: Record<string, { title: string; subtitle?: string }> = {
   "Grills & Skewers": {
     title: "Grills & Skewers",
     subtitle: "Flame-grilled perfection, served fresh.",
+  },
+  Sides: {
+    title: "Sides",
+    subtitle: "Perfect companions to complete your meal.",
   },
   Desserts: {
     title: "Desserts",
