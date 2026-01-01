@@ -1,73 +1,163 @@
-# Welcome to your Lovable project
+Lazzat Grills & Shakes
 
-## Project info
+This repository contains the source code for the Lazzat Grills & Shakes restaurant website and digital menu.
+The project is built as a modern, scalable React application with a fully data-driven menu system.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+# Project Details 
+Restaurant: Lazzat Grills & Shakes
+Project Type: Restaurant Website & Dynamic Menu
+Framework: React + TypeScript
+Build Tool: Vite
 
-## How can I edit this code?
+# How can I edit this code?
+How can I edit this code?
+Use your preferred IDE (Local Development)
 
-There are several ways of editing your application.
+You can work locally using any IDE (VS Code recommended).
 
-**Use Lovable**
+Requirements
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+Node.js
 
-Changes made via Lovable will be committed automatically to this repo.
+npm
 
-**Use your preferred IDE**
+Install Node using nvm if needed:
+https://github.com/nvm-sh/nvm#installing-and-updating
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
+# Steps 
+  # Step 1: Clone the repository
 git clone <YOUR_GIT_URL>
 
-# Step 2: Navigate to the project directory.
+# Step 2: Navigate to the project directory
 cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Step 3: Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Step 4: Start the development server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+# Edit files directly on GitHub
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+Open the file you want to edit
 
-**Use GitHub Codespaces**
+Click the Edit (pencil) icon
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Make your changes and commit
 
-## What technologies are used for this project?
+# Use GitHub Codespaces
 
-This project is built with:
+Open the repository
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Click Code → Codespaces
 
-## How can I deploy this project?
+Create a new Codespace
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Edit files and commit changes directly in the browser
 
-## Can I connect a custom domain to my Lovable project?
+# Menu System Overview
 
-Yes, you can!
+The menu is fully data-driven and managed from the src/lib folder.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Important files
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+menu-types.ts – Global MenuItem type
+
+menu-data.ts – Central menu aggregator
+
+grills-skewers-data.ts
+
+biryani-data.ts
+
+sides-data.ts
+
+desserts-data.ts
+
+shakes-juices-data.ts
+
+# Adding or Updating Menu Items
+
+Open the relevant *-data.ts file
+
+Add or edit a MenuItem object
+
+Import images from src/assets
+
+Save the file — no UI changes needed
+
+Menu updates automatically across the site.
+
+# Dietary & Filters
+
+Supported filters include:
+
+Vegetarian
+
+Vegan
+
+Gluten-Free
+
+Dairy-Free
+
+Nut-Free
+
+Items appear automatically when users apply filters.
+
+# Dietary & Filters
+
+Supported filters include:
+
+Vegetarian
+
+Vegan
+
+Gluten-Free
+
+Dairy-Free
+
+Nut-Free
+
+Items appear automatically when users apply filters.
+
+# Spice Levels
+
+Each item uses a heat level scale:
+
+0 = No spice
+
+5 = Very spicy
+
+Used for icons, labels, and filtering.
+
+# Technologies Used
+
+Vite
+
+React
+
+TypeScript
+
+Tailwind CSS
+
+shadcn-ui
+
+# Build & Deployment
+
+To create a production build:
+
+npm run build
+
+Deploy the generated dist folder to any static hosting provider such as Vercel or Netlify.
+
+# Developer Notes
+
+Do not hardcode menu items inside components
+
+Always follow the MenuItem interface
+
+Keep images inside src/assets
+
+Categories and filters are rendered dynamically
+
+# CopyRight
+© Lazzat Grills & Shakes  All rights reserved
