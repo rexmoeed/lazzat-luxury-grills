@@ -140,16 +140,25 @@ export const HeroSlider = () => {
           </p>
 
           <div
-            className="flex flex-row items-center justify-center gap-4 animate-fade-up"
-            style={{ animationDelay: "600ms" }}
-          >
-            <Link to="/order" className="btn-gold w-full sm:w-auto text-center">
-              Order Now
-            </Link>
-            <Link to="/menu" className="btn-outline-white w-full sm:w-auto text-center">
-              Explore Menu
-            </Link>
-          </div>
+  className="flex flex-row items-center justify-center gap-4 animate-fade-up"
+  style={{ animationDelay: "600ms" }}
+>
+  <Link
+    to="/order"
+    className="btn-gold pulse-gold w-full sm:w-auto text-center"
+  >
+    Order Now
+  </Link>
+
+  <Link
+    to="/menu"
+    className="btn-outline-white pulse-gold w-full sm:w-auto text-center"
+    style={{ animationDelay: "1.2s" }}
+  >
+    Explore Menu
+  </Link>
+</div>
+
         </div>
       </div>
 
