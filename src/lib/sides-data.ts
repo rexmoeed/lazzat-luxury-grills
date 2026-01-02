@@ -131,7 +131,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
 
     {
       id: 211,
-      name: "Cheese-Stuffed Naan",
+      name: "Cheese Stuffed Naan",
       description:
         "Soft naan filled with gooey, melted cheese. Rich, indulgent, and a crowd favorite with every bite.",
       price: 3.99,
