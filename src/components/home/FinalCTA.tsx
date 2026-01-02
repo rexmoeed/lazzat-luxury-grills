@@ -34,13 +34,14 @@ export const FinalCTA = () => {
         <div className="flex flex-row items-center justify-center gap-4 animate-fade-up">
           <Link
             to="/order"
-            className="btn-gold w-full sm:w-auto text-center animate-pulse-gold"
+            className="btn-gold w-full pulse-gold sm:w-auto text-center animate-pulse-gold"
           >
             Order Now
           </Link>
           <Link
             to="/locations"
-            className="btn-outline-white w-full sm:w-auto text-center"
+            className="btn-outline-white w-full pulse-gold sm:w-auto text-center"
+            style={{ animationDelay: "1.2s" }}
           >
             Find a Location
           </Link>
