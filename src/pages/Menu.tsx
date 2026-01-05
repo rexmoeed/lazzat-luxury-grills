@@ -27,7 +27,7 @@ const allergenIconMap: Partial<Record<
   Allergen,
   { icon: any; label: string }
 >> = {
-  milk: { icon: Milk, label: "Milk" },
+  milk: { icon: Milk, label: "Dairy" },
   eggs: { icon: Egg, label: "Eggs" },
   gluten: { icon: Wheat, label: "Gluten" },
   "tree-nuts": { icon: Nut, label: "Tree Nuts" },
@@ -128,7 +128,7 @@ const dietaryFilters = [
 ];
 
 const allergenFilters: { id: Allergen; label: string }[] = [
-  { id: "milk", label: "Milk" },
+  { id: "milk", label: "Dairy" },
   { id: "eggs", label: "Eggs" },
   { id: "gluten", label: "Gluten" },
   { id: "tree-nuts", label: "Tree Nuts" },
