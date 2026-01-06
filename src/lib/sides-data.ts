@@ -14,6 +14,11 @@ import imgButterNaan from "@/assets/Butter Naan.jpg";
 import imgCheeseStuffedNaan from "@/assets/Cheese-Stuffed Naan.jpg";
 import imgGarlicHerbNaan from "@/assets/Garlic & Herb Naan.jpg";
 
+/* New Items */
+import imgGarlicButterRice from "@/assets/garlic-butter-rice.jpeg";
+import imgSaffronBasmatiRice from "@/assets/saffron-basmati-rice.jpeg";
+import imgSweetPotatoFries from "@/assets/sweet-potato-fries.jpeg";
+
 export const sidesItems: Record<string, MenuItem[]> = {
   Classic: [
     {
@@ -160,5 +165,53 @@ export const sidesItems: Record<string, MenuItem[]> = {
       allergens: ["milk", "gluten"],
       dietary: ["vegetarian"],
     },
+        {
+      id: 213,
+      name: "Saffron Basmati Rice",
+      description:
+        "Fragrant long-grain basmati gently infused with saffron for a rich, aromatic base.",
+      price: 3.99,
+      image: imgSaffronBasmatiRice,
+      category: "Sides",
+      subCategory: "Classic",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Saffron", "Extra Butter"],
+      allergens: [],
+      dietary: ["vegetarian", "gluten-free"],
+    },
+
+    {
+      id: 214,
+      name: "Butter Garlic Rice",
+      description:
+        "Fluffy rice tossed with butter and roasted garlic for a smooth, comforting finish.",
+      price: 3.99,
+      image: imgGarlicButterRice,
+      category: "Sides",
+      subCategory: "Classic",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Garlic", "Extra Butter"],
+      allergens: ["milk"],
+      dietary: ["vegetarian", "gluten-free"],
+    },
+
+    {
+      id: 215,
+      name: "Sweet Potato Fries",
+      description:
+        "A slightly sweet contrast to the smoky, savory BBQ flavors.",
+      price: 4.49,
+      image: imgSweetPotatoFries,
+      category: "Sides",
+      subCategory: "Classic",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: ["Extra Crispy"],
+      allergens: [],
+      dietary: ["vegetarian", "gluten-free"],
+    },
+
   ],
 };
