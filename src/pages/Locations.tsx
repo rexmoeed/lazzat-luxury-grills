@@ -2,9 +2,9 @@ import { Layout } from "@/components/layout/Layout";
 import { useEffect, useState } from "react";
 import { MapPin, Clock, Phone, Navigation } from "lucide-react";
 
-// =====================
-// Location Data
-// =====================
+/* =====================
+   Location Data
+===================== */
 const locations = [
   {
     id: 1,
@@ -34,9 +34,9 @@ const locations = [
   },
 ];
 
-// =====================
-// Helpers
-// =====================
+/* =====================
+   Helpers
+===================== */
 const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const getMapsLink = (address: string) => {
@@ -60,12 +60,14 @@ const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => 
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 };
 
-// component for location
-
+/* =====================
+   Component
+===================== */
 const Locations = () => {
   const [nearestId, setNearestId] = useState<number | null>(null);
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [openMaps, setOpenMaps] = useState<{ [key: number]: boolean }>({});
+  const [openDetails, setOpenDetails] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (!navigator.geolocation) return;
@@ -92,8 +94,13 @@ const Locations = () => {
     setOpenMaps((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const toggleDetails = (id: number) => {
+    setOpenDetails((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
   return (
     <Layout>
+      {/* Hero */}
       <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-background">
         <div className="container-luxury px-4 text-center">
           <div className="gold-divider w-16 mx-auto mb-6" />
@@ -106,6 +113,7 @@ const Locations = () => {
         </div>
       </section>
 
+      {/* Locations */}
       <section className="section-padding bg-card">
         <div className="container-luxury px-4 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {locations.map((location) => {
@@ -132,75 +140,94 @@ const Locations = () => {
                   </div>
                 )}
 
-                <h3 className="font-serif text-xl text-foreground mb-3">
-                  {location.name}
-                </h3>
+                {/* Title */}
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="font-serif text-xl text-foreground">
+                    {location.name}
+                  </h3>
 
-                {/* Address – turns GOLD on hover */}
-                <a
-                  href={getMapsLink(location.address)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex gap-2 mb-3 group"
-                >
-                  <MapPin className="w-5 h-5 text-primary mt-0.5" />
-                  <p className="text-sm transition-colors duration-300 group-hover:text-primary cursor-pointer">
-                    {location.address}
-                  </p>
-                </a>
-
-                <div className="flex gap-2 mb-3">
-                  <Phone className="w-5 h-5 text-primary" />
-                  <a href={`tel:${location.phone}`} className="text-sm hover:text-primary transition">
-                    {location.phone}
-                  </a>
+                  <button
+                    onClick={() => toggleDetails(location.id)}
+                    className="text-xs text-primary md:hidden"
+                  >
+                    {openDetails[location.id] ? "Hide details" : "View details"}
+                  </button>
                 </div>
 
-                <div className="flex gap-2 text-sm mb-4">
-                  <Clock className="w-5 h-5 text-primary" />
-                  <div className="space-y-1">
-                    <div>Mon–Thu: {location.hours.weekday}</div>
-                    <div>Fri–Sat: {location.hours.weekend}</div>
-                    <div>Sunday: {location.hours.sunday}</div>
+                {/* Details */}
+                <div
+                  className={`
+                    space-y-3 text-muted-foreground text-sm
+                    ${openDetails[location.id] ? "block" : "hidden"}
+                    md:block
+                  `}
+                >
+                  <a
+                    href={getMapsLink(location.address)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex gap-2 items-start"
+                  >
+                    <MapPin className="w-4 h-4 text-primary drop-shadow-[0_0_6px_rgba(212,175,55,0.7)] mt-0.5" />
+                    <p className="text-muted-foreground">
+                      {location.address}
+                    </p>
+                  </a>
+
+                  <div className="flex gap-2 items-center">
+                    <Phone className="w-4 h-4 text-primary drop-shadow-[0_0_6px_rgba(212,175,55,0.7)]" />
+                    <a href={`tel:${location.phone}`} className="text-muted-foreground">
+                      {location.phone}
+                    </a>
+                  </div>
+
+                  <div className="flex gap-2 items-start">
+                    <Clock className="w-4 h-4 text-primary drop-shadow-[0_0_6px_rgba(212,175,55,0.7)] mt-0.5" />
+                    <div className="space-y-1 text-muted-foreground">
+                      <div>Mon–Thu: {location.hours.weekday}</div>
+                      <div>Fri–Sat: {location.hours.weekend}</div>
+                      <div>Sunday: {location.hours.sunday}</div>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-2 mb-3">
-  {/* Open Maps */}
-  <a
-    href={getMapsLink(location.address)}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="btn-gold inline-flex items-center gap-2 px-6 py-2 w-full max-w-xs justify-center"
-  >
-    <Navigation className="w-4 h-4" />
-    Open in Google Maps
-  </a>
+                {/* Icons row */}
+                <div className="flex items-center justify-center gap-6 mt-4 mb-3">
+                  <a
+                    href={getMapsLink(location.address)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-col items-center text-primary hover:scale-110 transition"
+                  >
+                    <Navigation className="w-6 h-6 drop-shadow-[0_0_10px_rgba(212,175,55,0.9)]" />
+                    <span className="text-[11px] mt-1">Get Directions</span>
+                  </a>
 
-  {/* Toggle Map (mobile only) */}
-  <button
-    onClick={() => toggleMap(location.id)}
-    className="btn-gold w-full max-w-xs md:hidden"
-  >
-    {isOpen ? "Hide Map" : "Show Map"}
-  </button>
-</div>
+                  <button
+                    onClick={() => toggleMap(location.id)}
+                    className="flex flex-col items-center text-primary hover:scale-110 transition md:hidden"
+                  >
+                    <MapPin className="w-6 h-6 drop-shadow-[0_0_10px_rgba(212,175,55,0.9)]" />
+                    <span className="text-[11px] mt-1">
+                      {isOpen ? "Hide" : "Map"}
+                    </span>
+                  </button>
+                </div>
 
-
-                {/* Map – name appears on pin */}
+                {/* Map */}
                 <div
                   className={`overflow-hidden rounded-lg border transition-all ${
                     isOpen ? "h-48" : "h-0"
                   } md:h-56`}
                 >
                   <iframe
-  title={location.name}
-  src={`https://maps.google.com/maps?q=${encodeURIComponent(
-    `${location.name}, ${location.address}`
-  )}&z=18&output=embed`}
-  className="w-full h-full"
-  loading="lazy"
-/>
+                    title={location.name}
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                      `${location.name}, ${location.address}`
+                    )}&z=18&output=embed`}
+                    className="w-full h-full"
+                    loading="lazy"
+                  />
                 </div>
               </div>
             );
