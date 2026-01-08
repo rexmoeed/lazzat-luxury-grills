@@ -147,7 +147,7 @@ const miscFilters = [
 export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("none");
-  const [showFilters, setShowFilters] = useState<boolean>(false);
+  const [showFilters, setShowFilters] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
 
@@ -649,20 +649,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         <div className="container-luxury px-4">
           {/* Mobile Toggle */}
           <div className="flex items-center justify-between md:hidden mb-4">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 text-sm"
-            >
-              <Filter size={18} />
-              Filters
-              <ChevronDown
-                size={16}
-                className={cn(
-                  "transition-transform",
-                  showFilters && "rotate-180"
-                )}
-              />
-            </button>
+            
 
             {/* OPEN DRAWER INSTEAD OF SELECT */}
             <button
@@ -674,12 +661,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
           </div>
 
           {/* Category Filters */}
-          <div
-            className={cn(
-              "overflow-hidden transition-all duration-300 md:block",
-              showFilters ? "max-h-40" : "max-h-0 md:max-h-none"
-            )}
-          >
+          <div className="overflow-hidden md:block max-h-none">
             <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
               <div className="relative w-full md:w-auto">
   {/* LEFT ARROW — mobile only */}
