@@ -647,74 +647,105 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
       {/* Filters Bar */}
       <section className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-md border-b border-primary/20 py-4">
         <div className="container-luxury px-4">
-          {/* Mobile Toggle */}
-          <div className="flex items-center justify-between md:hidden mb-4">
-            
-
-            {/* OPEN DRAWER INSTEAD OF SELECT */}
-            <button
-              onClick={() => setDrawerOpen(true)}
-              className="bg-secondary text-sm px-3 py-2 rounded border border-primary/30 flex items-center gap-2"
-            >
-              Sort / Filters
-            </button>
-          </div>
+         
 
           {/* Category Filters */}
           <div className="overflow-hidden md:block max-h-none">
             <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
-              <div className="relative w-full md:w-auto">
-  {/* LEFT ARROW — mobile only */}
-  <button
-    type="button"
-    onClick={() => scrollCategories("left")}
-    className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-  >
-    <ChevronLeft size={16} />
-  </button>
+              <div className="w-full md:w-auto">
 
-  {/* SCROLLABLE CATEGORY PILLS */}
-  <div
-    ref={categoryScrollRef}
-    className="flex gap-2 md:gap-3 px-10 overflow-x-auto whitespace-nowrap scrollbar-hide"
-  >
-    {categories.map((category) => (
-      <button
-        key={category}
-        onClick={() => setActiveCategory(category)}
-        className={cn(
-          "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all shrink-0",
-          activeCategory === category
-            ? "bg-primary text-primary-foreground"
-            : "bg-secondary text-muted-foreground hover:bg-primary/20"
-        )}
-      >
-        {category}
-      </button>
-    ))}
+  {/* SLIDER ROW (arrows aligned to this only) */}
+  <div className="relative">
+
+    {/* LEFT ARROW — mobile only */}
+    <button
+      type="button"
+      onClick={() => scrollCategories("left")}
+      className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+    >
+      <ChevronLeft size={16} />
+    </button>
+
+    {/* SCROLLABLE CATEGORY PILLS */}
+    <div
+      ref={categoryScrollRef}
+      className="flex gap-2 md:gap-3 px-10 overflow-x-auto whitespace-nowrap scrollbar-hide"
+    >
+      {categories.map((category) => (
+        <button
+          key={category}
+          onClick={() => setActiveCategory(category)}
+          className={cn(
+            "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all shrink-0",
+            activeCategory === category
+              ? "bg-primary text-primary-foreground"
+              : "bg-secondary text-muted-foreground hover:bg-primary/20"
+          )}
+        >
+          {category}
+        </button>
+      ))}
+    </div>
+
+    {/* RIGHT ARROW — mobile only */}
+    <button
+      type="button"
+      onClick={() => scrollCategories("right")}
+      className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+    >
+      <ChevronRight size={16} />
+    </button>
   </div>
 
-  {/* RIGHT ARROW — mobile only */}
-  <button
-    type="button"
-    onClick={() => scrollCategories("right")}
-    className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-  >
-    <ChevronRight size={16} />
-  </button>
+  {/* MOBILE Sort & Filters — BELOW slider (not inside arrow container) */}
+  <div className="md:hidden mt-3 flex justify-center w-full">
+    <button
+      onClick={() => setDrawerOpen(true)}
+      className="
+        flex items-center gap-2
+        bg-secondary/80 backdrop-blur
+        px-5 py-2.5
+        text-sm font-medium
+        rounded-full
+        border border-primary/30
+        hover:border-primary
+        hover:bg-primary/10
+        transition-all
+      "
+    >
+      <Filter size={16} className="text-primary" />
+      Sort & Filters
+    </button>
+  </div>
+
 </div>
 
 
               {/* Desktop Sort -> open drawer */}
-              <div className="hidden md:flex items-center gap-3">
-                <span className="text-sm text-muted-foreground">Sort / Filters:</span>
-                <button
-                  onClick={() => setDrawerOpen(true)}
-                  className="bg-secondary px-4 py-2 text-sm rounded border border-primary/30"
-                >
-                  Open
-                </button>
-              </div>
+<div className="hidden md:flex items-center gap-4">
+  <span className="text-sm text-muted-foreground tracking-wide">
+    Sort & Filters
+  </span>
+
+  <button
+    onClick={() => setDrawerOpen(true)}
+    className="
+      flex items-center gap-2
+      bg-secondary/80 backdrop-blur
+      px-5 py-2.5
+      text-sm font-medium
+      rounded-full
+      border border-primary/30
+      hover:border-primary
+      hover:bg-primary/10
+      transition-all
+    "
+  >
+    <Filter size={16} className="text-primary" />
+    Open Panel
+  </button>
+</div>
+
             </div>
           </div>
         </div>
