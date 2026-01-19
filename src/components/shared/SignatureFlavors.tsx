@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/*  USE CENTRAL SAUCE DATA */
+/* CENTRAL DATA */
 import { sauces } from "@/lib/sauces-data";
+import { spices } from "@/lib/spices-data";
 
 const filters = [
   { label: "All", value: "all" },
@@ -14,13 +15,16 @@ const filters = [
 
 const SignatureFlavors = () => {
   const [filter, setFilter] = useState("all");
-  const [selectedSauce, setSelectedSauce] = useState<any | null>(null);
+  const [selectedFlavor, setSelectedFlavor] = useState<any | null>(null);
 
-  const filteredSauces = sauces.filter((s) => {
+  /* MERGE SAUCES + SPICES */
+  const allFlavours = [...sauces, ...spices];
+
+  const filteredFlavours = allFlavours.filter((f) => {
     if (filter === "all") return true;
-    if (filter === "mild") return s.level <= 3;
-    if (filter === "medium") return s.level >= 4 && s.level <= 6;
-    if (filter === "hot") return s.level >= 7;
+    if (filter === "mild") return f.level <= 3;
+    if (filter === "medium") return f.level >= 4 && f.level <= 6;
+    if (filter === "hot") return f.level >= 7;
     return true;
   });
 
@@ -44,42 +48,42 @@ const SignatureFlavors = () => {
         ))}
       </div>
 
-      {/* SAUCE GRID */}
+      {/* FLAVOURS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {filteredSauces.map((sauce, index) => (
+        {filteredFlavours.map((flavor, index) => (
           <div
-            key={sauce.name}
-            onClick={() => setSelectedSauce(sauce)}
+            key={flavor.name}
+            onClick={() => setSelectedFlavor(flavor)}
             className="card-luxury p-4 md:p-6 group cursor-pointer"
             style={{ animationDelay: `${index * 50}ms` }}
           >
-            {sauce.image && (
+            {flavor.image && (
               <div className="relative w-full aspect-[4/3] mb-3 overflow-hidden rounded-md">
                 <img
-                  src={sauce.image}
-                  alt={sauce.name}
+                  src={flavor.image}
+                  alt={flavor.name}
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                 />
               </div>
             )}
 
             <h3 className="font-serif text-lg mb-1 group-hover:text-primary transition-colors">
-              {sauce.name}
+              {flavor.name}
             </h3>
 
             <p className="text-xs text-muted-foreground mb-4">
-              {sauce.description}
+              {flavor.description}
             </p>
 
             <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(sauce.level, 5) }).map((_, i) => (
+              {Array.from({ length: Math.min(flavor.level, 5) }).map((_, i) => (
                 <Flame
                   key={i}
                   size={16}
                   className={
-                    sauce.level <= 3
+                    flavor.level <= 3
                       ? "text-primary"
-                      : sauce.level <= 6
+                      : flavor.level <= 6
                       ? "text-orange-500"
                       : "text-red-500"
                   }
@@ -90,58 +94,57 @@ const SignatureFlavors = () => {
         ))}
       </div>
 
-      {/* MODAL – MENU STYLE (IMAGE LEFT, CONTENT RIGHT) */}
-      {selectedSauce && (
+      {/* MODAL */}
+      {selectedFlavor && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setSelectedSauce(null)}
+          onClick={() => setSelectedFlavor(null)}
         >
           <div
-  className="relative w-full max-w-4xl max-h-[80vh] overflow-hidden rounded-xl bg-background 
-ring-1 ring-primary/40 
-shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7),0_0_32px_rgba(218,170,67,0.22)]
-grid grid-cols-1 md:grid-cols-2"
-  onClick={(e) => e.stopPropagation()}
->
+            className="relative w-full max-w-4xl max-h-[80vh] overflow-hidden rounded-xl bg-background 
+            ring-1 ring-primary/40 
+            shadow-[0_20px_50px_-20px_rgba(0,0,0,0.7),0_0_32px_rgba(218,170,67,0.22)]
+            grid grid-cols-1 md:grid-cols-2"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* LEFT IMAGE */}
             <div className="relative w-full aspect-[4/3] md:aspect-auto md:h-full overflow-hidden bg-black">
-  {selectedSauce.image && (
-    <img
-      src={selectedSauce.image}
-      alt={selectedSauce.name}
-      className="w-full h-full object-contain md:object-cover"
-    />
-  )}
-
-  <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
-</div>
+              {selectedFlavor.image && (
+                <img
+                  src={selectedFlavor.image}
+                  alt={selectedFlavor.name}
+                  className="w-full h-full object-contain md:object-cover"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/20 to-transparent" />
+            </div>
 
             {/* RIGHT CONTENT */}
             <div className="p-6 md:p-8 flex flex-col justify-between">
               <div>
                 <div className="text-xs uppercase tracking-wider text-primary mb-2">
-                  Sauces • Signature
+                  Signature Flavours • Lazzat
                 </div>
 
                 <h2 className="font-serif text-3xl mb-3">
-                  {selectedSauce.name}
+                  {selectedFlavor.name}
                 </h2>
 
                 <p className="text-muted-foreground mb-6 leading-relaxed">
-                  {selectedSauce.description}
+                  {selectedFlavor.description}
                 </p>
 
                 <div className="flex items-center gap-1">
                   {Array.from({
-                    length: Math.min(selectedSauce.level, 5),
+                    length: Math.min(selectedFlavor.level, 5),
                   }).map((_, i) => (
                     <Flame
                       key={i}
                       size={18}
                       className={
-                        selectedSauce.level <= 3
+                        selectedFlavor.level <= 3
                           ? "text-primary"
-                          : selectedSauce.level <= 6
+                          : selectedFlavor.level <= 6
                           ? "text-orange-500"
                           : "text-red-500"
                       }
@@ -157,7 +160,7 @@ grid grid-cols-1 md:grid-cols-2"
 
             {/* CLOSE */}
             <button
-              onClick={() => setSelectedSauce(null)}
+              onClick={() => setSelectedFlavor(null)}
               className="absolute top-4 right-4 rounded-full bg-black/60 p-2 text-white hover:bg-black"
             >
               ✕
@@ -166,9 +169,9 @@ grid grid-cols-1 md:grid-cols-2"
         </div>
       )}
 
-      {filteredSauces.length === 0 && (
+      {filteredFlavours.length === 0 && (
         <p className="text-center text-muted-foreground mt-6">
-          No sauces match this filter.
+          No flavours match this filter.
         </p>
       )}
     </div>
