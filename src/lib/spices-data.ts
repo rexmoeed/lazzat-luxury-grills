@@ -98,7 +98,7 @@ export const spices: SauceItem[] = [
   },
   {
     name: "Korean Chilli Flakes",
-    level: 6,
+    level: 7,
     description: "Korean gochugaru chilli flakes",
     image: koreanChilli,
     allergens: [],
@@ -140,7 +140,7 @@ export const spices: SauceItem[] = [
   },
   {
     name: "Smoked Paprika",
-    level: 3,
+    level: 4,
     description: "Smoked red peppers, ground",
     image: paprika,
     allergens: [],
