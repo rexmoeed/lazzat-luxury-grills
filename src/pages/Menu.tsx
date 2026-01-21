@@ -60,6 +60,7 @@ const categories = [
   "Desserts",
   "Shakes & Juices",
   "Biryani",
+  "Sajji",
 ];
 const categoryHeadings: Record<string, { title: string; subtitle?: string }> = {
   "Grills & Skewers": {
@@ -82,6 +83,10 @@ const categoryHeadings: Record<string, { title: string; subtitle?: string }> = {
     title: "Biryani",
     subtitle: "Slow-cooked rice with aromatic spices.",
   },
+  Sajji: {
+  title: "Sajji",
+  subtitle: "Authentic Balochi slow-roasted flavor.",
+},
 };
 
 
@@ -119,6 +124,7 @@ const quickFilters = [
   { id: "salmon", label: "Salmon" },
   { id: "seekh", label: "Seekh" },
   { id: "biryani", label: "Biryani" },
+  { id: "sajji", label: "Sajji" },
 ];
 
 const dietaryFilters = [
@@ -669,7 +675,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
     {/* SCROLLABLE CATEGORY PILLS */}
     <div
       ref={categoryScrollRef}
-      className="flex gap-2 md:gap-3 px-10 overflow-x-auto whitespace-nowrap scrollbar-hide"
+      className="flex gap-2 md:gap-3 px-0 overflow-x-auto whitespace-nowrap scrollbar-hide"
     >
       {categories.map((category) => (
         <button

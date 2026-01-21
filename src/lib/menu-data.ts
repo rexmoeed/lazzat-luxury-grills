@@ -3,9 +3,10 @@ import { MenuItem } from "./menu-types";
 
 import { grillsAndSkewers } from "./grills-skewers-data";
 import { biryaniItems } from "./biryani-data";
+import { sajjiItems } from "./sajji-data"; // ✅ ADD THIS
 import { desserts } from "./desserts-data";
 import { shakesAndJuices } from "./shakes-juices-data";
-import { sidesItems } from "./sides-data"; 
+import { sidesItems } from "./sides-data";
 
 /* Grouped Menu data */
 export const menuItemsGrouped: Record<
@@ -14,9 +15,10 @@ export const menuItemsGrouped: Record<
 > = {
   "Grills & Skewers": grillsAndSkewers,
   Biryani: biryaniItems,
+  Sajji: sajjiItems, 
   Desserts: desserts,
   "Shakes & Juices": shakesAndJuices,
-  Sides: sidesItems, // Sides
+  Sides: sidesItems,
 };
 
 /* Flat Export for Filter sort */
