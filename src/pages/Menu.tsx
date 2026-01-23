@@ -56,6 +56,26 @@ const hashCode = (str: string) => {
 // Find sauce details by name (case-insensitive)
 const findSauce = (name: string) =>
   sauces.find((s) => s.name.toLowerCase() === name.toLowerCase());
+
+// Side catalog pulled from existing menu items
+const sidesCatalog = menuItemsFlat.filter((item) => item.category === "Sides");
+
+// Find side details by name (case-insensitive)
+const findSide = (name: string) =>
+  sidesCatalog.find((s) => s.name.toLowerCase() === name.toLowerCase());
+
+// Fallback side pairings by category when an item does not define its own
+const defaultSidePairingsByCategory: Record<string, string[]> = {
+  "Grills & Skewers": ["Crispy Fries", "Side Salad", "Garlic & Herb Naan"],
+  Biryani: ["Side Salad", "Classic Butter Naan"],
+  Sajji: ["Butter Garlic Rice", "Crispy Fries"],
+};
+
+const getSidePairings = (item: MenuItem): string[] => {
+  const explicit = item.sidePairings || [];
+  if (explicit.length > 0) return explicit;
+  return defaultSidePairingsByCategory[item.category] || [];
+};
 const categories = [
   "All",
   "Grills & Skewers",
@@ -173,6 +193,8 @@ export default function MenuPage() {
   const [showFilters, setShowFilters] = useState<boolean>(true);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
+
+  const sideRecommendations = selectedItem ? getSidePairings(selectedItem) : [];
 
     // Scroll ref for Sort buttons (inside Filter Drawer)
   const sortScrollRef = useRef<HTMLDivElement>(null);
@@ -1210,6 +1232,62 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                   </div>
                                   <p className="text-xs text-muted-foreground line-clamp-2">
                                     {sauce.description}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Side Pairings Section */}
+                    {sideRecommendations.length > 0 && selectedItem.category === "Grills & Skewers" && (
+                      <div className="mb-6">
+                        <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                          Recommended Sides
+                        </h4>
+                        <div className="space-y-3">
+                          {sideRecommendations.map((name) => {
+                            const side = findSide(name);
+
+                            if (!side) {
+                              return (
+                                <span
+                                  key={name}
+                                  className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                >
+                                  {name}
+                                </span>
+                              );
+                            }
+
+                            return (
+                              <div
+                                key={name}
+                                className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                              >
+                                {side.image && (
+                                  <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                    <img
+                                      src={side.image}
+                                      alt={side.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                )}
+
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-2 mb-1">
+                                    <span className="text-sm font-semibold truncate">{side.name}</span>
+                                    {typeof side.price === "number" && (
+                                      <span className="text-xs font-semibold text-primary">
+                                        ${side.price.toFixed(2)}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-xs text-muted-foreground line-clamp-2">
+                                    {side.description}
                                   </p>
                                 </div>
                               </div>

@@ -60,6 +60,8 @@ export interface MenuItem {
 
   /** Pairings & options */
   saucePairings: string[];
+  /** Side recommendations to suggest with this item */
+  sidePairings?: string[];
   customizations: string[];
 
   /* Enriched Meta Data */
