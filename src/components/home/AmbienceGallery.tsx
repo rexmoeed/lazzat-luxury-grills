@@ -20,25 +20,25 @@ export const AmbienceGallery = () => {
     <section className="section-padding bg-card">
       <div className="container-luxury">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="gold-divider w-16 mx-auto mb-6" />
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+        <div className="text-center mb-12">
+          <div className="gold-divider w-16 mx-auto mb-5" />
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-3">
             Ambience & <span className="text-primary">Décor</span>
           </h2>
-          <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
+          <p className="font-sans text-sm md:text-base text-muted-foreground max-w-2xl mx-auto">
             Step into a world where luxury meets comfort, designed for an
             unforgettable dining experience.
           </p>
         </div>
 
         {/* Gallery Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
           {galleryImages.map((image, index) => (
             <button
               key={index}
               onClick={() => setSelectedImage(index)}
               className={cn(
-                "group relative overflow-hidden rounded-lg aspect-square cursor-pointer",
+                "group relative overflow-hidden rounded-lg aspect-square cursor-pointer shadow-[0_10px_30px_-22px_rgba(0,0,0,0.5)]",
                 index === 0 && "md:col-span-2 md:row-span-2"
               )}
             >
@@ -50,7 +50,7 @@ export const AmbienceGallery = () => {
               />
               <div className="absolute inset-0 bg-background/0 group-hover:bg-background/40 transition-colors duration-500" />
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <span className="text-xs font-sans text-foreground uppercase tracking-widest">
+                <span className="text-[11px] font-sans text-foreground uppercase tracking-widest">
                   View
                 </span>
               </div>
@@ -63,7 +63,7 @@ export const AmbienceGallery = () => {
       {/* Lightbox */}
       {selectedImage !== null && (
         <div
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg flex items-center justify-center p-3 md:p-4"
           onClick={() => setSelectedImage(null)}
         >
           <button
@@ -76,7 +76,7 @@ export const AmbienceGallery = () => {
           <img
             src={galleryImages[selectedImage].src}
             alt={galleryImages[selectedImage].alt}
-            className="max-w-full max-h-[80vh] object-contain rounded-lg animate-zoom-in"
+            className="max-w-full max-h-[75vh] object-contain rounded-lg animate-zoom-in"
           />
         </div>
       )}
