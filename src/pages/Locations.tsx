@@ -114,7 +114,7 @@ const Locations = () => {
       </section>
 
       {/* Locations */}
-      <section className="section-padding bg-card">
+      <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-card">
         <div className="container-luxury px-4 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {locations.map((location) => {
             const isNearest = nearestId === location.id;

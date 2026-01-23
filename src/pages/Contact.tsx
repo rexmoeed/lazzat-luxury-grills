@@ -46,7 +46,7 @@ const Contact = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="section-padding bg-card">
+      <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-card">
         <div className="container-luxury px-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
             {/* Contact Info */}

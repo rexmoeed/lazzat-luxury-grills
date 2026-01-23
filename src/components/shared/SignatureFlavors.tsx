@@ -6,51 +6,199 @@ import { cn } from "@/lib/utils";
 import { sauces } from "@/lib/sauces-data";
 import { spices } from "@/lib/spices-data";
 
-const filters = [
+type FlavorSource = "sauce" | "spice";
+type FlavorEntry = (typeof sauces)[number] & { source: FlavorSource };
+
+const heatFilters = [
   { label: "All", value: "all" },
   { label: "Mild (1–3)", value: "mild" },
   { label: "Medium (4–6)", value: "medium" },
   { label: "Hot (7+)", value: "hot" },
 ];
 
+const typeFilters: { label: string; value: "all" | FlavorSource }[] = [
+  { label: "All", value: "all" },
+  { label: "Sauces", value: "sauce" },
+  { label: "Spices", value: "spice" },
+];
+
+const sortOptions = [
+  { label: "Featured", value: "featured" },
+  { label: "Heat: Low to High", value: "heat-asc" },
+  { label: "Heat: High to Low", value: "heat-desc" },
+  { label: "Name: A → Z", value: "name-asc" },
+];
+
+const heatLabelMap: Record<string, string> = {
+  all: "All heat levels",
+  mild: "Mild (1–3)",
+  medium: "Medium (4–6)",
+  hot: "Hot (7+)",
+};
+
 const SignatureFlavors = () => {
-  const [filter, setFilter] = useState("all");
+  const [heatFilter, setHeatFilter] = useState("all");
+  const [typeFilter, setTypeFilter] = useState<"all" | FlavorSource>("all");
+  const [sortBy, setSortBy] = useState("featured");
+  const [panelOpen, setPanelOpen] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState<any | null>(null);
 
-  /* MERGE SAUCES + SPICES */
-  const allFlavours = [...sauces, ...spices];
+  /* MERGE SAUCES + SPICES WITH SOURCE TAG */
+  const allFlavours: FlavorEntry[] = [
+    ...sauces.map((f) => ({ ...f, source: "sauce" as const })),
+    ...spices.map((f) => ({ ...f, source: "spice" as const })),
+  ];
 
   const filteredFlavours = allFlavours.filter((f) => {
-    if (filter === "all") return true;
-    if (filter === "mild") return f.level <= 3;
-    if (filter === "medium") return f.level >= 4 && f.level <= 6;
-    if (filter === "hot") return f.level >= 7;
+    // Heat filter
+    if (heatFilter === "mild" && f.level > 3) return false;
+    if (heatFilter === "medium" && (f.level < 4 || f.level > 6)) return false;
+    if (heatFilter === "hot" && f.level < 7) return false;
+
+    // Type filter
+    if (typeFilter !== "all" && f.source !== typeFilter) return false;
+
     return true;
+  });
+
+  const sortedFlavours = [...filteredFlavours].sort((a, b) => {
+    switch (sortBy) {
+      case "heat-asc":
+        return a.level - b.level;
+      case "heat-desc":
+        return b.level - a.level;
+      case "name-asc":
+        return a.name.localeCompare(b.name);
+      default:
+        return 0;
+    }
   });
 
   return (
     <div className="w-full">
-      {/* FILTER BUTTONS */}
-      <div className="flex flex-wrap gap-3 mb-8 justify-center">
-        {filters.map((f) => (
-          <button
-            key={f.value}
-            onClick={() => setFilter(f.value)}
-            className={cn(
-              "px-4 py-2 rounded-full border text-sm transition-all",
-              filter === f.value
-                ? "bg-primary text-black border-primary"
-                : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
-            )}
-          >
-            {f.label}
-          </button>
-        ))}
+      {/* FILTER & SORT PANEL TOGGLE */}
+      <div className="relative mb-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+        <button
+          onClick={() => setPanelOpen((v) => !v)}
+          className="px-5 py-2 rounded-full border border-primary/40 bg-background/80 backdrop-blur text-sm font-semibold tracking-wide hover:border-primary hover:text-primary transition-all shadow-sm"
+        >
+          Filter & Sort
+        </button>
+
+        {/* Single-row Heat Pills */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          {heatFilters.map((f) => (
+            <button
+              key={f.value}
+              onClick={() => setHeatFilter(f.value)}
+              className={cn(
+                "px-4 py-2 rounded-full border text-sm transition-all",
+                heatFilter === f.value
+                  ? "bg-primary text-black border-primary"
+                  : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
+              )}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+
+        {panelOpen && (
+          <div className="absolute top-12 z-20 w-full max-w-3xl rounded-2xl border border-primary/20 bg-background/95 backdrop-blur shadow-2xl p-5">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="md:col-span-2">
+                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                  Heat
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {heatFilters.map((f) => (
+                    <button
+                      key={f.value}
+                      onClick={() => setHeatFilter(f.value)}
+                      className={cn(
+                        "px-4 py-2 rounded-full border text-sm transition-all",
+                        heatFilter === f.value
+                          ? "bg-primary text-black border-primary"
+                          : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
+                      )}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-xs uppercase tracking-widest text-muted-foreground mb-2">
+                  Type
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {typeFilters.map((f) => (
+                    <button
+                      key={f.value}
+                      onClick={() => setTypeFilter(f.value)}
+                      className={cn(
+                        "px-4 py-2 rounded-full border text-sm transition-all",
+                        typeFilter === f.value
+                          ? "bg-primary text-black border-primary"
+                          : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
+                      )}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 flex flex-col gap-2">
+              <div className="text-xs uppercase tracking-widest text-muted-foreground">
+                Sort
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {sortOptions.map((opt) => (
+                  <button
+                    key={opt.value}
+                    onClick={() => setSortBy(opt.value)}
+                    className={cn(
+                      "px-4 py-2 rounded-full border text-sm transition-all",
+                      sortBy === opt.value
+                        ? "bg-primary text-black border-primary"
+                        : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
+                    )}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 flex justify-end gap-3 text-sm">
+              <button
+                className="px-4 py-2 rounded-full border border-muted text-muted-foreground hover:border-primary hover:text-primary transition"
+                onClick={() => {
+                  setHeatFilter("all");
+                  setTypeFilter("all");
+                  setSortBy("featured");
+                  setPanelOpen(false);
+                }}
+              >
+                Reset
+              </button>
+              <button
+                className="px-4 py-2 rounded-full bg-primary text-black font-semibold border border-primary hover:opacity-90 transition"
+                onClick={() => setPanelOpen(false)}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* FLAVOURS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-        {filteredFlavours.map((flavor, index) => (
+        {sortedFlavours.map((flavor, index) => (
           <div
             key={flavor.name}
             onClick={() => setSelectedFlavor(flavor)}
@@ -70,6 +218,10 @@ const SignatureFlavors = () => {
             <h3 className="font-serif text-lg mb-1 group-hover:text-primary transition-colors">
               {flavor.name}
             </h3>
+
+            <div className="text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+              {flavor.source === "sauce" ? "Sauce" : "Spice"}
+            </div>
 
             <p className="text-xs text-muted-foreground mb-4">
               {flavor.description}

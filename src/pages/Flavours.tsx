@@ -24,7 +24,7 @@ const Flavours: React.FC = () => {
       </section>
 
       {/* CONTENT */}
-      <section className="section-padding bg-background">
+      <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-background">
         <div className="container-luxury px-4">
           <SignatureFlavors />
         </div>

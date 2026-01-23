@@ -66,7 +66,13 @@ const findSide = (name: string) =>
 
 // Fallback side pairings by category when an item does not define its own
 const defaultSidePairingsByCategory: Record<string, string[]> = {
-  "Grills & Skewers": ["Crispy Fries", "Side Salad", "Garlic & Herb Naan"],
+  "Grills & Skewers": [
+    "Crispy Fries",
+    "Side Salad",
+    "Classic Butter Naan",
+    "Cheese Stuffed Naan",
+    "Garlic & Herb Naan",
+  ],
   Biryani: ["Side Salad", "Classic Butter Naan"],
   Sajji: ["Butter Garlic Rice", "Crispy Fries"],
 };

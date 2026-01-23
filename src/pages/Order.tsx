@@ -21,7 +21,7 @@ const Order = () => {
       </section>
 
       {/* Order Options */}
-      <section className="section-padding bg-card">
+      <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-card">
         <div className="container-luxury px-4">
           {/* SINGLE CARD — centered */}
           <div className="grid grid-cols-1 gap-8 max-w-xl mx-auto">
