@@ -11,7 +11,7 @@ import {
 } from "@/lib/menu-data";
 
 import { sauces } from "@/lib/sauces-data";
-import type { MenuItem, Allergen } from "@/lib/menu-types";
+import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
 
 import {
   Milk,
@@ -52,6 +52,10 @@ const hashCode = (str: string) => {
   }
   return Math.abs(hash);
 };
+
+// Find sauce details by name (case-insensitive)
+const findSauce = (name: string) =>
+  sauces.find((s) => s.name.toLowerCase() === name.toLowerCase());
 const categories = [
   "All",
   "Grills & Skewers",
@@ -147,6 +151,19 @@ const allergenFilters: { id: Allergen; label: string }[] = [
 
 const miscFilters = [
   { id: "spicy", label: "Spicy" }, // heuristic: heatLevel >= 4
+];
+
+/* Configuration */
+const SPICY_THRESHOLD = 4; // items with heatLevel >= this are considered "spicy"
+const MEAT_KEYWORDS = [
+  "chicken",
+  "lamb",
+  "beef",
+  "salmon",
+  "fish",
+  "seekh",
+  "meat",
+  "sajji",
 ];
 
 
@@ -251,8 +268,7 @@ const scrollCategories = (dir: "left" | "right") => {
   };
 
   /* Heuristics for dietary filters.
-     IMPORTANT: These are heuristics because your menu data doesn't currently include explicit `diet` fields.
-     - Ideally: add { diet: ["vegan","vegetarian","gluten-free"] } to menu item objects and replace heuristics below.
+     IMPORTANT: Prefer explicit dietary flags on menu items. We derive defaults safely when missing.
   */
 const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
   if (!item.allergens || item.allergens.length === 0) return false;
@@ -260,47 +276,59 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
 };
 
 
+  /**
+   * Deterministic dietary matching:
+   * - Honors explicit item.dietary when present.
+   * - Derives a safe default: vegetarian if no meat keywords; vegan if vegetarian AND no milk/eggs.
+   * - Gluten-free is only honored when explicitly provided (avoid accidental false-positives).
+   */
+  const deriveDietary = (item: MenuItem): DietaryFlag[] => {
+    const derived = new Set<DietaryFlag>(item.dietary || []);
+    const fullText = `${item.name} ${item.category} ${item.subCategory || ""}`.toLowerCase();
 
-  const heuristicsMatchDiet = (item: MenuItem, dietId: string) => {
-    const name = item.name.toLowerCase();
-    const cat = (item.category || "").toLowerCase();
-    const sub = (item.subCategory || "").toLowerCase();
+    const hasMeat = MEAT_KEYWORDS.some((kw) => fullText.includes(kw));
 
-    if (dietId === "vegan") {
-      // heuristic: desserts that are fruit-based OR items with "coconut", "mango" etc. Not perfect.
-      return (
-        item.heatLevel === 0 &&
-        (cat.includes("dessert") || /coconut|mango|fruit|vegan/.test(name + sub + cat))
-      );
+    // Vegetarian if no meat keywords
+    if (!hasMeat) {
+      derived.add("vegetarian");
+
+      // Vegan only when vegetarian AND no dairy/egg allergens
+      if (!itemHasAllergen(item, "milk") && !itemHasAllergen(item, "eggs")) {
+        derived.add("vegan");
+      }
     }
-    if (dietId === "vegetarian") {
-      return (
-        item.heatLevel === 0 ||
-        /cheese|cheesecake|paneer|vegetarian|veggie/.test(name + sub + cat)
-      );
-    }
-    if (dietId === "contains-nuts") {
-      return /pistachio|almond|nut|biscoff|pecan/.test(name + sub + cat);
-    }
-    if (dietId === "gluten-free") {
-      // heuristic: biryani and shakes likely gluten-free; desserts rarely
-      return /biryani|shake|parfait|panna cotta|entremet|tres leches/.test(name + sub + cat);
-    }
-    
-    return false;
+
+    // Gluten-free is only trusted if explicitly provided in data
+    // (to avoid mislabeling items that may contain hidden gluten).
+
+    return Array.from(derived);
+  };
+
+  const itemMatchesDiet = (item: MenuItem, dietId: string) => {
+    return deriveDietary(item).includes(dietId as DietaryFlag);
   };
 
   
 
 
-  /* FILTER MENU ITEMS
-     We implement OR semantics: if no selectedFilters -> behave like earlier
-     If filters selected -> include an item if ANY selected filter matches it (quickFilters/diet/misc)
-  */
+  /**
+   * FILTER MENU ITEMS
+   * 
+   * Filter Pipeline:
+   * 1. Category filter (All vs specific category)
+   * 2. Allergen EXCLUSIONS - removes items with selected allergens (hard rule)
+   * 3. POSITIVE FILTERS - includes items matching ANY selected filter (OR logic)
+   *    - Quick filters: protein/type shortcuts (chicken, lamb, salmon, etc.)
+   *    - Dietary filters: vegan, vegetarian, gluten-free
+   *    - Misc filters: spicy (heat level >= threshold)
+   * 4. SORT - applies ordering:
+   *    - "spice-low" / "spice-high" - sorts by heat level
+   *    - Food type filters - acts as secondary filter (displays only that type)
+   */
   const filteredItems = useMemo(() => {
   let items = [...menuItemsFlat];
 
-  /* CATEGORY FILTER (unchanged) */
+  /* Step 1: CATEGORY FILTER */
   if (activeCategory !== "All" && activeCategory !== "Sauces") {
     items = items.filter(
       (item) => item.category === activeCategory
@@ -309,9 +337,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
 
   const selected = Array.from(selectedFilters);
 
-  /* -------------------------------
-     ALLERGEN EXCLUSIONS (HARD RULE)
-     ------------------------------- */
+  /* Step 2: ALLERGEN EXCLUSIONS (HARD RULE - removes items containing selected allergens) */
   const excludedAllergens = selected.filter(
     (f): f is Allergen =>
       allergenFilters.some((a) => a.id === f)
@@ -326,29 +352,28 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     );
   }
 
-  /* ---------------------------------
-     POSITIVE FILTERS (OR SEMANTICS)
-     --------------------------------- */
+  /* Step 3: POSITIVE FILTERS (OR SEMANTICS - includes item if ANY filter matches) */
   const positiveFilters = selected.filter(
     (f) => !excludedAllergens.includes(f as Allergen)
   );
 
   if (positiveFilters.length > 0) {
     items = items.filter((item) => {
+      // Quick filters: match food type/protein
       const quickMatch = positiveFilters.some((f) =>
         quickFilters.some(
           (q) => q.id === f && matchesFoodType(item, f)
         )
       );
 
+      // Dietary filters: vegan, vegetarian, gluten-free
       const dietMatch = positiveFilters.some((f) =>
-        dietaryFilters.some(
-          (d) => d.id === f && heuristicsMatchDiet(item, f)
-        )
+        dietaryFilters.some((d) => d.id === f && itemMatchesDiet(item, f))
       );
 
+      // Misc filters: spicy, etc.
       const miscMatch = positiveFilters.some((f) => {
-        if (f === "spicy") return item.heatLevel >= 4;
+        if (f === "spicy") return item.heatLevel >= SPICY_THRESHOLD;
         return false;
       });
 
@@ -356,9 +381,8 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     });
   }
 
-  /* -------------------------------
-     SORTING (unchanged)
-     ------------------------------- */
+  /* Step 4: SORTING */
+  // Sort by heat level (ascending or descending)
   if (sortBy === "spice-low") {
     return [...items].sort((a, b) => a.heatLevel - b.heatLevel);
   }
@@ -367,6 +391,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     return [...items].sort((a, b) => b.heatLevel - a.heatLevel);
   }
 
+  // Food type shortcuts: filter to show only selected type
   const quickTypes = [
     "chicken",
     "lamb",
@@ -388,6 +413,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     return items.filter((i) => matchesFoodType(i, sortBy));
   }
 
+  // Default: return all filtered items in original order
   return items;
 }, [activeCategory, sortBy, selectedFilters]);
 
@@ -1021,156 +1047,204 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         </div>
       </section>
 
-      {/* PRODUCT MODAL */}
+      {/* PRODUCT MODAL - ELEGANT DESIGN */}
       {selectedItem && (
         <div
-          className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg overflow-y-auto"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden flex items-center justify-center p-0 md:p-6"
           onClick={() => setSelectedItem(null)}
         >
-          <div className="min-h-screen flex md:items-center justify-center p-4">
+          <div className="w-full h-full md:h-auto md:max-h-[75vh] flex items-center justify-center">
             <div
-              className="relative
-              w-full
-              max-w-lg md:max-w-4xl
-              bg-card
-              border border-primary/30
-              rounded-lg
-              overflow-hidden
-              animate-zoom-in
-              max-h-[90vh]
-              flex flex-col"
+              className="relative w-full h-full md:h-auto md:max-w-4xl bg-background/95 backdrop-blur-md border-0 md:border md:border-primary/20 md:rounded-2xl overflow-hidden shadow-2xl animate-zoom-in"
               onClick={(e) => e.stopPropagation()}
             >
+              {/* Close Button */}
               <button
                 onClick={() => setSelectedItem(null)}
-                className="absolute
-                          top-3 right-3
-                          z-20
-                          w-9 h-9
-                          rounded-full
-                          bg-background/90
-                          backdrop-blur
-                          flex items-center justify-center
-                          hover:text-primary"
+                className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-primary/30 flex items-center justify-center hover:bg-primary/10 hover:border-primary transition-all"
               >
                 <X size={20} />
               </button>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 h-full">
-                <div className="relative aspect-square md:aspect-auto">
-                  <img
-                    src={selectedItem.image}
-                    alt={selectedItem.name}
-                    className="w-full h-full object-cover"
-                  />
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 h-full md:h-auto md:max-h-[75vh]">
+                {/* Image Section - boxed to show full image */}
+                <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex items-center justify-center px-2 py-3">
+                  <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black">
+                    <img
+                      src={selectedItem.image}
+                      alt={selectedItem.name}
+                      className="w-full h-full object-contain"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                    {/* Category Badge on Image */}
+                    <div className="absolute bottom-4 left-4">
+                      <span className="inline-block px-4 py-1.5 bg-primary/90 backdrop-blur text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-full">
+                        {selectedItem.category}
+                        {selectedItem.subCategory && ` • ${selectedItem.subCategory}`}
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="p-6 md:p-8 overflow-y-auto">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs text-primary uppercase tracking-widest">
-                      {selectedItem.category}
-                      {selectedItem.subCategory
-                        ? ` / ${selectedItem.subCategory}`
-                        : ""}
-                    </span>
+                {/* Content Section - Takes 3 columns */}
+                <div className="lg:col-span-3 flex flex-col h-[calc(100vh-19rem)] md:h-full md:max-h-[75vh]">
+                  <div className="p-6 md:p-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
+                    {/* Header */}
+                    <div className="mb-6">
+                      <h2 className="font-serif text-3xl md:text-4xl mb-3 text-foreground">
+                        {selectedItem.name}
+                      </h2>
+                      <p className="text-muted-foreground leading-relaxed text-base">
+                        {selectedItem.description}
+                      </p>
+                    </div>
 
+                    {/* Heat Level Badge */}
                     {selectedItem.heatLevel > 0 && (
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs text-muted-foreground mr-1">
-                          Heat Level {selectedItem.heatLevel}
-                        </span>
+                      <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
+                        <Flame size={18} className="text-orange-500" />
+                        <span className="text-sm font-medium">Heat Level {selectedItem.heatLevel}</span>
+                        <div className="flex items-center gap-0.5 ml-2">
+                          {Array.from({ length: Math.min(selectedItem.heatLevel, 5) }).map((_, i) => (
+                            <Flame
+                              key={i}
+                              size={14}
+                              className={
+                                selectedItem.heatLevel <= 3
+                                  ? "text-primary"
+                                  : selectedItem.heatLevel <= 6
+                                  ? "text-orange-500"
+                                  : "text-red-500"
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
 
-                        {Array.from({
-                          length: Math.min(selectedItem.heatLevel, 5),
-                        }).map((_, i) => (
-                          <Flame
-                            key={i}
-                            size={14}
-                            className={
-                              selectedItem.heatLevel <= 3
-                                ? "text-primary"
-                                : selectedItem.heatLevel <= 6
-                                ? "text-orange-500"
-                                : "text-red-500"
+                    {/* Allergens Section */}
+                    {selectedItem.allergens && selectedItem.allergens.length > 0 && (
+                      <div className="mb-6 pb-6 border-b border-primary/10">
+                        <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                          Allergen Information
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedItem.allergens.map((a) => {
+                            const Icon = allergenIconMap[a]?.icon;
+                            const label = allergenIconMap[a]?.label;
+                            if (!Icon) return null;
+
+                            return (
+                              <div
+                                key={a}
+                                className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-sm"
+                              >
+                                <Icon size={16} className="text-destructive" />
+                                <span className="font-medium">{label}</span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sauce Pairings Section */}
+                    {selectedItem.saucePairings.length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                          Recommended Sauce Pairings
+                        </h4>
+                        <div className="space-y-3">
+                          {selectedItem.saucePairings.map((name) => {
+                            const sauce = findSauce(name);
+
+                            if (!sauce) {
+                              return (
+                                <span
+                                  key={name}
+                                  className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                >
+                                  {name}
+                                </span>
+                              );
                             }
-                          />
-                        ))}
+
+                            return (
+                              <div
+                                key={name}
+                                className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                              >
+                                {sauce.image && (
+                                  <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                    <img
+                                      src={sauce.image}
+                                      alt={sauce.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                )}
+
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center justify-between gap-2 mb-1">
+                                    <span className="text-sm font-semibold truncate">{sauce.name}</span>
+                                    <div className="flex items-center gap-0.5 flex-shrink-0">
+                                      {Array.from({ length: Math.min(sauce.level, 3) }).map((_, i) => (
+                                        <Flame
+                                          key={i}
+                                          size={14}
+                                          className={
+                                            sauce.level <= 3
+                                              ? "text-primary"
+                                              : sauce.level <= 6
+                                              ? "text-orange-500"
+                                              : "text-red-500"
+                                          }
+                                        />
+                                      ))}
+                                      {sauce.level > 3 && (
+                                        <span className="text-xs text-muted-foreground ml-1">
+                                          +{sauce.level - 3}
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground line-clamp-2">
+                                    {sauce.description}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Customizations Section */}
+                    {selectedItem.customizations.length > 0 && (
+                      <div className="mb-6">
+                        <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                          Available Customizations
+                        </h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedItem.customizations.map((c) => (
+                            <span
+                              key={c}
+                              className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
+                            >
+                              {c}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     )}
                   </div>
 
-                  <h2 className="font-serif text-3xl mb-2">
-                    {selectedItem.name}
-                  </h2>
-
-                  <p className="text-muted-foreground mb-8 leading-relaxed">
-                    {selectedItem.description}
-                  </p>
-                  {/* Allergens */}
-{selectedItem.allergens && selectedItem.allergens.length > 0 && (
-  <div className="mb-6">
-    <h4 className="font-serif text-sm mb-2 uppercase tracking-wider">
-      Contains Allergens
-    </h4>
-
-    <div className="flex flex-wrap gap-3">
-      {selectedItem.allergens.map((a) => {
-        const Icon = allergenIconMap[a]?.icon;
-        const label = allergenIconMap[a]?.label;
-        if (!Icon) return null;
-
-        return (
-          <div
-            key={a}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary border border-primary/20 text-xs"
-          >
-            <Icon size={14} />
-            <span>{label}</span>
-          </div>
-        );
-      })}
-    </div>
-  </div>
-)}
-
-
-                  {selectedItem.saucePairings.length > 0 && (
-                    <div className="mb-6">
-                      <h4 className="font-serif text-sm mb-3 uppercase tracking-wider">
-                        Recommended Sauce Pairings
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedItem.saucePairings.map((s) => (
-                          <span
-                            key={s}
-                            className="text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
-                          >
-                            {s}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {selectedItem.customizations.length > 0 && (
-                    <div className="mb-8">
-                      <h4 className="font-serif text-sm mb-3 uppercase tracking-wider">
-                        Customizations
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedItem.customizations.map((c) => (
-                          <span
-                            key={c}
-                            className="text-xs bg-primary/10 text-primary px-3 py-1.5 rounded-full border border-primary/30"
-                          >
-                            {c}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <button className="btn-gold w-full">Order Now</button>
+                  {/* Footer with CTA */}
+                  <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
+                    <button className="btn-gold w-full py-3 text-base font-semibold">
+                      Order Now
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

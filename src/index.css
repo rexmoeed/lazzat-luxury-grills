@@ -379,3 +379,42 @@ html, body {
 .pulse-gold {
   animation: pulse-glow 3s ease-in-out infinite;
 }
+
+/* Custom Scrollbar Styling */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: hsl(43 56% 52% / 0.3);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: hsl(43 56% 52% / 0.5);
+}
+
+/* Firefox scrollbar */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(43 56% 52% / 0.3) transparent;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thumb-primary\/30::-webkit-scrollbar-thumb {
+  background: hsl(43 56% 52% / 0.3);
+}
+
+.scrollbar-thumb-primary\/50:hover::-webkit-scrollbar-thumb {
+  background: hsl(43 56% 52% / 0.5);
+}

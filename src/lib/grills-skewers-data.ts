@@ -23,9 +23,15 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       subCategory: "Chicken",
       heatLevel: 3,
       isPopular: true,
-      saucePairings: ["Mint sauce", "Maple Mustard"],
+      saucePairings: [
+        "Mint sauce",
+        "Maple Mustard",
+        "Sweet and spicy",
+        "Chipotle sauce",
+      ],
       customizations: ["Extra Char", "Boneless"],
       allergens: ["milk"], // yogurt / cream-based marinade
+      dietary: [],
     },
     {
       id: 4,
@@ -37,9 +43,15 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       category: "Grills & Skewers",
       subCategory: "Seekh",
       heatLevel: 4,
-      saucePairings: ["Mint sauce", "Classic Mild"],
+      saucePairings: [
+        "Mint sauce",
+        "Mushroom sauce",
+        "Sweet and spicy",
+        "Chipotle sauce",
+      ],
       customizations: ["Add Cheese", "Boneless"],
       allergens: ["milk"], // dairy binding / optional cheese
+      dietary: [],
     },
   ],
 
@@ -55,9 +67,14 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       subCategory: "Lamb",
       heatLevel: 4,
       isPopular: true,
-      saucePairings: ["Chimichurri", "Garlic Supreme"],
+      saucePairings: [
+        "BBQ sauce",
+        "Spicy tomato sauce",
+        "Sweet and spicy",
+      ],
       customizations: ["Extra Herb", "Half Portion"],
       allergens: [], // no major allergens in base preparation
+      dietary: [],
     },
     {
       id: 5,
@@ -69,9 +86,14 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       category: "Grills & Skewers",
       subCategory: "Seekh",
       heatLevel: 5,
-      saucePairings: ["Garlic Supreme", "Chimichurri"],
+      saucePairings: [
+        "Jalapeno chipotle sauce",
+        "BBQ sauce",
+        "Spicy tomato sauce",
+      ],
       customizations: ["Extra Spice", "Boneless"],
       allergens: [], // spice-based, no dairy by default
+      dietary: [],
     },
     {
       id: 6,
@@ -83,9 +105,14 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       category: "Grills & Skewers",
       subCategory: "Lamb Chops",
       heatLevel: 3,
-      saucePairings: ["Chimichurri", "Classic Mild"],
+      saucePairings: [
+        "BBQ sauce",
+        "Mushroom sauce",
+        "Mint sauce",
+      ],
       customizations: ["Extra Lemon", "Crispy Edges"],
       allergens: [], // herb & oil marinade
+      dietary: [],
     },
   ],
 
@@ -100,9 +127,14 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       category: "Grills & Skewers",
       subCategory: "Salmon",
       heatLevel: 2,
-      saucePairings: ["Lemon Herb", "Mint sauce"],
+      saucePairings: [
+        "Maple Mustard",
+        "Mint sauce",
+        "Sweet and spicy",
+      ],
       customizations: ["Extra Lemon"],
       allergens: ["fish", "milk"], // salmon + yogurt-based tikka marinade
+      dietary: [],
     },
   ],
 
@@ -118,7 +150,12 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       subCategory: "Vegetarian",
       heatLevel: 3,
       isPopular: true,
-      saucePairings: ["Mint sauce", "Classic Mild", "Garlic Supreme"],
+      saucePairings: [
+        "Mint sauce",
+        "Mushroom sauce",
+        "Chipotle sauce",
+        "Sweet and spicy",
+      ],
       customizations: ["Extra Char", "Extra Sauce"],
       allergens: ["milk"], // paneer = cheese (dairy)
       dietary: ["vegetarian"],

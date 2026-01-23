@@ -20,6 +20,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: ["Extra Thick", "Less Sugar", "Add Ice Cream"],
       allergens: ["milk"], // milk + optional ice cream
+      dietary: ["vegetarian"],
     },
   ],
 
@@ -37,6 +38,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: ["Less Sweet", "Extra Mint", "Sparkling"],
       allergens: [], // no common allergens
+      dietary: ["vegetarian"],
     },
   ],
 };

@@ -22,10 +22,12 @@ export const biryaniItems: Record<string, MenuItem[]> = {
         "Mushroom sauce",
         "Sweet and spicy",
         "Spicy tomato sauce",
+        "Chipotle sauce",
       ],
 
       customizations: ["Extra Rice", "Extra Meat", "Boneless"],
       allergens: ["milk"], // ghee / yogurt-based preparation
+      dietary: [],
     },
   ],
 };

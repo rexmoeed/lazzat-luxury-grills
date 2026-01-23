@@ -21,6 +21,7 @@ export const sajjiItems: Record<string, MenuItem[]> = {
          "Mint sauce",
         "Sweet and spicy",
         "Spicy tomato sauce",
+        "BBQ sauce",
       ],
 
       customizations: [
@@ -30,6 +31,7 @@ export const sajjiItems: Record<string, MenuItem[]> = {
       ],
 
       allergens: ["milk"], // possible butter / raita pairing
+      dietary: [],
     },
   ],
 };
