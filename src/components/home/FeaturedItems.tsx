@@ -1,20 +1,83 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { menuItemsFlat } from "@/lib/menu-data";
+import { sauces } from "@/lib/sauces-data";
 
 export const FeaturedItems = () => {
-  const popularOrNew = menuItemsFlat.filter((item) => item.isPopular || item.isNew);
+  const grillsBiryaniSajji = menuItemsFlat.filter((item) =>
+    ["Grills & Skewers", "Biryani", "Sajji"].includes(item.category)
+  );
+  const shakesJuices = menuItemsFlat.filter((item) => item.category === "Shakes & Juices");
+  const sides = menuItemsFlat.filter((item) => item.category === "Sides");
+  const desserts = menuItemsFlat.filter((item) => item.category === "Desserts");
 
-  let featuredItems = popularOrNew.slice(0, 5);
+  const [tick, setTick] = useState(0);
 
-  if (featuredItems.length < 5) {
-    const remaining = menuItemsFlat
-      .filter((item) => !featuredItems.some((f) => f.id === item.id))
-      .slice(0, 5 - featuredItems.length);
-    featuredItems = [...featuredItems, ...remaining];
-  }
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTick((prev) => prev + 1);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
 
-  const firstRow = featuredItems.slice(0, 3);
-  const secondRow = featuredItems.slice(3, 5);
+  const grillItem = grillsBiryaniSajji.length
+    ? grillsBiryaniSajji[tick % grillsBiryaniSajji.length]
+    : null;
+  const sauceItem = sauces.length ? sauces[tick % sauces.length] : null;
+  const juiceItem = shakesJuices.length ? shakesJuices[tick % shakesJuices.length] : null;
+  const sideItem = sides.length ? sides[tick % sides.length] : null;
+  const dessertItem = desserts.length ? desserts[tick % desserts.length] : null;
+
+  const cards = [
+    grillItem && {
+      title: "Grills · Biryani · Sajji",
+      name: grillItem.name,
+      description: grillItem.description,
+      image: grillItem.image,
+      to: "/menu",
+      accent: grillItem.category,
+    },
+    sauceItem && {
+      title: "Signature Sauces",
+      name: sauceItem.name,
+      description: sauceItem.description,
+      image: sauceItem.image,
+      to: "/menu",
+      accent: `Level ${sauceItem.level}`,
+    },
+    juiceItem && {
+      title: "Juices & Shakes",
+      name: juiceItem.name,
+      description: juiceItem.description,
+      image: juiceItem.image,
+      to: "/menu",
+      accent: juiceItem.category,
+    },
+    sideItem && {
+      title: "Sides",
+      name: sideItem.name,
+      description: sideItem.description,
+      image: sideItem.image,
+      to: "/menu",
+      accent: sideItem.category,
+    },
+    dessertItem && {
+      title: "Desserts",
+      name: dessertItem.name,
+      description: dessertItem.description,
+      image: dessertItem.image,
+      to: "/menu",
+      accent: dessertItem.category,
+    },
+  ].filter(Boolean) as {
+    title: string;
+    name: string;
+    description: string;
+    image: string;
+    to: string;
+    accent?: string;
+  }[];
 
   return (
     <section className="section-padding bg-background">
@@ -31,94 +94,47 @@ export const FeaturedItems = () => {
           </p>
         </div>
 
-        {/* Portfolio Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {firstRow.map((item, index) => (
+        {/* Five rotating boxes */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 max-w-6xl mx-auto">
+          {cards.map((card, idx) => (
             <Link
-              key={item.id}
-              to="/menu"
-              className="group relative aspect-[5/4] overflow-hidden rounded-lg shadow-[0_10px_35px_-24px_rgba(0,0,0,0.45)]"
-              style={{ animationDelay: `${index * 100}ms` }}
+              key={`${card.title}-${idx}`}
+              to={card.to}
+              className="group relative aspect-[5/6] overflow-hidden rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)]"
             >
-              {/* Image */}
               <img
-                src={item.image}
-                alt={item.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                src={card.image}
+                alt={card.name}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110"
                 loading="lazy"
               />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-
-              {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-2 block">
-                    {item.category}
-                  </span>
-                  <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2">
-                    {item.name}
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out" />
+              <div className="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur text-[10px] font-semibold uppercase tracking-wide text-white">
+                {card.title}
+              </div>
+              <div className="absolute inset-0 flex flex-col justify-end p-3.5 md:p-4">
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
+                  {card.accent && (
+                    <span className="text-[10px] font-sans text-primary uppercase tracking-widest mb-1 block">
+                      {card.accent}
+                    </span>
+                  )}
+                  <h3 className="font-serif text-base md:text-lg text-foreground mb-1">
+                    {card.name}
                   </h3>
-                  <p className="text-sm font-sans text-foreground/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                    {item.description}
+                  <p className="text-[11px] md:text-sm font-sans text-foreground/75 line-clamp-2">
+                    {card.description}
                   </p>
                 </div>
               </div>
-
-              {/* Gold Border on Hover */}
-              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-500" />
-            </Link>
-          ))}
-        </div>
-
-        {/* Second Row - 2 items */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          {secondRow.map((item, index) => (
-            <Link
-              key={item.id}
-              to="/menu"
-              className="group relative aspect-[5/3] overflow-hidden rounded-lg shadow-[0_10px_35px_-24px_rgba(0,0,0,0.45)]"
-              style={{ animationDelay: `${(index + 3) * 100}ms` }}
-            >
-              {/* Image */}
-              <img
-                src={item.image}
-                alt={item.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                loading="lazy"
-              />
-
-              {/* Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-500" />
-
-              {/* Content */}
-              <div className="absolute inset-0 flex flex-col justify-end p-5 md:p-6">
-                <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                  <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-2 block">
-                    {item.category}
-                  </span>
-                  <h3 className="font-serif text-xl md:text-2xl text-foreground mb-2">
-                    {item.name}
-                  </h3>
-                  <p className="text-sm font-sans text-foreground/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Gold Border on Hover */}
-              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-500" />
+              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
             </Link>
           ))}
         </div>
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <Link
-            to="/menu"
-            className="btn-outline-white inline-block"
-          >
+          <Link to="/menu" className="btn-outline-white inline-block">
             View Full Menu
           </Link>
         </div>

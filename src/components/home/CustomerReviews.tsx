@@ -35,7 +35,7 @@ export const CustomerReviews = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentReview((prev) => (prev + 1) % reviews.length);
-    }, 5000);
+    }, 4500);
     return () => clearInterval(timer);
   }, []);
 
@@ -51,61 +51,71 @@ export const CustomerReviews = () => {
     <section className="section-padding bg-background">
       <div className="container-luxury max-w-4xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="gold-divider w-16 mx-auto mb-6" />
-          <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
+        <div className="text-center mb-10">
+          <div className="gold-divider w-16 mx-auto mb-5" />
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-2">
             What Our <span className="text-primary">Guests</span> Say
           </h2>
+          <p className="text-sm md:text-base text-muted-foreground">Premium hospitality, verified by our diners.</p>
         </div>
 
         {/* Review Carousel */}
-        <div className="relative">
+        <div
+          className="relative rounded-2xl border border-foreground/5 bg-background/40 backdrop-blur-sm shadow-[0_14px_45px_-28px_rgba(0,0,0,0.6)] px-5 md:px-8 py-8"
+        >
           {/* Quote Icon */}
-          <Quote className="w-12 h-12 text-primary/30 mx-auto mb-8" />
+          <Quote className="w-10 h-10 text-primary/40 mx-auto mb-6" />
 
           {/* Review */}
-          <div className="text-center">
+          <div className="text-center relative min-h-[220px]">
             {reviews.map((review, index) => (
               <div
                 key={review.id}
                 className={cn(
-                  "transition-all duration-500",
+                  "transition-all duration-500 ease-out", 
                   index === currentReview
-                    ? "opacity-100"
-                    : "opacity-0 absolute inset-0"
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4 pointer-events-none absolute inset-0"
                 )}
               >
-                {/* Stars */}
-                <div className="flex items-center justify-center gap-1 mb-6">
+                {/* Stars and meta */}
+                <div className="flex items-center justify-center gap-1.5 mb-4">
                   {Array.from({ length: review.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="w-5 h-5 text-primary fill-primary"
+                      className="w-4.5 h-4.5 text-primary fill-primary"
                     />
                   ))}
+                  <span className="text-xs text-muted-foreground ml-2">5.0 · Verified Guests</span>
                 </div>
 
                 {/* Text */}
-                <p className="font-serif text-xl md:text-2xl text-foreground/90 italic mb-8 leading-relaxed">
-                  "{review.text}"
+                <p className="font-serif text-lg md:text-xl text-foreground leading-relaxed mb-6">
+                  {review.text}
                 </p>
 
                 {/* Author */}
-                <p className="font-sans text-sm text-primary uppercase tracking-widest">
-                  {review.name}
-                </p>
+                <div className="flex items-center justify-center gap-3 text-sm uppercase tracking-[0.15em] text-primary">
+                  <div className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[12px] text-primary font-semibold">
+                    {review.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </div>
+                  <span>{review.name}</span>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-center gap-4 mt-12">
+          <div className="flex items-center justify-center gap-3 mt-10">
             <button
               onClick={prevReview}
-              className="w-10 h-10 rounded-full border border-foreground/30 flex items-center justify-center text-foreground/70 hover:border-primary hover:text-primary transition-all duration-300"
+              className="w-9 h-9 rounded-full border border-foreground/20 flex items-center justify-center text-foreground/70 hover:border-primary hover:text-primary transition-all duration-300"
               aria-label="Previous review"
             >
-              <ChevronLeft size={20} />
+              <ChevronLeft size={18} />
             </button>
 
             {/* Indicators */}
@@ -127,10 +137,10 @@ export const CustomerReviews = () => {
 
             <button
               onClick={nextReview}
-              className="w-10 h-10 rounded-full border border-foreground/30 flex items-center justify-center text-foreground/70 hover:border-primary hover:text-primary transition-all duration-300"
+              className="w-9 h-9 rounded-full border border-foreground/20 flex items-center justify-center text-foreground/70 hover:border-primary hover:text-primary transition-all duration-300"
               aria-label="Next review"
             >
-              <ChevronRight size={20} />
+              <ChevronRight size={18} />
             </button>
           </div>
         </div>
