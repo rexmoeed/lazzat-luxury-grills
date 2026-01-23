@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { useEffect, useState } from "react";
-import { MapPin, Clock, Phone, Navigation } from "lucide-react";
+import { MapPin, Clock, Phone, Navigation, Copy, Share2, Wifi, Car, ShoppingBag } from "lucide-react";
 
 /* =====================
    Location Data
@@ -18,6 +18,7 @@ const locations = [
       weekend: "11:00 AM - 12:00 AM",
       sunday: "12:00 PM - 10:00 PM",
     },
+    amenities: ["parking", "wifi", "takeaway"],
   },
   {
     id: 2,
@@ -31,6 +32,7 @@ const locations = [
       weekend: "10:00 AM - 11:00 PM",
       sunday: "11:00 AM - 9:00 PM",
     },
+    amenities: ["parking", "wifi", "takeaway"],
   },
 ];
 
@@ -60,6 +62,50 @@ const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => 
   return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
 };
 
+const getTravelTime = (distanceKm: number) => {
+  const avgSpeedKmh = 40; // Average city driving speed
+  const timeHours = distanceKm / avgSpeedKmh;
+  const timeMinutes = Math.round(timeHours * 60);
+  return timeMinutes;
+};
+
+const isLocationOpen = (hours: typeof locations[0]['hours']) => {
+  const now = new Date();
+  const day = now.getDay(); // 0 = Sunday
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  let hoursString = '';
+  if (day === 0) {
+    hoursString = hours.sunday;
+  } else if (day === 5 || day === 6) {
+    hoursString = hours.weekend;
+  } else {
+    hoursString = hours.weekday;
+  }
+
+  const match = hoursString.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/);
+  if (!match) return false;
+
+  const [, startHour, startMin, startPeriod, endHour, endMin, endPeriod] = match;
+  
+  let openTime = parseInt(startHour) * 60 + parseInt(startMin);
+  if (startPeriod === 'PM' && startHour !== '12') openTime += 12 * 60;
+  if (startPeriod === 'AM' && startHour === '12') openTime = parseInt(startMin);
+
+  let closeTime = parseInt(endHour) * 60 + parseInt(endMin);
+  if (endPeriod === 'PM' && endHour !== '12') closeTime += 12 * 60;
+  if (endPeriod === 'AM' && endHour === '12') closeTime = parseInt(endMin);
+  if (closeTime < openTime) closeTime += 24 * 60; // Next day
+
+  return currentTime >= openTime && currentTime <= closeTime;
+};
+
+const amenityIcons: Record<string, { icon: any; label: string }> = {
+  parking: { icon: Car, label: "Parking Available" },
+  wifi: { icon: Wifi, label: "Free WiFi" },
+  takeaway: { icon: ShoppingBag, label: "Takeaway Only" },
+};
+
 /* =====================
    Component
 ===================== */
@@ -68,27 +114,51 @@ const Locations = () => {
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
   const [openMaps, setOpenMaps] = useState<{ [key: number]: boolean }>({});
   const [openDetails, setOpenDetails] = useState<{ [key: number]: boolean }>({});
+  const [locationStatus, setLocationStatus] = useState<'loading' | 'success' | 'error' | null>(null);
+  const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [hasRequestedLocation, setHasRequestedLocation] = useState(false);
+
+  const requestLocation = () => {
+    if (!navigator.geolocation) {
+      setLocationStatus('error');
+      return;
+    }
+
+    setLocationStatus('loading');
+    setHasRequestedLocation(true);
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserCoords({ lat: latitude, lng: longitude });
+
+        const nearest = locations.reduce((prev, curr) => {
+          const prevDist = getDistance(latitude, longitude, prev.lat, prev.lng);
+          const currDist = getDistance(latitude, longitude, curr.lat, curr.lng);
+          return currDist < prevDist ? curr : prev;
+        });
+
+        setNearestId(nearest.id);
+        setLocationStatus('success');
+
+        document
+          .getElementById(`location-${nearest.id}`)
+          ?.scrollIntoView({ behavior: "smooth", block: "center" });
+      },
+      () => {
+        setLocationStatus('error');
+      },
+      { timeout: 10000 }
+    );
+  };
 
   useEffect(() => {
-    if (!navigator.geolocation) return;
-
-    navigator.geolocation.getCurrentPosition((pos) => {
-      const { latitude, longitude } = pos.coords;
-      setUserCoords({ lat: latitude, lng: longitude });
-
-      const nearest = locations.reduce((prev, curr) => {
-        const prevDist = getDistance(latitude, longitude, prev.lat, prev.lng);
-        const currDist = getDistance(latitude, longitude, curr.lat, curr.lng);
-        return currDist < prevDist ? curr : prev;
-      });
-
-      setNearestId(nearest.id);
-
-      document
-        .getElementById(`location-${nearest.id}`)
-        ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    });
+    // Don't auto-request on mount - wait for user action
   }, []);
+
+  const retryLocation = () => {
+    requestLocation();
+  };
 
   const toggleMap = (id: number) => {
     setOpenMaps((prev) => ({ ...prev, [id]: !prev[id] }));
@@ -96,6 +166,35 @@ const Locations = () => {
 
   const toggleDetails = (id: number) => {
     setOpenDetails((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const copyAddress = async (address: string, id: number) => {
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const shareLocation = async (location: typeof locations[0]) => {
+    const shareData = {
+      title: location.name,
+      text: `Check out ${location.name} at ${location.address}`,
+      url: getMapsLink(location.address),
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${location.name}\n${location.address}\n${shareData.url}`);
+        alert('Location details copied to clipboard!');
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
   };
 
   return (
@@ -115,7 +214,51 @@ const Locations = () => {
 
       {/* Locations */}
       <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-card">
-        <div className="container-luxury px-4 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+        <div className="container-luxury px-4">
+          {/* Location Permission Prompt */}
+          {!hasRequestedLocation && (
+            <div className="mb-6 p-6 rounded-lg border border-primary/30 bg-background/95 text-center">
+              <MapPin className="w-8 h-8 text-primary mx-auto mb-3" />
+              <h3 className="text-lg font-serif text-foreground mb-2">
+                Find Your Nearest Location
+              </h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                Enable location access to see which Lazzat branch is closest to you.
+              </p>
+              <button
+                onClick={requestLocation}
+                className="btn-gold px-6 py-2.5 text-sm font-semibold"
+              >
+                Enable Location
+              </button>
+            </div>
+          )}
+
+          {/* Status Banner */}
+          {locationStatus === 'loading' && (
+            <div className="mb-6 p-4 rounded-lg border border-primary/20 bg-background/50 text-center">
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                <span>Finding your nearest location...</span>
+              </div>
+            </div>
+          )}
+
+          {locationStatus === 'error' && (
+            <div className="mb-6 p-4 rounded-lg border border-primary/30 bg-background text-center">
+              <p className="text-sm text-muted-foreground mb-3">
+                Please enable location access on your device to find the nearest branch, or view both locations below.
+              </p>
+              <button
+                onClick={retryLocation}
+                className="text-sm text-primary hover:underline font-medium"
+              >
+                Try Again
+              </button>
+            </div>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
           {locations.map((location) => {
             const isNearest = nearestId === location.id;
             const isOpen = openMaps[location.id];
@@ -124,19 +267,35 @@ const Locations = () => {
               <div
                 key={location.id}
                 id={`location-${location.id}`}
-                className={`bg-background border rounded-lg p-3 md:p-5 transition-all ${
-                  isNearest ? "border-primary shadow-gold scale-[1.015]" : "border-primary/20"
+                className={`bg-background border rounded-lg p-3 md:p-5 transition-all duration-700 ${
+                  isNearest 
+                    ? "border-primary shadow-[0_0_25px_rgba(218,170,67,0.4)] animate-pulse-glow scale-[1.02]" 
+                    : "border-primary/20"
                 }`}
+                style={isNearest ? {
+                  animation: 'pulse-glow 2s ease-in-out infinite'
+                } : undefined}
               >
-                {isNearest && (
-                  <span className="text-xs font-semibold text-primary uppercase">
-                    Nearest to you
-                  </span>
-                )}
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    {isNearest && (
+                      <span className="text-xs font-semibold text-primary uppercase">
+                        Nearest to you
+                      </span>
+                    )}
+                    <span className={`text-xs font-semibold px-2 py-1 rounded-full ${
+                      isLocationOpen(location.hours)
+                        ? "bg-green-500/20 text-green-500"
+                        : "bg-red-500/20 text-red-500"
+                    }`}>
+                      {isLocationOpen(location.hours) ? "Open Now" : "Closed"}
+                    </span>
+                  </div>
+                </div>
 
                 {userCoords && (
-                  <div className="text-xs text-muted-foreground mb-1">
-                    {getDistance(userCoords.lat, userCoords.lng, location.lat, location.lng).toFixed(1)} km away
+                  <div className="text-xs text-muted-foreground mb-2">
+                    {getDistance(userCoords.lat, userCoords.lng, location.lat, location.lng).toFixed(1)} km away • ~{getTravelTime(getDistance(userCoords.lat, userCoords.lng, location.lat, location.lng))} min drive
                   </div>
                 )}
 
@@ -191,6 +350,41 @@ const Locations = () => {
                   </div>
                 </div>
 
+                {/* Amenities */}
+                {location.amenities && location.amenities.length > 0 && (
+                  <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-primary/10">
+                    {location.amenities.map((amenity) => {
+                      const AmenityIcon = amenityIcons[amenity]?.icon;
+                      const label = amenityIcons[amenity]?.label;
+                      if (!AmenityIcon) return null;
+                      return (
+                        <div key={amenity} className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                          <AmenityIcon className="w-4 h-4 text-primary" />
+                          <span>{label}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Action Buttons */}
+                <div className="flex gap-2 mt-4">
+                  <button
+                    onClick={() => copyAddress(location.address, location.id)}
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-primary/30 bg-background/50 hover:border-primary hover:bg-primary/5 transition text-xs font-medium"
+                  >
+                    <Copy className="w-3.5 h-3.5" />
+                    {copiedId === location.id ? "Copied!" : "Copy Address"}
+                  </button>
+                  <button
+                    onClick={() => shareLocation(location)}
+                    className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-lg border border-primary/30 bg-background/50 hover:border-primary hover:bg-primary/5 transition text-xs font-medium"
+                  >
+                    <Share2 className="w-3.5 h-3.5" />
+                    Share
+                  </button>
+                </div>
+
                 {/* Icons row */}
                 <div className="flex items-center justify-center gap-6 mt-4 mb-3">
                   <a
@@ -232,6 +426,7 @@ const Locations = () => {
               </div>
             );
           })}
+          </div>
         </div>
       </section>
     </Layout>
