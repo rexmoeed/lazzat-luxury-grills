@@ -379,7 +379,13 @@ const Contact = () => {
       <section className="py-10 bg-card text-center">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4">Ready to Explore Our Menu?</h2>
         <p className="text-muted-foreground mb-6">Discover our full range of grills, desserts, shakes, and more.</p>
-        <a href="/menu" className="btn-gold inline-block px-8 py-3 text-lg font-semibold rounded-full shadow hover:scale-105 transition-transform">View Menu</a>
+        <a
+          href="/menu"
+          className="btn-gold inline-block w-full max-w-xs mx-auto px-6 py-3 text-base md:text-lg font-semibold rounded-full shadow hover:scale-105 transition-transform"
+          style={{ minWidth: '0' }}
+        >
+          View Menu
+        </a>
       </section>
     </Layout>
   );
