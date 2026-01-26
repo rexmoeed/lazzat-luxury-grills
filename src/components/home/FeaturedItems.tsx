@@ -26,14 +26,13 @@ export const FeaturedItems = () => {
     : null;
   const sauceItem = sauces.length ? sauces[tick % sauces.length] : null;
   const juiceItem = shakesJuices.length ? shakesJuices[tick % shakesJuices.length] : null;
-  const sideItem = sides.length ? sides[tick % sides.length] : null;
   const dessertItem = desserts.length ? desserts[tick % desserts.length] : null;
 
+  // Show 4 featured cards: Grills/Biryani/Sajji, Sauces, Juices/Shakes, and Desserts
   const cards = [
     grillItem && {
       title: "Grills · Biryani · Sajji",
       name: grillItem.name,
-      description: grillItem.description,
       image: grillItem.image,
       to: "/menu",
       accent: grillItem.category,
@@ -41,7 +40,6 @@ export const FeaturedItems = () => {
     sauceItem && {
       title: "Signature Sauces",
       name: sauceItem.name,
-      description: sauceItem.description,
       image: sauceItem.image,
       to: "/menu",
       accent: `Level ${sauceItem.level}`,
@@ -49,23 +47,13 @@ export const FeaturedItems = () => {
     juiceItem && {
       title: "Juices & Shakes",
       name: juiceItem.name,
-      description: juiceItem.description,
       image: juiceItem.image,
       to: "/menu",
       accent: juiceItem.category,
     },
-    sideItem && {
-      title: "Sides",
-      name: sideItem.name,
-      description: sideItem.description,
-      image: sideItem.image,
-      to: "/menu",
-      accent: sideItem.category,
-    },
     dessertItem && {
       title: "Desserts",
       name: dessertItem.name,
-      description: dessertItem.description,
       image: dessertItem.image,
       to: "/menu",
       accent: dessertItem.category,
@@ -73,7 +61,6 @@ export const FeaturedItems = () => {
   ].filter(Boolean) as {
     title: string;
     name: string;
-    description: string;
     image: string;
     to: string;
     accent?: string;
@@ -94,47 +81,179 @@ export const FeaturedItems = () => {
           </p>
         </div>
 
-        {/* Five rotating boxes */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 max-w-6xl mx-auto">
-          {cards.map((card, idx) => (
+        {/* Magazine-style grid layout for featured boxes */}
+        <div
+          className="grid grid-cols-4 grid-rows-2 gap-6 max-w-6xl mx-auto"
+          style={{
+            gridTemplateRows: 'repeat(2, 1fr)',
+            gridAutoFlow: 'dense',
+            alignItems: 'stretch',
+            minHeight: '520px'
+          }}>
+          {/* Large left box (Grills/Biryani/Sajji) */}
+          {cards[0] && (
             <Link
-              key={`${card.title}-${idx}`}
-              to={card.to}
-              className="group relative aspect-[5/6] overflow-hidden rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)]"
+              key={cards[0].title}
+              to={cards[0].to}
+              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-2 col-span-2 h-full min-h-[260px] flex overflow-hidden"
+              style={{minHeight:'100%', height:'100%'}}
             >
               <img
-                src={card.image}
-                alt={card.name}
-                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110"
+                src={cards[0].image}
+                alt={cards[0].name}
+                className="absolute inset-0 w-full h-full object-contain transition-all duration-1000 ease-in-out group-hover:scale-105 featured-fade bg-black"
                 loading="lazy"
+                style={{animation: 'fadeScale 0.7s', background: '#111'}}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out" />
-              <div className="absolute top-2.5 left-2.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur text-[10px] font-semibold uppercase tracking-wide text-white">
-                {card.title}
-              </div>
-              <div className="absolute inset-0 flex flex-col justify-end p-3.5 md:p-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out featured-fade" style={{animation: 'fadeScale 0.7s'}} />
+              <div className="absolute inset-0 flex flex-col justify-end p-4 featured-fade" style={{animation: 'fadeScale 0.7s'}}>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
-                  {card.accent && (
-                    <span className="text-[10px] font-sans text-primary uppercase tracking-widest mb-1 block">
-                      {card.accent}
+                  {cards[0].accent && (
+                    <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-1 block">
+                      {cards[0].accent}
                     </span>
                   )}
-                  <h3 className="font-serif text-base md:text-lg text-foreground mb-1">
-                    {card.name}
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {cards[0].name}
                   </h3>
-                  <p className="text-[11px] md:text-sm font-sans text-foreground/75 line-clamp-2">
-                    {card.description}
-                  </p>
                 </div>
               </div>
               <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
             </Link>
-          ))}
+          )}
+          {/* Top-right two boxes: Sauces and Newly Added */}
+          {cards[1] && (
+            <Link
+              key={cards[1].title}
+              to={cards[1].to}
+              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              style={{minHeight:'100%', height:'100%'}}
+            >
+              <img
+                src={cards[1].image}
+                alt={cards[1].name}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110 featured-fade"
+                loading="lazy"
+                style={{animation: 'fadeScale 0.7s'}}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out featured-fade" style={{animation: 'fadeScale 0.7s'}} />
+              <div className="absolute inset-0 flex flex-col justify-end p-4 featured-fade" style={{animation: 'fadeScale 0.7s'}}>
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
+                  {cards[1].accent && (
+                    <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-1 block">
+                      {cards[1].accent}
+                    </span>
+                  )}
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {cards[1].name}
+                  </h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
+            </Link>
+          )}
+
+          {/* Newly Added Items box (top-right) */}
+          {menuItemsFlat.find(i => i.isNew) && (
+            <Link
+              key="newly-added"
+              to="/menu"
+              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              style={{minHeight:'100%', height:'100%'}}
+            >
+              <img
+                src={menuItemsFlat.find(i => i.isNew && i.image)?.image || cards[0]?.image}
+                alt={menuItemsFlat.find(i => i.isNew)?.name || 'Newly Added'}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110 featured-fade"
+                loading="lazy"
+                style={{animation: 'fadeScale 0.7s'}}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out featured-fade" style={{animation: 'fadeScale 0.7s'}} />
+              <div className="absolute inset-0 flex flex-col justify-end p-4 featured-fade" style={{animation: 'fadeScale 0.7s'}}>
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
+                  <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-1 block">Newly Added</span>
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {menuItemsFlat.find(i => i.isNew)?.name || 'New Item'}
+                  </h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
+            </Link>
+          )}
+                  {/* Smooth fade/scale animation for menu item changes */}
+                  <style>{`
+                    @keyframes fadeScale {
+                      0% { opacity: 0; transform: scale(0.96); }
+                      100% { opacity: 1; transform: scale(1); }
+                    }
+                    .featured-fade {
+                      animation: fadeScale 0.7s;
+                    }
+                  `}</style>
+          {/* Bottom-right two boxes (Shakes/Juices and Desserts) */}
+          {cards[2] && (
+            <Link
+              key={cards[2].title}
+              to={cards[2].to}
+              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              style={{minHeight:'100%', height:'100%'}}
+            >
+              <img
+                src={cards[2].image}
+                alt={cards[2].name}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out" />
+              <div className="absolute inset-0 flex flex-col justify-end p-4">
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
+                  {cards[2].accent && (
+                    <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-1 block">
+                      {cards[2].accent}
+                    </span>
+                  )}
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {cards[2].name}
+                  </h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
+            </Link>
+          )}
+          {cards[3] && (
+            <Link
+              key={cards[3].title}
+              to={cards[3].to}
+              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              style={{minHeight:'100%', height:'100%'}}
+            >
+              <img
+                src={cards[3].image}
+                alt={cards[3].name}
+                className="absolute inset-0 w-full h-full object-cover transition-all duration-1000 ease-in-out group-hover:scale-110"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/45 to-transparent opacity-85 group-hover:opacity-95 transition-opacity duration-700 ease-in-out" />
+              <div className="absolute inset-0 flex flex-col justify-end p-4">
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-all duration-700 ease-in-out">
+                  {cards[3].accent && (
+                    <span className="text-[11px] font-sans text-primary uppercase tracking-widest mb-1 block">
+                      {cards[3].accent}
+                    </span>
+                  )}
+                  <h3 className="font-serif text-lg md:text-xl text-foreground mb-1">
+                    {cards[3].name}
+                  </h3>
+                </div>
+              </div>
+              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-700 ease-in-out" />
+            </Link>
+          )}
         </div>
 
         {/* CTA */}
         <div className="text-center mt-12">
-          <Link to="/menu" className="btn-outline-white inline-block">
+          <Link to="/menu" className="btn-gold inline-block">
             View Full Menu
           </Link>
         </div>
