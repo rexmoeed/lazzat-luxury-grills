@@ -83,19 +83,19 @@ export const FeaturedItems = () => {
 
         {/* Magazine-style grid layout for featured boxes */}
         <div
-          className="grid grid-cols-4 grid-rows-2 gap-6 max-w-6xl mx-auto"
+          className="grid grid-cols-4 grid-rows-2 gap-4 max-w-5xl mx-auto"
           style={{
             gridTemplateRows: 'repeat(2, 1fr)',
             gridAutoFlow: 'dense',
             alignItems: 'stretch',
-            minHeight: '520px'
+            minHeight: '380px'
           }}>
           {/* Large left box (Grills/Biryani/Sajji) */}
           {cards[0] && (
             <Link
               key={cards[0].title}
               to={cards[0].to}
-              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-2 col-span-2 h-full min-h-[260px] flex overflow-hidden"
+              className="group relative rounded-lg shadow-[0_8px_24px_-16px_rgba(0,0,0,0.45)] row-span-2 col-span-2 h-full min-h-[180px] flex overflow-hidden"
               style={{minHeight:'100%', height:'100%'}}
             >
               <img
@@ -126,7 +126,7 @@ export const FeaturedItems = () => {
             <Link
               key={cards[1].title}
               to={cards[1].to}
-              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              className="group relative rounded-lg shadow-[0_8px_24px_-16px_rgba(0,0,0,0.45)] row-span-1 col-span-1 h-full min-h-[90px] flex overflow-hidden"
               style={{minHeight:'100%', height:'100%'}}
             >
               <img
@@ -158,7 +158,7 @@ export const FeaturedItems = () => {
             <Link
               key="newly-added"
               to="/menu"
-              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              className="group relative rounded-lg shadow-[0_8px_24px_-16px_rgba(0,0,0,0.45)] row-span-1 col-span-1 h-full min-h-[90px] flex overflow-hidden"
               style={{minHeight:'100%', height:'100%'}}
             >
               <img
@@ -195,7 +195,7 @@ export const FeaturedItems = () => {
             <Link
               key={cards[2].title}
               to={cards[2].to}
-              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              className="group relative rounded-lg shadow-[0_8px_24px_-16px_rgba(0,0,0,0.45)] row-span-1 col-span-1 h-full min-h-[90px] flex overflow-hidden"
               style={{minHeight:'100%', height:'100%'}}
             >
               <img
@@ -224,7 +224,7 @@ export const FeaturedItems = () => {
             <Link
               key={cards[3].title}
               to={cards[3].to}
-              className="group relative rounded-lg shadow-[0_12px_38px_-28px_rgba(0,0,0,0.55)] row-span-1 col-span-1 h-full min-h-[130px] flex overflow-hidden"
+              className="group relative rounded-lg shadow-[0_8px_24px_-16px_rgba(0,0,0,0.45)] row-span-1 col-span-1 h-full min-h-[90px] flex overflow-hidden"
               style={{minHeight:'100%', height:'100%'}}
             >
               <img
