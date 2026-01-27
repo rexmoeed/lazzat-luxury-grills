@@ -85,6 +85,7 @@ const getSidePairings = (item: MenuItem): string[] => {
 const categories = [
   "All",
   "Grills & Skewers",
+  "Döner",
   "Sides",
   "Sauces",
   "Desserts",
@@ -93,6 +94,10 @@ const categories = [
   "Sajji",
 ];
 const categoryHeadings: Record<string, { title: string; subtitle?: string }> = {
+    "Döner": {
+      title: "Döner",
+      subtitle: "Turkish-style döner wraps, bold flavors, and fresh toppings.",
+    },
   "Grills & Skewers": {
     title: "Grills & Skewers",
     subtitle: "Flame-grilled perfection, served fresh.",
@@ -153,6 +158,7 @@ const quickFilters = [
   { id: "lamb", label: "Lamb" },
   { id: "salmon", label: "Salmon" },
   { id: "seekh", label: "Seekh" },
+  { id: "doner", label: "Döner" },
   { id: "biryani", label: "Biryani" },
   { id: "sajji", label: "Sajji" },
 ];
@@ -190,6 +196,7 @@ const MEAT_KEYWORDS = [
   "seekh",
   "meat",
   "sajji",
+  "doner",
 ];
 
 
