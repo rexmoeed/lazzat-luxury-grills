@@ -86,6 +86,7 @@ const categories = [
   "All",
   "Grills & Skewers",
   "Döner",
+  "Wraps",
   "Sides",
   "Sauces",
   "Desserts",
