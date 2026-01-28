@@ -1,0 +1,5 @@
+# Lazzat Large Language Model (LLM) Policy
+
+This website may use Large Language Models (LLMs) or AI-powered features for enhanced user experience, support, or content generation. If you have questions about our use of LLMs, data privacy, or wish to opt out of AI-driven features, please contact us at info@lazzat.com.
+
+For more information, see our Privacy Policy.
