@@ -87,12 +87,12 @@ const categories = [
   "Grills & Skewers",
   "Döner",
   "Wraps",
-  "Sides",
-  "Sauces",
-  "Desserts",
-  "Shakes & Juices",
   "Biryani",
   "Sajji",
+  "Sides",
+  "Sauces",
+  "Shakes & Juices",
+  "Desserts",
 ];
 const categoryHeadings: Record<string, { title: string; subtitle?: string }> = {
     "Döner": {
@@ -579,7 +579,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
           : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
       )}
     >
-      {Icon && <Icon size={14} />}
+      {Icon && <Icon size={14} className="text-red-400" />}
       <span>{a.label}</span>
     </button>
   );
@@ -904,11 +904,9 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                 <div key={a} className="group relative">
                   <Icon
                     size={14}
-                    className="text-muted-foreground group-hover:text-primary transition"
+                    className="text-red-400"
                   />
-                  <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
-                    {label}
-                  </div>
+
                 </div>
               );
             })}
@@ -1019,10 +1017,10 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             </div>
 
             {/* Bottom meta row */}
-            <div className="mt-4 flex items-center justify-between gap-3">
+            <div className="mt-4 flex flex-col gap-1">
               {/* Heat */}
               {item.heatLevel > 0 && (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 mb-1">
                   {Array.from({ length: Math.min(item.heatLevel, 5) }).map(
                     (_, i) => (
                       <Flame
@@ -1043,7 +1041,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
               {/* Allergens */}
               {item.allergens && item.allergens.length > 0 && (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-1">
                   {item.allergens.map((a) => {
                     const Icon = allergenIconMap[a]?.icon;
                     const label = allergenIconMap[a]?.label;
@@ -1053,11 +1051,8 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       <div key={a} className="group relative">
                         <Icon
                           size={14}
-                          className="text-muted-foreground group-hover:text-primary transition"
+                          className="text-white"
                         />
-                        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-background border px-2 py-1 text-xs opacity-0 group-hover:opacity-100 pointer-events-none shadow">
-                          {label}
-                        </div>
                       </div>
                     );
                   })}
@@ -1175,7 +1170,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 key={a}
                                 className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-sm"
                               >
-                                <Icon size={16} className="text-destructive" />
+                                <Icon size={16} className="text-red-400" />
                                 <span className="font-medium">{label}</span>
                               </div>
                             );
