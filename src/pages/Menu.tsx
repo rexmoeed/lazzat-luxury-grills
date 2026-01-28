@@ -35,6 +35,7 @@ const allergenIconMap: Partial<Record<
   soy: { icon: Leaf, label: "Soy" },
   sesame: { icon: Leaf, label: "Sesame" },
   shellfish: { icon: Fish, label: "Shellfish" },
+  fish: { icon: Fish, label: "Fish" },
 };
 
 /* Utility */
@@ -179,6 +180,7 @@ const allergenFilters: { id: Allergen; label: string }[] = [
   { id: "soy", label: "Soy" },
   { id: "sesame", label: "Sesame" },
   { id: "shellfish", label: "Shellfish" },
+  { id: "fish", label: "Fish" },
 ];
 
 
