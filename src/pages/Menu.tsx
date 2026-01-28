@@ -1238,7 +1238,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                     )}
 
                     {/* Side Pairings Section */}
-                    {sideRecommendations.length > 0 && selectedItem.category === "Grills & Skewers" && (
+                    {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
                       <div className="mb-6">
                         <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                           Recommended Sides

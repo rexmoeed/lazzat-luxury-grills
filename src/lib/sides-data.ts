@@ -35,6 +35,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Crispy"],
       allergens: [],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -51,6 +53,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Garlic", "Add Cheese"],
       allergens: ["milk", "gluten"],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -67,6 +71,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Char"],
       allergens: [],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -83,6 +89,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Dressing"],
       allergens: ["milk"],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -99,6 +107,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Butter", "Extra Paprika"],
       allergens: ["milk"],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -115,6 +125,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Dressing", "Add Olives"],
       allergens: [],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
     /* NAAN ITEMS */
@@ -132,6 +144,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Butter"],
       allergens: ["milk", "gluten"],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -148,6 +162,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Cheese"],
       allergens: ["milk", "gluten"],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -164,6 +180,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Garlic"],
       allergens: ["milk", "gluten"],
       dietary: ["vegetarian"],
+      isNew: true,
+      isPopular: true,
     },
         {
       id: 213,
@@ -179,6 +197,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Saffron", "Extra Butter"],
       allergens: [],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -195,6 +215,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Garlic", "Extra Butter"],
       allergens: ["milk"],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
     {
@@ -211,6 +233,8 @@ export const sidesItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Crispy"],
       allergens: [],
       dietary: ["vegetarian", "gluten-free"],
+      isNew: true,
+      isPopular: true,
     },
 
   ],

@@ -16,10 +16,13 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       category: "Wraps",
       subCategory: "Steak",
       heatLevel: 2,
+      isNew: true,
+      // isPopular intentionally omitted
       saucePairings: ["BBQ sauce"],
       customizations: ["Extra Sauce", "No Onions"],
       allergens: ["gluten"],
       dietary: [],
+      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
       id: 402,
@@ -31,10 +34,13 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       category: "Wraps",
       subCategory: "Veggie",
       heatLevel: 1,
+      isNew: true,
+      // isPopular intentionally omitted
       saucePairings: ["BBQ sauce"],
       customizations: ["No Cheese", "Extra Veggies"],
       allergens: ["gluten"],
       dietary: ["vegetarian", "vegan"],
+      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
       id: 403,
@@ -46,10 +52,13 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       category: "Wraps",
       subCategory: "Chicken",
       heatLevel: 2,
+      isNew: true,
+      // isPopular intentionally omitted
       saucePairings: ["BBQ sauce", "Chipotle sauce"],
       customizations: ["Extra Sauce", "No Tomato"],
       allergens: ["gluten"],
       dietary: [],
+      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
   ],
 };
