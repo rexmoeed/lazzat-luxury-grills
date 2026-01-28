@@ -319,25 +319,8 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
    * - Gluten-free is only honored when explicitly provided (avoid accidental false-positives).
    */
   const deriveDietary = (item: MenuItem): DietaryFlag[] => {
-    const derived = new Set<DietaryFlag>(item.dietary || []);
-    const fullText = `${item.name} ${item.category} ${item.subCategory || ""}`.toLowerCase();
-
-    const hasMeat = MEAT_KEYWORDS.some((kw) => fullText.includes(kw));
-
-    // Vegetarian if no meat keywords
-    if (!hasMeat) {
-      derived.add("vegetarian");
-
-      // Vegan only when vegetarian AND no dairy/egg allergens
-      if (!itemHasAllergen(item, "milk") && !itemHasAllergen(item, "eggs")) {
-        derived.add("vegan");
-      }
-    }
-
-    // Gluten-free is only trusted if explicitly provided in data
-    // (to avoid mislabeling items that may contain hidden gluten).
-
-    return Array.from(derived);
+    // Only trust explicit dietary flags for vegan, vegetarian, gluten-free
+    return Array.from(new Set(item.dietary || []));
   };
 
   const itemMatchesDiet = (item: MenuItem, dietId: string) => {
@@ -402,10 +385,14 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
         )
       );
 
-      // Dietary filters: vegan, vegetarian, gluten-free
-      const dietMatch = positiveFilters.some((f) =>
-        dietaryFilters.some((d) => d.id === f && itemMatchesDiet(item, f))
+      // Dietary filters: vegan, vegetarian, gluten-free (AND logic)
+      const selectedDietary = positiveFilters.filter((f) =>
+        dietaryFilters.some((d) => d.id === f)
       );
+      let dietMatch = false;
+      if (selectedDietary.length > 0) {
+        dietMatch = selectedDietary.every((f) => itemMatchesDiet(item, f));
+      }
 
       // Misc filters: spicy, etc.
       const miscMatch = positiveFilters.some((f) => {
@@ -413,7 +400,11 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
         return false;
       });
 
-      return quickMatch || dietMatch || miscMatch;
+      // If any dietary filter is selected, require AND match for all selected dietary filters
+      if (selectedDietary.length > 0) {
+        return dietMatch;
+      }
+      return quickMatch || miscMatch;
     });
   }
 
@@ -890,33 +881,10 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         {sauce.description}
       </p>
 
-      {/* Bottom row: Allergens (LEFT) + Heat (RIGHT) */}
-      <div className="mt-auto flex items-center justify-between min-h-[20px]">
-        {/* Allergens */}
-        {sauce.allergens && sauce.allergens.length > 0 ? (
-          <div className="flex items-center gap-2">
-            {sauce.allergens.map((a) => {
-              const Icon = allergenIconMap[a]?.icon;
-              const label = allergenIconMap[a]?.label;
-              if (!Icon) return null;
-
-              return (
-                <div key={a} className="group relative">
-                  <Icon
-                    size={14}
-                    className="text-red-400"
-                  />
-
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <span className="w-6" />
-        )}
-
+      {/* Bottom row: Heat (top) + Allergens (bottom) */}
+      <div className="mt-auto flex flex-col gap-1 min-h-[20px]">
         {/* Heat */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 mb-1">
           {Array.from({ length: Math.min(sauce.level, 5) }).map((_, i) => (
             <Flame
               key={i}
@@ -936,6 +904,25 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             </span>
           )}
         </div>
+        {/* Allergens */}
+        {sauce.allergens && sauce.allergens.length > 0 && (
+          <div className="flex items-center gap-2 mt-1">
+            {sauce.allergens.map((a) => {
+              const Icon = allergenIconMap[a]?.icon;
+              const label = allergenIconMap[a]?.label;
+              if (!Icon) return null;
+
+              return (
+                <div key={a} className="group relative">
+                  <Icon
+                    size={14}
+                    className="text-white"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   ))}

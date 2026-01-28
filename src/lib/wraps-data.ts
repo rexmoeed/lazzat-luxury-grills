@@ -34,7 +34,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       saucePairings: ["BBQ sauce"],
       customizations: ["No Cheese", "Extra Veggies"],
       allergens: ["gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "vegan"],
     },
     {
       id: 403,
