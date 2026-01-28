@@ -14,7 +14,7 @@ const slides = [
     image: heroRestaurant,
     video: heroRestaurantVidMp4,
     poster: heroRestaurant, // optional poster image
-    headline: "Fresh. Fast. Full of Luxury Flavor.",
+    headline: "The Everything in One Place Grill",
     subhead: "Premium global grills crafted fresh daily.",
   },
   {
