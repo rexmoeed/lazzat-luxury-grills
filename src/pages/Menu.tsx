@@ -1,61 +1,28 @@
-// Utility: slugify
-function slugify(str: string = ""): string {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
 
-// Utility: hashCode (for generating IDs)
-function hashCode(str: string): number {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = (hash << 5) - hash + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash);
-}
+import {
+  quickFilters,
+  dietaryFilters,
+  allergenFilters,
+  miscFilters,
+  SPICY_THRESHOLD,
+  allergenIconMap,
+  sidesTabs,
+  slugify,
+  hashCode,
+} from "@/lib/menu-constants";
 
-// Allergen icon map
-const allergenIconMap: Partial<Record<string, { icon: any; label: string }>> = {
-  milk: { icon: Milk, label: "Dairy" },
-  eggs: { icon: Egg, label: "Eggs" },
-  gluten: { icon: Wheat, label: "Gluten" },
-  "tree-nuts": { icon: Nut, label: "Tree Nuts" },
-  peanuts: { icon: Nut, label: "Peanuts" },
-  soy: { icon: Leaf, label: "Soy" },
-  sesame: { icon: Leaf, label: "Sesame" },
-  shellfish: { icon: Fish, label: "Shellfish" },
-  fish: { icon: Fish, label: "Fish" },
-};
-
-// --- Place these inside MenuPage, after all state/consts ---
-// clearFilters, filteredSauces, CategoryHeading
-
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
-import { Flame, X, Filter, ChevronDown } from "lucide-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Flame, X, Filter, ChevronDown, ChevronLeft, ChevronRight, Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRef } from "react";
-
 import {
   menuItemsFlat,
   menuItemsGrouped,
 } from "@/lib/menu-data";
-
 import { sauces } from "@/lib/sauces-data";
 import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
 
 
-// Allergen icons (customize as needed)
-import { Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
-
-// Sides tab options
-const sidesTabs = [
-  { id: "carb", label: "Carbs" },
-  { id: "green", label: "Greens" },
-];
 
 export default function MenuPage() {
   // State declarations
@@ -82,17 +49,16 @@ export default function MenuPage() {
     } else if (sauceFilter === "high") {
       result = result.filter((s) => s.level >= 7);
     }
-    // Exclude allergens selected in drawer
+    // Exclude allergens selected in drawer (crash-proof)
     const excludedAllergens = Array.from(selectedFilters).filter(
-      (f): f is Allergen => allergenFilters.some((a) => a.id === f)
+      (f): f is Allergen =>
+        Array.isArray(allergenFilters) && allergenFilters.some((a) => a.id === f)
     );
     if (excludedAllergens.length === 0) {
       return result;
     }
     return result.filter((sauce) => {
-      if (!sauce.allergens || sauce.allergens.length === 0) {
-        return true;
-      }
+      if (!Array.isArray(sauce.allergens)) return true;
       return !excludedAllergens.some((a) => sauce.allergens.includes(a));
     });
   }, [sauceFilter, selectedFilters]);
@@ -255,41 +221,7 @@ const sortOptions = [
 /* quickFilters are protein / type shortcuts (map to existing quick sorts) */
 /* dietaryFilters: these ideally should be flags on your menuItems (vegan/vegetarian/gluten-free) — currently we use heuristics */
 /* spiceFilter options are handled separately via sauce heat or item.heatLevel */
-const quickFilters = [
-  { id: "chicken", label: "Chicken" },
-  { id: "lamb", label: "Lamb" },
-  { id: "salmon", label: "Salmon" },
-  { id: "seekh", label: "Seekh" },
-  { id: "doner", label: "Döner" },
-  { id: "biryani", label: "Biryani" },
-  { id: "sajji", label: "Sajji" },
-];
 
-const dietaryFilters = [
-  { id: "vegan", label: "Vegan" },
-  { id: "vegetarian", label: "Vegetarian" },
-  { id: "gluten-free", label: "Gluten-free" },
-];
-
-const allergenFilters: { id: Allergen; label: string }[] = [
-  { id: "milk", label: "Dairy" },
-  { id: "eggs", label: "Eggs" },
-  { id: "gluten", label: "Gluten" },
-  { id: "tree-nuts", label: "Tree Nuts" },
-  { id: "peanuts", label: "Peanuts" },
-  { id: "soy", label: "Soy" },
-  { id: "sesame", label: "Sesame" },
-  { id: "shellfish", label: "Shellfish" },
-  { id: "fish", label: "Fish" },
-];
-
-
-const miscFilters = [
-  { id: "spicy", label: "Spicy" }, // heuristic: heatLevel >= 4
-];
-
-/* Configuration */
-const SPICY_THRESHOLD = 4; // items with heatLevel >= this are considered "spicy"
 const MEAT_KEYWORDS = [
   "chicken",
   "lamb",
@@ -334,7 +266,13 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
    */
   const deriveDietary = (item: MenuItem): DietaryFlag[] => {
     // Only trust explicit dietary flags for vegan, vegetarian, gluten-free
-    return Array.from(new Set(item.dietary || []));
+    let flags = new Set(item.dietary || []);
+    // Remove vegan/vegetarian if item contains eggs
+    if (itemHasAllergen(item, "eggs")) {
+      flags.delete("vegan");
+      flags.delete("vegetarian");
+    }
+    return Array.from(flags);
   };
 
   const itemMatchesDiet = (item: MenuItem, dietId: string) => {
@@ -410,7 +348,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
 
       // Misc filters: spicy, etc.
       const miscMatch = positiveFilters.some((f) => {
-        if (f === "spicy") return item.heatLevel >= SPICY_THRESHOLD;
+        if (f === "spicy") return (item.heatLevel ?? 0) >= SPICY_THRESHOLD;
         return false;
       });
 
@@ -425,11 +363,11 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
   /* Step 4: SORTING */
   // Sort by heat level (ascending or descending)
   if (sortBy === "spice-low") {
-    return [...items].sort((a, b) => a.heatLevel - b.heatLevel);
+    return [...items].sort((a, b) => (a.heatLevel ?? 0) - (b.heatLevel ?? 0));
   }
 
   if (sortBy === "spice-high") {
-    return [...items].sort((a, b) => b.heatLevel - a.heatLevel);
+    return [...items].sort((a, b) => (b.heatLevel ?? 0) - (a.heatLevel ?? 0));
   }
 
   // Food type shortcuts: filter to show only selected type
@@ -922,24 +860,24 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             <div className="mt-auto flex flex-col gap-1 min-h-[20px]">
                               {/* Heat */}
                               <div className="flex items-center gap-1 mb-1">
-                                {Array.from({ length: Math.min(item.heatLevel, 5) }).map((_, i) => (
-                                  <Flame
-                                    key={i}
-                                    size={14}
-                                    className={
-                                      item.heatLevel <= 3
-                                        ? "text-primary"
-                                        : item.heatLevel <= 6
-                                        ? "text-orange-500"
-                                        : "text-red-500"
-                                    }
-                                  />
-                                ))}
-                                {item.heatLevel > 5 && (
-                                  <span className="text-xs ml-1 text-muted-foreground">
-                                    +{item.heatLevel - 5}
-                                  </span>
-                                )}
+                                        {Array.from({ length: Math.min(item.heatLevel ?? 0, 5) }).map((_, i) => (
+                                          <Flame
+                                            key={i}
+                                            size={14}
+                                            className={
+                                              (item.heatLevel ?? 0) <= 3
+                                                ? "text-primary"
+                                                : (item.heatLevel ?? 0) <= 6
+                                                ? "text-orange-500"
+                                                : "text-red-500"
+                                            }
+                                          />
+                                        ))}
+                                        {(item.heatLevel ?? 0) > 5 && (
+                                          <span className="text-xs ml-1 text-muted-foreground">
+                                            +{(item.heatLevel ?? 0) - 5}
+                                          </span>
+                                        )}
                               </div>
                               {/* Allergens */}
                               {item.allergens && item.allergens.length > 0 && (
@@ -1076,29 +1014,29 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </p>
                           </div>
                           {/* Heat Level Badge */}
-                          {selectedItem.heatLevel > 0 && (
-                            <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
-                              <Flame size={18} className="text-orange-500" />
-                              <span className="text-sm font-medium">Heat Level {selectedItem.heatLevel}</span>
-                              <div className="flex items-center gap-0.5 ml-2">
-                                {Array.from({ length: Math.min(selectedItem.heatLevel, 5) }).map((_, i) => (
-                                  <Flame
-                                    key={i}
-                                    size={14}
-                                    className={
-                                      selectedItem.heatLevel <= 3
-                                        ? "text-primary"
-                                        : selectedItem.heatLevel <= 6
-                                        ? "text-orange-500"
-                                        : "text-red-500"
-                                    }
-                                  />
-                                ))}
+                            {(selectedItem.heatLevel ?? 0) > 0 && (
+                              <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
+                                <Flame size={18} className="text-orange-500" />
+                                <span className="text-sm font-medium">Heat Level {selectedItem.heatLevel ?? 0}</span>
+                                <div className="flex items-center gap-0.5 ml-2">
+                                  {Array.from({ length: Math.min(selectedItem.heatLevel ?? 0, 5) }).map((_, i) => (
+                                    <Flame
+                                      key={i}
+                                      size={14}
+                                      className={
+                                        (selectedItem.heatLevel ?? 0) <= 3
+                                          ? "text-primary"
+                                          : (selectedItem.heatLevel ?? 0) <= 6
+                                          ? "text-orange-500"
+                                          : "text-red-500"
+                                      }
+                                    />
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
+                            )}
                           {/* Allergens Section */}
-                          {selectedItem.allergens && selectedItem.allergens.length > 0 && (
+                            {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
                             <div className="mb-6 pb-6 border-b border-primary/10">
                               <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
                                 Allergen Information
@@ -1122,7 +1060,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </div>
                           )}
                           {/* Sauce Pairings Section */}
-                          {selectedItem.saucePairings.length > 0 && (
+                            {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && (
                             <div className="mb-6">
                               <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                 Recommended Sauce Pairings
@@ -1189,7 +1127,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </div>
                           )}
                           {/* Side Pairings Section */}
-                          {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
+                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
                             <div className="mb-6">
                               <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                 Recommended Sides
@@ -1241,7 +1179,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </div>
                           )}
                           {/* Customizations Section */}
-                          {selectedItem.customizations.length > 0 && (
+                            {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
                             <div className="mb-6">
                               <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
                                 Available Customizations
