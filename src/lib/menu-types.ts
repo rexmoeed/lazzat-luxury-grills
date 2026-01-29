@@ -77,6 +77,8 @@ export interface MenuItem {
 
   /** Texture characteristics */
   textures?: TextureProfile[];
+  /** Sides classification: 'carb' or 'green' */
+  sideType?: "carb" | "green";
 }
 
 /* Sauce Items */

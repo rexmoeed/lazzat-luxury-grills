@@ -37,6 +37,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
@@ -55,6 +56,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
@@ -73,6 +75,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian", "gluten-free"],
       isNew: true,
       isPopular: true,
+      sideType: "green",
     },
 
     {
@@ -91,6 +94,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "green",
     },
 
     {
@@ -109,6 +113,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian", "gluten-free"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
@@ -127,6 +132,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian", "gluten-free"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     /* NAAN ITEMS */
@@ -146,6 +152,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
@@ -164,6 +171,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
@@ -182,6 +190,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
         {
       id: 213,
@@ -199,6 +208,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       dietary: ["vegetarian", "gluten-free"],
       isNew: true,
       isPopular: true,
+      sideType: "carb",
     },
 
     {
