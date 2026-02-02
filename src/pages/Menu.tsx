@@ -19,7 +19,7 @@ import {
   menuItemsFlat,
   menuItemsGrouped,
 } from "@/lib/menu-data";
-import { sauces } from "@/lib/sauces-data";
+// ...removed sauces import
 import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
 
 
@@ -34,34 +34,12 @@ export default function MenuPage() {
   const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
-  const [sauceFilter, setSauceFilter] = useState<"all" | "low" | "mid" | "high">("all");
+  // ...removed sauceFilter state
 
   // Helper to clear filters
   const clearFilters = () => setSelectedFilters(new Set());
 
-  // filteredSauces helper
-  const filteredSauces = useMemo(() => {
-    let result = sauces;
-    if (sauceFilter === "low") {
-      result = result.filter((s) => s.level <= 3);
-    } else if (sauceFilter === "mid") {
-      result = result.filter((s) => s.level >= 4 && s.level <= 6);
-    } else if (sauceFilter === "high") {
-      result = result.filter((s) => s.level >= 7);
-    }
-    // Exclude allergens selected in drawer (crash-proof)
-    const excludedAllergens = Array.from(selectedFilters).filter(
-      (f): f is Allergen =>
-        Array.isArray(allergenFilters) && allergenFilters.some((a) => a.id === f)
-    );
-    if (excludedAllergens.length === 0) {
-      return result;
-    }
-    return result.filter((sauce) => {
-      if (!Array.isArray(sauce.allergens)) return true;
-      return !excludedAllergens.some((a) => sauce.allergens.includes(a));
-    });
-  }, [sauceFilter, selectedFilters]);
+  // ...removed filteredSauces helper
 
   // Helper component to render category heading
   function CategoryHeading({ category }: { category: string }) {
@@ -110,9 +88,7 @@ export default function MenuPage() {
     });
   };
 
-// Find sauce details by name (case-insensitive)
-const findSauce = (name: string) =>
-  sauces.find((s) => s.name.toLowerCase() === name.toLowerCase());
+// ...removed findSauce helper
 
 // Side catalog pulled from existing menu items
 const sidesCatalog = menuItemsFlat.filter((item) => item.category === "Sides");
@@ -152,7 +128,6 @@ const categories = [
   "Sajji",
   "Desserts",
   "Sides",
-  "Sauces",
   "Shakes & Juices",
 ];
 
@@ -186,10 +161,7 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
     title: "Sides",
     subtitle: "Perfect accompaniments for your meal."
   },
-  "Sauces": {
-    title: "Signature Sauces",
-    subtitle: "House-made sauces for every taste."
-  },
+  // ...removed Sauces heading
   "Shakes & Juices": {
     title: "Shakes & Juices",
     subtitle: "Refreshing shakes and juices."
@@ -758,156 +730,49 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       ))}
                     </div>
                   )}
-                  {/* Sauces Filter Dropdown */}
-                  {activeCategory === "Sauces" && (
-                    <div className="flex items-center justify-between mb-6">
-                      <div />
-                      <select
-                        value={sauceFilter}
-                        onChange={(e) => setSauceFilter(e.target.value as any)}
-                        className="bg-secondary text-sm px-3 py-2 rounded border border-primary/30"
-                      >
-                        <option value="all">All Levels</option>
-                        <option value="low">Level 1–3</option>
-                        <option value="mid">Level 4–6</option>
-                        <option value="high">Level 7+</option>
-                      </select>
-                    </div>
-                  )}
+                  {/* ...removed Sauces Filter Dropdown */}
                   {/* Grid for Sides, Sauces, or other single category */}
-                  <div className={
-                    activeCategory === "Sauces"
-                      ? "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-                      : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  }>
+                  <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
                     {(activeCategory === "Sides"
                       ? filteredItems.filter((item) => item.category === "Sides" && item.sideType === activeSidesTab)
-                      : activeCategory === "Sauces"
-                        ? filteredSauces.map((sauce) => ({
-                            ...sauce,
-                            id: hashCode(sauce.name),
-                            name: sauce.name,
-                            description: sauce.description,
-                            image: sauce.image,
-                            category: "Sauces",
-                            subCategory: "Signature Sauce",
-                            heatLevel: sauce.level,
-                            allergens: sauce.allergens || [],
-                            saucePairings: [],
-                            customizations: [],
-                            isNew: false,
-                            isPopular: false,
-                          }))
-                        : filteredItems.filter((item) => item.category === activeCategory)
+                      : filteredItems.filter((item) => item.category === activeCategory)
                     ).map((item) => (
                       <div
                         key={item.id}
                         onClick={() => setSelectedItem(item)}
-                        className={
-                          activeCategory === "Sauces"
-                            ? "card-luxury p-4 md:p-6 group flex flex-col cursor-pointer"
-                            : "card-luxury cursor-pointer group"
-                        }
+                        className="card-luxury cursor-pointer group"
                       >
-                        {/* Image and content for Sides/Sauces/Other */}
                         {item.image && (
-                          <div className={
-                            activeCategory === "Sauces"
-                              ? "mb-3 overflow-hidden rounded-md aspect-[4/3]"
-                              : "relative aspect-[4/3] overflow-hidden"
-                          }>
+                          <div className="relative aspect-[4/3] overflow-hidden">
                             <img
                               src={item.image}
                               alt={item.name}
-                              className={
-                                activeCategory === "Sauces"
-                                  ? "w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                  : "w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              }
+                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                             />
-                            {activeCategory !== "Sauces" && (
-                              <>
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                                <div className="absolute top-4 left-4 flex gap-2">
-                                  {item.isNew && (
-                                    <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
-                                  )}
-                                  {item.isPopular && (
-                                    <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
-                                  )}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                        <div className={activeCategory === "Sauces" ? "" : "p-6"}>
-                          <h3 className={
-                            activeCategory === "Sauces"
-                              ? "font-serif text-lg mb-2 group-hover:text-primary"
-                              : "font-serif text-xl group-hover:text-primary transition-colors"
-                          }>
-                            {item.name}
-                          </h3>
-                          <p className={
-                            activeCategory === "Sauces"
-                              ? "text-xs text-muted-foreground mb-4 line-clamp-4"
-                              : "text-sm text-muted-foreground line-clamp-2 mt-1"
-                          }>
-                            {item.description}
-                          </p>
-                          {/* Meta row for Sides/Sauces/Other */}
-                          {activeCategory === "Sauces" ? (
-                            <div className="mt-auto flex flex-col gap-1 min-h-[20px]">
-                              {/* Heat */}
-                              <div className="flex items-center gap-1 mb-1">
-                                        {Array.from({ length: Math.min(item.heatLevel ?? 0, 5) }).map((_, i) => (
-                                          <Flame
-                                            key={i}
-                                            size={14}
-                                            className={
-                                              (item.heatLevel ?? 0) <= 3
-                                                ? "text-primary"
-                                                : (item.heatLevel ?? 0) <= 6
-                                                ? "text-orange-500"
-                                                : "text-red-500"
-                                            }
-                                          />
-                                        ))}
-                                        {(item.heatLevel ?? 0) > 5 && (
-                                          <span className="text-xs ml-1 text-muted-foreground">
-                                            +{(item.heatLevel ?? 0) - 5}
-                                          </span>
-                                        )}
-                              </div>
-                              {/* Allergens */}
-                              {item.allergens && item.allergens.length > 0 && (
-                                <div className="flex items-center gap-2 mt-1">
-                                  {item.allergens.map((a: string) => {
-                                    const Icon = allergenIconMap[a]?.icon;
-                                    if (!Icon) return null;
-                                    return (
-                                      <div key={a} className="group relative">
-                                        <Icon size={14} className="text-white" />
-                                      </div>
-                                    );
-                                  })}
-                                </div>
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                            <div className="absolute top-4 left-4 flex gap-2">
+                              {item.isNew && (
+                                <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
+                              )}
+                              {item.isPopular && (
+                                <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
                               )}
                             </div>
-                          ) : null}
-                          {/* ...existing meta row (heat, allergens, etc.) for Sides/Other can go here if needed... */}
-                          {activeCategory !== "Sauces" && (
-                            <div className="mt-3 text-xs text-primary uppercase tracking-wider">
-                              {item.category}
-                              {item.subCategory ? ` • ${item.subCategory}` : ""}
-                            </div>
-                          )}
+                          </div>
+                        )}
+                        <div className="p-6">
+                          <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                          <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+                            {item.category}
+                            {item.subCategory ? ` • ${item.subCategory}` : ""}
+                          </div>
                         </div>
                       </div>
                     ))}
                   </div>
                   {/* No items found */}
-                  {(activeCategory === "Sauces" ? filteredSauces.length === 0 : filteredItems.filter((item) => item.category === activeCategory).length === 0) && (
+                  {filteredItems.filter((item) => item.category === activeCategory).length === 0 && (
                     <div className="text-center py-16">
                       <p className="text-muted-foreground">
                         No items found in this category.
@@ -918,7 +783,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
               )}
               {activeCategory === "All" && (
                 <>
-                  {categories.filter(cat => cat !== "All" && cat !== "Sides" && cat !== "Sauces").map((cat) => {
+                  {categories.filter(cat => cat !== "All" && cat !== "Sides").map((cat) => {
                     const items = filteredItems.filter(item => item.category === cat);
                     if (items.length === 0) return null;
                     return (
@@ -1059,73 +924,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                               </div>
                             </div>
                           )}
-                          {/* Sauce Pairings Section */}
-                            {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && (
-                            <div className="mb-6">
-                              <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                Recommended Sauce Pairings
-                              </h4>
-                              <div className="space-y-3">
-                                {selectedItem.saucePairings.map((name) => {
-                                  const sauce = findSauce(name);
-                                  if (!sauce) {
-                                    return (
-                                      <span
-                                        key={name}
-                                        className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
-                                      >
-                                        {name}
-                                      </span>
-                                    );
-                                  }
-                                  return (
-                                    <div
-                                      key={name}
-                                      className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
-                                    >
-                                      {sauce.image && (
-                                        <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                          <img
-                                            src={sauce.image}
-                                            alt={sauce.name}
-                                            className="w-full h-full object-cover"
-                                          />
-                                        </div>
-                                      )}
-                                      <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between gap-2 mb-1">
-                                          <span className="text-sm font-semibold truncate">{sauce.name}</span>
-                                          <div className="flex items-center gap-0.5 flex-shrink-0">
-                                            {Array.from({ length: Math.min(sauce.level, 3) }).map((_, i) => (
-                                              <Flame
-                                                key={i}
-                                                size={14}
-                                                className={
-                                                  sauce.level <= 3
-                                                    ? "text-primary"
-                                                    : sauce.level <= 6
-                                                    ? "text-orange-500"
-                                                    : "text-red-500"
-                                                }
-                                              />
-                                            ))}
-                                            {sauce.level > 3 && (
-                                              <span className="text-xs text-muted-foreground ml-1">
-                                                +{sauce.level - 3}
-                                              </span>
-                                            )}
-                                          </div>
-                                        </div>
-                                        <p className="text-xs text-muted-foreground line-clamp-2">
-                                          {sauce.description}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
+                          {/* ...removed Sauce Pairings Section... */}
                           {/* Side Pairings Section */}
                             {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
                             <div className="mb-6">
