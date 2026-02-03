@@ -229,17 +229,17 @@ const SignatureFlavors = () => {
             </p>
 
             {/* Heat Level Dots/Flames - no box, no label */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 mt-2 mb-1">
               {Array.from({ length: 7 }).map((_, i) => {
                 let color = 'text-gray-300';
-                if (i === 0) color = i < flavor.level ? 'text-green-500' : 'text-gray-300';
-                else if (i === 1) color = i < flavor.level ? 'text-yellow-400' : 'text-gray-300';
+                if (i === 0) color = i < flavor.level ? 'text-green-400' : 'text-gray-300';
+                else if (i === 1) color = i < flavor.level ? 'text-yellow-300' : 'text-gray-300';
                 else if (i >= 2 && i <= 5) color = i < flavor.level ? 'text-orange-400' : 'text-gray-300';
                 else if (i === 6) color = i < flavor.level ? 'text-red-500' : 'text-gray-300';
                 return (
                   <Flame
                     key={i}
-                    size={12}
+                    size={15}
                     strokeWidth={1.5}
                     className={color + (i < flavor.level ? '' : ' opacity-40')}
                     fill={i < flavor.level ? 'currentColor' : 'none'}
@@ -308,17 +308,17 @@ const SignatureFlavors = () => {
                 </p>
 
                 {/* Heat Level Dots/Flames - no box, no label */}
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 mt-2 mb-1">
                   {Array.from({ length: 7 }).map((_, i) => {
                     let color = 'text-gray-300';
-                    if (i === 0) color = i < selectedFlavor.level ? 'text-green-500' : 'text-gray-300';
-                    else if (i === 1) color = i < selectedFlavor.level ? 'text-yellow-400' : 'text-gray-300';
+                    if (i === 0) color = i < selectedFlavor.level ? 'text-green-400' : 'text-gray-300';
+                    else if (i === 1) color = i < selectedFlavor.level ? 'text-yellow-300' : 'text-gray-300';
                     else if (i >= 2 && i <= 5) color = i < selectedFlavor.level ? 'text-orange-400' : 'text-gray-300';
                     else if (i === 6) color = i < selectedFlavor.level ? 'text-red-500' : 'text-gray-300';
                     return (
                       <Flame
                         key={i}
-                        size={13}
+                        size={15}
                         strokeWidth={1.5}
                         className={color + (i < selectedFlavor.level ? '' : ' opacity-40')}
                         fill={i < selectedFlavor.level ? 'currentColor' : 'none'}

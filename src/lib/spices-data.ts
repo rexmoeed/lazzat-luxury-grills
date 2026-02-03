@@ -49,14 +49,14 @@ export const spices: SauceItem[] = [
   },
   {
     name: "Cracked Black Pepper",
-    level: 2,
+    level: 3, // moderate heat
     description: "Cracked black peppercorns",
     image: blackPepper,
     allergens: [],
   },
   {
     name: "Crushed Red Chilli",
-    level: 6,
+    level: 6, // hot (can go to 7 for extra hot)
     description: "Sun-dried red chillies, crushed",
     image: redChilli,
     allergens: [],
@@ -98,7 +98,7 @@ export const spices: SauceItem[] = [
   },
   {
     name: "Korean Chilli Flakes",
-    level: 7,
+    level: 5, // medium-hot (gochugaru is not as hot as Indian/Thai)
     description: "Korean gochugaru chilli flakes",
     image: koreanChilli,
     allergens: [],
@@ -140,7 +140,7 @@ export const spices: SauceItem[] = [
   },
   {
     name: "Smoked Paprika",
-    level: 4,
+    level: 2, // usually mild, unless hot variety
     description: "Smoked red peppers, ground",
     image: paprika,
     allergens: [],
@@ -175,7 +175,7 @@ export const spices: SauceItem[] = [
   },
   {
     name: "White Pepper",
-    level: 2,
+    level: 3, // moderate heat
     description: "Hulled white peppercorns, ground",
     image: whitePepper,
     allergens: [],
