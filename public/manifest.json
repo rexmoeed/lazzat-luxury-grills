@@ -1,0 +1,21 @@
+{
+  "name": "Lazzat",
+  "short_name": "Lazzat",
+  "description": "Luxury fast-casual dining: BBQ, Tikka, Kabab, Biryani, Sajji, and more.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/Lazzat logo 02.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/Lazzat logo 02.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,4 +1,3 @@
-
 import {
   quickFilters,
   dietaryFilters,
@@ -12,6 +11,7 @@ import {
 } from "@/lib/menu-constants";
 
 import React, { useMemo, useState, useRef } from "react";
+import { Helmet } from "react-helmet";
 import { Layout } from "@/components/layout/Layout";
 import { Flame, X, Filter, ChevronDown, ChevronLeft, ChevronRight, Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -25,6 +25,8 @@ import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
 
 
 export default function MenuPage() {
+    const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
+    const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
   // State declarations
   const [activeSidesTab, setActiveSidesTab] = useState<string>("carb");
   const [activeCategory, setActiveCategory] = useState<string>("All");
@@ -612,273 +614,298 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
 
   return (
-      <Layout>
-        {/* Hero */}
-        <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-background">
-          <div className="container-luxury px-4 text-center">
-            <div className="gold-divider w-16 mx-auto mb-6" />
-            <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-3">
-              Our <span className="text-primary">Menu</span>
-            </h1>
-            <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-              Explore our premium selection of grills, sauces, desserts, shakes,
-              juices and biryani. All new menu.
-            </p>
-          </div>
-        </section>
-
-        {/* Filters Bar */}
-        <section className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-md border-b border-primary/20 py-4">
-          <div className="container-luxury px-4">
-            {/* Category Filters */}
-            <div className="overflow-hidden md:block max-h-none">
-              <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
-                <div className="w-full md:w-auto">
-                  {/* SLIDER ROW (arrows aligned to this only) */}
-                  <div className="relative">
-                    {/* LEFT ARROW — mobile only */}
-                    <button
-                      type="button"
-                      onClick={() => scrollCategories("left")}
-                      className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    {/* SCROLLABLE CATEGORY PILLS */}
-                    <div
-                      ref={categoryScrollRef}
-                      className="flex gap-2 md:gap-3 px-0 overflow-x-auto whitespace-nowrap scrollbar-hide"
-                    >
-                      {categories.map((category) => (
-                        <button
-                          key={category}
-                          onClick={() => setActiveCategory(category)}
-                          className={cn(
-                            "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all shrink-0",
-                            activeCategory === category
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-secondary text-muted-foreground hover:bg-primary/20"
-                          )}
-                        >
-                          {category}
-                        </button>
-                      ))}
+      <>
+        <Helmet>
+          <title>{pageTitle}</title>
+          <meta name="description" content={pageDescription} />
+          <meta property="og:title" content={pageTitle} />
+          <meta property="og:description" content={pageDescription} />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://lazzat.ca/menu" />
+          <meta property="og:image" content="https://lazzat.ca/Lazzat%20logo%2002.png" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content={pageTitle} />
+          <meta name="twitter:description" content={pageDescription} />
+          <meta name="twitter:image" content="https://lazzat.ca/Lazzat%20logo%2002.png" />
+          <link rel="canonical" href="https://lazzat.ca/menu" />
+        </Helmet>
+        <Layout>
+        <main id="main-content" tabIndex={-1} aria-label="Menu page main content">
+          <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-background" aria-labelledby="menu-hero-title">
+            <div className="container-luxury px-4 text-center">
+              <div className="gold-divider w-16 mx-auto mb-6" />
+              <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-3">
+                <span id="menu-hero-title">Our <span className="text-primary">Menu</span></span>
+              </h1>
+              <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
+                Explore our premium selection of grills, sauces, desserts, shakes,
+                juices and biryani. All new menu.
+              </p>
+            </div>
+          </section>
+          <nav className="sticky top-16 md:top-20 z-40 bg-background/95 backdrop-blur-md border-b border-primary/20 py-4" aria-label="Menu category navigation">
+            <div className="container-luxury px-4">
+              {/* Category Filters */}
+              <div className="overflow-hidden md:block max-h-none">
+                <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
+                  <div className="w-full md:w-auto">
+                    {/* SLIDER ROW (arrows aligned to this only) */}
+                    <div className="relative">
+                      {/* LEFT ARROW — mobile only */}
+                      <button
+                        type="button"
+                        onClick={() => scrollCategories("left")}
+                        className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+                      >
+                        <ChevronLeft size={16} />
+                      </button>
+                      {/* SCROLLABLE CATEGORY PILLS */}
+                      <div
+                        ref={categoryScrollRef}
+                        className="flex gap-2 md:gap-3 px-0 overflow-x-auto whitespace-nowrap scrollbar-hide"
+                      >
+                        {categories.map((category) => (
+                          <button
+                            key={category}
+                            onClick={() => setActiveCategory(category)}
+                            className={cn(
+                              "px-4 py-2 text-sm uppercase tracking-wider rounded-full transition-all shrink-0",
+                              activeCategory === category
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-secondary text-muted-foreground hover:bg-primary/20"
+                            )}
+                          >
+                            {category}
+                          </button>
+                        ))}
+                      </div>
+                      {/* RIGHT ARROW — mobile only */}
+                      <button
+                        type="button"
+                        onClick={() => scrollCategories("right")}
+                        className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+                      >
+                        <ChevronRight size={16} />
+                      </button>
                     </div>
-                    {/* RIGHT ARROW — mobile only */}
-                    <button
-                      type="button"
-                      onClick={() => scrollCategories("right")}
-                      className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-                    >
-                      <ChevronRight size={16} />
-                    </button>
+                    {/* MOBILE Sort & Filters — BELOW slider (not inside arrow container) */}
+                    <div className="md:hidden mt-3 flex justify-center w-full">
+                      <button
+                        onClick={() => setDrawerOpen(true)}
+                        className="flex items-center gap-2 bg-secondary/80 backdrop-blur px-5 py-2.5 text-sm font-medium rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all"
+                      >
+                        <Filter size={16} className="text-primary" />
+                        Sort & Filters
+                      </button>
+                    </div>
                   </div>
-                  {/* MOBILE Sort & Filters — BELOW slider (not inside arrow container) */}
-                  <div className="md:hidden mt-3 flex justify-center w-full">
+                  {/* Desktop Sort -> open drawer */}
+                  <div className="hidden md:flex items-center gap-4">
+                    <span className="text-sm text-muted-foreground tracking-wide">
+                      Sort & Filters
+                    </span>
                     <button
                       onClick={() => setDrawerOpen(true)}
                       className="flex items-center gap-2 bg-secondary/80 backdrop-blur px-5 py-2.5 text-sm font-medium rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all"
                     >
                       <Filter size={16} className="text-primary" />
-                      Sort & Filters
+                      Open Panel
                     </button>
                   </div>
-                </div>
-                {/* Desktop Sort -> open drawer */}
-                <div className="hidden md:flex items-center gap-4">
-                  <span className="text-sm text-muted-foreground tracking-wide">
-                    Sort & Filters
-                  </span>
-                  <button
-                    onClick={() => setDrawerOpen(true)}
-                    className="flex items-center gap-2 bg-secondary/80 backdrop-blur px-5 py-2.5 text-sm font-medium rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all"
-                  >
-                    <Filter size={16} className="text-primary" />
-                    Open Panel
-                  </button>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
-
-        {/* CONTENT */}
-        <section className="section-padding bg-background">
-          <div className="container-luxury px-4">
-            {/* --- Main Content Logic: Wrap all in a single parent fragment --- */}
-            <>
-              {/* Unified category rendering for all categories */}
-              {activeCategory !== "All" && (
-                <>
-                  <CategoryHeading category={activeCategory} />
-                  {/* Sides Tabs and Filtering */}
-                  {activeCategory === "Sides" && (
-                    <div className="flex gap-2 mb-6">
-                      {sidesTabs.map((tab) => (
-                        <button
-                          key={tab.id}
-                          onClick={() => setActiveSidesTab(tab.id)}
-                          className={cn(
-                            "px-4 py-2 rounded-full text-sm font-semibold transition",
-                            activeSidesTab === tab.id
-                              ? "bg-primary text-primary-foreground shadow"
-                              : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-                          )}
+          </nav>
+          <section className="section-padding bg-background" aria-label="Menu items">
+            <div className="container-luxury px-4">
+              {/* --- Main Content Logic: Wrap all in a single parent fragment --- */}
+              <>
+                {/* Unified category rendering for all categories */}
+                {activeCategory !== "All" && (
+                  <>
+                    <CategoryHeading category={activeCategory} />
+                    {/* Sides Tabs and Filtering */}
+                    {activeCategory === "Sides" && (
+                      <div className="flex gap-2 mb-6">
+                        {sidesTabs.map((tab) => (
+                          <button
+                            key={tab.id}
+                            onClick={() => setActiveSidesTab(tab.id)}
+                            className={cn(
+                              "px-4 py-2 rounded-full text-sm font-semibold transition",
+                              activeSidesTab === tab.id
+                                ? "bg-primary text-primary-foreground shadow"
+                                : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
+                            )}
+                          >
+                            {tab.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                    {/* ...removed Sauces Filter Dropdown */}
+                    {/* Grid for Sides, Sauces, or other single category */}
+                    <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
+                      {(activeCategory === "Sides"
+                        ? filteredItems.filter((item) => item.category === "Sides" && item.sideType === activeSidesTab)
+                        : filteredItems.filter((item) => item.category === activeCategory)
+                      ).map((item) => (
+                        <div
+                          key={item.id}
+                          tabIndex={0}
+                          role="button"
+                          aria-label={`View details for ${item.name}`}
+                          onClick={() => setSelectedItem(item)}
+                          onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setSelectedItem(item)}
+                          className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
                         >
-                          {tab.label}
-                        </button>
+                          {item.image && (
+                            <div className="relative aspect-[4/3] overflow-hidden">
+                              <img
+                                src={item.image}
+                                alt={item.name}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                              <div className="absolute top-4 left-4 flex gap-2">
+                                {item.isNew && (
+                                  <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
+                                )}
+                                {item.isPopular && (
+                                  <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          <div className="p-6">
+                            <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                            <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+                              {item.category}
+                              {item.subCategory ? ` • ${item.subCategory}` : ""}
+                            </div>
+                          </div>
+                        </div>
                       ))}
                     </div>
-                  )}
-                  {/* ...removed Sauces Filter Dropdown */}
-                  {/* Grid for Sides, Sauces, or other single category */}
-                  <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
-                    {(activeCategory === "Sides"
-                      ? filteredItems.filter((item) => item.category === "Sides" && item.sideType === activeSidesTab)
-                      : filteredItems.filter((item) => item.category === activeCategory)
-                    ).map((item) => (
-                      <div
-                        key={item.id}
-                        onClick={() => setSelectedItem(item)}
-                        className="card-luxury cursor-pointer group"
-                      >
-                        {item.image && (
-                          <div className="relative aspect-[4/3] overflow-hidden">
-                            <img
-                              src={item.image}
-                              alt={item.name}
-                              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                            <div className="absolute top-4 left-4 flex gap-2">
-                              {item.isNew && (
-                                <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
-                              )}
-                              {item.isPopular && (
-                                <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                        <div className="p-6">
-                          <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
-                          <div className="mt-3 text-xs text-primary uppercase tracking-wider">
-                            {item.category}
-                            {item.subCategory ? ` • ${item.subCategory}` : ""}
-                          </div>
-                        </div>
+                    {/* No items found */}
+                    {filteredItems.filter((item) => item.category === activeCategory).length === 0 && (
+                      <div className="text-center py-16">
+                        <p className="text-muted-foreground">
+                          No items found in this category.
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                  {/* No items found */}
-                  {filteredItems.filter((item) => item.category === activeCategory).length === 0 && (
-                    <div className="text-center py-16">
-                      <p className="text-muted-foreground">
-                        No items found in this category.
-                      </p>
-                    </div>
-                  )}
-                </>
-              )}
-              {activeCategory === "All" && (
-                <>
-                  {categories.filter(cat => cat !== "All" && cat !== "Sides").map((cat) => {
-                    const items = filteredItems.filter(item => item.category === cat);
-                    if (items.length === 0) return null;
-                    return (
-                      <div key={cat} className="mb-12">
-                        <CategoryHeading category={cat} />
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                          {items.map((item) => (
-                            <div
-                              key={item.id}
-                              onClick={() => setSelectedItem(item)}
-                              className="card-luxury cursor-pointer group"
-                            >
-                              <div className="relative aspect-[4/3] overflow-hidden">
-                                <img
-                                  src={item.image}
-                                  alt={item.name}
-                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-                                <div className="absolute top-4 left-4 flex gap-2">
-                                  {item.isNew && (
-                                    <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
-                                  )}
-                                  {item.isPopular && (
-                                    <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
-                                  )}
+                    )}
+                  </>
+                )}
+                {activeCategory === "All" && (
+                  <>
+                    {categories.filter(cat => cat !== "All" && cat !== "Sides").map((cat) => {
+                      const items = filteredItems.filter(item => item.category === cat);
+                      if (items.length === 0) return null;
+                      return (
+                        <div key={cat} className="mb-12">
+                          <CategoryHeading category={cat} />
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {items.map((item) => (
+                              <div
+                                key={item.id}
+                                tabIndex={0}
+                                role="button"
+                                aria-label={`View details for ${item.name}`}
+                                onClick={() => setSelectedItem(item)}
+                                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setSelectedItem(item)}
+                                className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
+                              >
+                                <div className="relative aspect-[4/3] overflow-hidden">
+                                  <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                  />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                                  <div className="absolute top-4 left-4 flex gap-2">
+                                    {item.isNew && (
+                                      <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>
+                                    )}
+                                    {item.isPopular && (
+                                      <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="p-6">
+                                  <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                                  <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                                  <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+                                    {item.category}
+                                    {item.subCategory ? ` • ${item.subCategory}` : ""}
+                                  </div>
                                 </div>
                               </div>
-                              <div className="p-6">
-                                <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                                <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
-                                <div className="mt-3 text-xs text-primary uppercase tracking-wider">
-                                  {item.category}
-                                  {item.subCategory ? ` • ${item.subCategory}` : ""}
-                                </div>
-                              </div>
-                            </div>
-                          ))}
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </>
-              )}
-            </>
-            {/* PRODUCT MODAL - ELEGANT DESIGN */}
-            {selectedItem && (
-              <div
-                className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden flex items-center justify-center p-0 md:p-6"
-                onClick={() => setSelectedItem(null)}
-              >
-                <div className="w-full h-full md:h-auto md:max-h-[75vh] flex items-center justify-center">
-                  <div
-                    className="relative w-full h-full md:h-auto md:max-w-4xl bg-background/95 backdrop-blur-md border-0 md:border md:border-primary/20 md:rounded-2xl overflow-hidden shadow-2xl animate-zoom-in"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {/* Close Button */}
-                    <button
-                      onClick={() => setSelectedItem(null)}
-                      className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-primary/30 flex items-center justify-center hover:bg-primary/10 hover:border-primary transition-all"
+                      );
+                    })}
+                  </>
+                )}
+              </>
+              {/* PRODUCT MODAL - ELEGANT DESIGN */}
+              {selectedItem && (
+                <div
+                  className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl overflow-hidden flex items-center justify-center p-0 md:p-6"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby="modal-title"
+                  aria-describedby="modal-desc"
+                  tabIndex={-1}
+                  onClick={() => setSelectedItem(null)}
+                >
+                  <div className="w-full h-full md:h-auto md:max-h-[75vh] flex items-center justify-center">
+                    <div
+                      className="relative w-full h-full md:h-auto md:max-w-4xl bg-background/95 backdrop-blur-md border-0 md:border md:border-primary/20 md:rounded-2xl overflow-hidden shadow-2xl animate-zoom-in"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <X size={20} />
-                    </button>
-                    <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 h-full md:h-auto md:max-h-[75vh]">
-                      {/* Image Section - boxed to show full image */}
-                      <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex items-center justify-center px-2 py-3">
-                        <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black">
-                          <img
-                            src={selectedItem.image}
-                            alt={selectedItem.name}
-                            className="w-full h-full object-contain"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-                          {/* Category Badge on Image */}
-                          <div className="absolute bottom-4 left-4">
-                            <span className="inline-block px-4 py-1.5 bg-primary/90 backdrop-blur text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-full">
-                              {selectedItem.category}
-                              {selectedItem.subCategory && ` • ${selectedItem.subCategory}`}
-                            </span>
+                      {/* Close Button */}
+                      <button
+                        aria-label="Close menu item details"
+                        onClick={() => setSelectedItem(null)}
+                        className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-primary/30 flex items-center justify-center hover:bg-primary/10 hover:border-primary transition-all focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <X size={20} />
+                      </button>
+                      <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 h-full md:h-auto md:max-h-[75vh]">
+                        {/* Image Section - boxed to show full image */}
+                        <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex items-center justify-center px-2 py-3">
+                          <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black">
+                            <img
+                              src={selectedItem.image}
+                              alt={selectedItem.name}
+                              className="w-full h-full object-contain"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+                            {/* Category Badge on Image */}
+                            <div className="absolute bottom-4 left-4">
+                              <span className="inline-block px-4 py-1.5 bg-primary/90 backdrop-blur text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-full">
+                                {selectedItem.category}
+                                {selectedItem.subCategory && ` • ${selectedItem.subCategory}`}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      {/* Content Section - Takes 3 columns */}
-                      <div className="lg:col-span-3 flex flex-col h-[calc(100vh-19rem)] md:h-full md:max-h-[75vh]">
-                        <div className="p-6 md:p-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
-                          {/* Header */}
-                          <div className="mb-6">
-                            <h2 className="font-serif text-3xl md:text-4xl mb-3 text-foreground">
-                              {selectedItem.name}
-                            </h2>
-                            <p className="text-muted-foreground leading-relaxed text-base">
-                              {selectedItem.description}
-                            </p>
-                          </div>
-                          {/* Heat Level Badge */}
+                        {/* Content Section - Takes 3 columns */}
+                        <div className="lg:col-span-3 flex flex-col h-[calc(100vh-19rem)] md:h-full md:max-h-[75vh]">
+                          <div className="p-6 md:p-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
+                            {/* Header */}
+                            <div className="mb-6">
+                              <h2 className="font-serif text-3xl md:text-4xl mb-3 text-foreground">
+                                {selectedItem.name}
+                              </h2>
+                              <p className="text-muted-foreground leading-relaxed text-base">
+                                {selectedItem.description}
+                              </p>
+                            </div>
+                            {/* Heat Level Badge */}
                             {(selectedItem.heatLevel ?? 0) > 0 && (
                               <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
                                 <Flame size={18} className="text-orange-500" />
@@ -900,118 +927,120 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 </div>
                               </div>
                             )}
-                          {/* Allergens Section */}
+                            {/* Allergens Section */}
                             {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
-                            <div className="mb-6 pb-6 border-b border-primary/10">
-                              <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
-                                Allergen Information
-                              </h4>
-                              <div className="flex flex-wrap gap-2">
-                                {selectedItem.allergens.map((a) => {
-                                  const Icon = allergenIconMap[a]?.icon;
-                                  const label = allergenIconMap[a]?.label;
-                                  if (!Icon) return null;
-                                  return (
-                                    <div
-                                      key={a}
-                                      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-sm"
-                                    >
-                                      <Icon size={16} className="text-red-400" />
-                                      <span className="font-medium">{label}</span>
-                                    </div>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          )}
-                          {/* ...removed Sauce Pairings Section... */}
-                          {/* Side Pairings Section */}
-                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
-                            <div className="mb-6">
-                              <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                Recommended Sides
-                              </h4>
-                              <div className="space-y-3">
-                                {sideRecommendations.map((name) => {
-                                  const side = findSide(name);
-                                  if (!side) {
+                              <div className="mb-6 pb-6 border-b border-primary/10">
+                                <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                                  Allergen Information
+                                </h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedItem.allergens.map((a) => {
+                                    const Icon = allergenIconMap[a]?.icon;
+                                    const label = allergenIconMap[a]?.label;
+                                    if (!Icon) return null;
                                     return (
-                                      <span
-                                        key={name}
-                                        className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                      <div
+                                        key={a}
+                                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-sm"
                                       >
-                                        {name}
-                                      </span>
-                                    );
-                                  }
-                                  return (
-                                    <div
-                                      key={name}
-                                      className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
-                                    >
-                                      {side.image && (
-                                        <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                          <img
-                                            src={side.image}
-                                            alt={side.name}
-                                            className="w-full h-full object-cover"
-                                          />
-                                        </div>
-                                      )}
-                                      <div className="flex-1 min-w-0">
-                                        <div className="flex items-center justify-between gap-2 mb-1">
-                                          <span className="text-sm font-semibold truncate">{side.name}</span>
-                                          {typeof side.price === "number" && (
-                                            <span className="text-xs font-semibold text-primary">
-                                              ${side.price.toFixed(2)}
-                                            </span>
-                                          )}
-                                        </div>
-                                        <p className="text-xs text-muted-foreground line-clamp-2">
-                                          {side.description}
-                                        </p>
+                                        <Icon size={16} className="text-red-400" />
+                                        <span className="font-medium">{label}</span>
                                       </div>
-                                    </div>
-                                  );
-                                })}
+                                    );
+                                  })}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                          {/* Customizations Section */}
+                            )}
+                            {/* ...removed Sauce Pairings Section... */}
+                            {/* Side Pairings Section */}
+                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
+                              <div className="mb-6">
+                                <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                  Recommended Sides
+                                </h4>
+                                <div className="space-y-3">
+                                  {sideRecommendations.map((name) => {
+                                    const side = findSide(name);
+                                    if (!side) {
+                                      return (
+                                        <span
+                                          key={name}
+                                          className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                        >
+                                          {name}
+                                        </span>
+                                      );
+                                    }
+                                    return (
+                                      <div
+                                        key={name}
+                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                                      >
+                                        {side.image && (
+                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                            <img
+                                              src={side.image}
+                                              alt={side.name}
+                                              className="w-full h-full object-cover"
+                                            />
+                                          </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center justify-between gap-2 mb-1">
+                                            <span className="text-sm font-semibold truncate">{side.name}</span>
+                                            {typeof side.price === "number" && (
+                                              <span className="text-xs font-semibold text-primary">
+                                                ${side.price.toFixed(2)}
+                                              </span>
+                                            )}
+                                          </div>
+                                          <p className="text-xs text-muted-foreground line-clamp-2">
+                                            {side.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                            {/* Customizations Section */}
                             {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
-                            <div className="mb-6">
-                              <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
-                                Available Customizations
-                              </h4>
-                              <div className="flex flex-wrap gap-2">
-                                {selectedItem.customizations.map((c) => (
-                                  <span
-                                    key={c}
-                                    className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
-                                  >
-                                    {c}
-                                  </span>
-                                ))}
+                              <div className="mb-6">
+                                <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                                  Available Customizations
+                                </h4>
+                                <div className="flex flex-wrap gap-2">
+                                  {selectedItem.customizations.map((c) => (
+                                    <span
+                                      key={c}
+                                      className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
+                                    >
+                                      {c}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
-                            </div>
-                          )}
-                        </div>
-                        {/* Footer with CTA */}
-                        <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
-                          <button className="btn-gold w-full py-3 text-base font-semibold">
-                            Order Now
-                          </button>
+                            )}
+                          </div>
+                          {/* Footer with CTA */}
+                          <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
+                            <button className="btn-gold w-full py-3 text-base font-semibold">
+                              Order Now
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
-            {/* Filter Drawer - render at root of page so it's above everything */}
-            <FilterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
-          </div>
-        </section>
+              )}
+              {/* Filter Drawer - render at root of page so it's above everything */}
+              <FilterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+            </div>
+          </section>
+        </main>
       </Layout>
+    </>
     );
 }
