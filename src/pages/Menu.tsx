@@ -21,6 +21,7 @@ import {
 } from "@/lib/menu-data";
 // ...removed sauces import
 import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
+import { findSauce } from "@/lib/find-sauce";
 
 
 
@@ -109,8 +110,18 @@ const findSide = (name: string) =>
       "Cheese Stuffed Naan",
       "Garlic & Herb Naan",
     ],
-    Biryani: ["Side Salad", "Classic Butter Naan"],
-    Sajji: ["Butter Garlic Rice", "Crispy Fries"],
+    Biryani: [
+      "Side Salad",
+      "Coleslaw",
+      "Grilled Vegetables",
+      "Corn on the Cob"
+    ],
+    Sajji: [
+      "Side Salad",
+      "Coleslaw",
+      "Grilled Vegetables",
+      "Corn on the Cob"
+    ],
   };
 
   const getSidePairings = (item: MenuItem): string[] => {
@@ -951,9 +962,8 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 </div>
                               </div>
                             )}
-                            {/* ...removed Sauce Pairings Section... */}
                             {/* Side Pairings Section */}
-                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps"].includes(selectedItem.category) && (
+                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
                               <div className="mb-6">
                                 <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                   Recommended Sides
@@ -996,6 +1006,53 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                           </div>
                                           <p className="text-xs text-muted-foreground line-clamp-2">
                                             {side.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </div>
+                            )}
+                            {/* Sauce Pairings Section */}
+                            {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
+                              <div className="mb-6">
+                                <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                  Recommended Sauces
+                                </h4>
+                                <div className="space-y-3">
+                                  {selectedItem.saucePairings.map((name) => {
+                                    const sauce = findSauce(name);
+                                    if (!sauce) {
+                                      return (
+                                        <span
+                                          key={name}
+                                          className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                        >
+                                          {name}
+                                        </span>
+                                      );
+                                    }
+                                    return (
+                                      <div
+                                        key={name}
+                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                                      >
+                                        {sauce.image && (
+                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                            <img
+                                              src={sauce.image}
+                                              alt={sauce.name}
+                                              className="w-full h-full object-cover"
+                                            />
+                                          </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center justify-between gap-2 mb-1">
+                                            <span className="text-sm font-semibold truncate">{sauce.name}</span>
+                                          </div>
+                                          <p className="text-xs text-muted-foreground line-clamp-2">
+                                            {sauce.description}
                                           </p>
                                         </div>
                                       </div>
