@@ -918,47 +918,42 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </div>
                             {/* Heat Level Dots/Flames */}
                             {selectedItem.heatLevel > 0 && (
-                              <div className="mb-6 flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-500/10 via-yellow-400/10 to-red-500/10 border border-primary/10 rounded-lg max-w-xs" style={{minWidth: 220}}>
-                                <span className="text-xs font-medium mr-2">Spice Level</span>
-                                <div className="flex items-center gap-1 ml-1">
-                                  {Array.from({ length: 7 }).map((_, i) => {
-                                    // Color order: 0=green, 1=yellow, 2-5=orange, 6=red
-                                    let color = 'text-gray-300';
-                                    if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-500' : 'text-gray-300';
-                                    else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-400' : 'text-gray-300';
-                                    else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-300';
-                                    else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-300';
-                                    return (
-                                      <Flame
-                                        key={i}
-                                        size={13}
-                                        strokeWidth={1.5}
-                                        className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
-                                        fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
-                                      />
-                                    );
-                                  })}
-                                </div>
+                              <div className="mb-6 flex items-center gap-2">
+                                <span className="text-xs font-medium">Spice Level</span>
+                                {Array.from({ length: 7 }).map((_, i) => {
+                                  let color = 'text-gray-300';
+                                  if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-500' : 'text-gray-300';
+                                  else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-400' : 'text-gray-300';
+                                  else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-300';
+                                  else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-300';
+                                  return (
+                                    <Flame
+                                      key={i}
+                                      size={13}
+                                      strokeWidth={1.5}
+                                      className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
+                                      fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
+                                    />
+                                  );
+                                })}
                               </div>
                             )}
                             {/* Allergens Section */}
                             {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
                               <div className="mb-6 pb-6 border-b border-primary/10">
-                                <div className="flex items-center gap-2 px-3 py-1 bg-background/80 border border-primary/10 rounded-lg max-w-xs" style={{minWidth: 220}}>
-                                  <span className="text-xs font-medium mr-2">Allergens</span>
-                                  <div className="flex items-center gap-3 ml-1">
-                                    {selectedItem.allergens.map((a) => {
-                                      const Icon = allergenIconMap[a]?.icon;
-                                      const label = allergenIconMap[a]?.label;
-                                      if (!Icon) return null;
-                                      return (
-                                        <span key={a} className="flex items-center gap-1 text-xs">
-                                          <Icon size={15} className="text-red-500" />
-                                          <span className="font-medium text-foreground">{label}</span>
-                                        </span>
-                                      );
-                                    })}
-                                  </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs font-medium">
+                                    {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
+                                  </span>
+                                  {selectedItem.allergens.map((a) => {
+                                    const Icon = allergenIconMap[a]?.icon;
+                                    if (!Icon) return null;
+                                    return (
+                                      <span key={a} className="flex items-center text-xs">
+                                        <Icon size={15} className="text-red-500" />
+                                      </span>
+                                    );
+                                  })}
                                 </div>
                               </div>
                             )}
