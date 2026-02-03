@@ -916,25 +916,28 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 {selectedItem.description}
                               </p>
                             </div>
-                            {/* Heat Level Badge */}
-                            {(selectedItem.heatLevel ?? 0) > 0 && (
-                              <div className="mb-6 inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500/10 to-red-500/10 border border-orange-500/30 rounded-lg">
-                                <Flame size={18} className="text-orange-500" />
-                                <span className="text-sm font-medium">Heat Level {selectedItem.heatLevel ?? 0}</span>
-                                <div className="flex items-center gap-0.5 ml-2">
-                                  {Array.from({ length: Math.min(selectedItem.heatLevel ?? 0, 5) }).map((_, i) => (
-                                    <Flame
-                                      key={i}
-                                      size={14}
-                                      className={
-                                        (selectedItem.heatLevel ?? 0) <= 3
-                                          ? "text-primary"
-                                          : (selectedItem.heatLevel ?? 0) <= 6
-                                          ? "text-orange-500"
-                                          : "text-red-500"
-                                      }
-                                    />
-                                  ))}
+                            {/* Heat Level Dots/Flames */}
+                            {selectedItem.heatLevel > 0 && (
+                              <div className="mb-6 flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-green-500/10 via-yellow-400/10 to-red-500/10 border border-primary/10 rounded-lg max-w-xs" style={{minWidth: 220}}>
+                                <span className="text-xs font-medium mr-2">Spice Level</span>
+                                <div className="flex items-center gap-1 ml-1">
+                                  {Array.from({ length: 7 }).map((_, i) => {
+                                    // Color order: 0=green, 1=yellow, 2-5=orange, 6=red
+                                    let color = 'text-gray-300';
+                                    if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-500' : 'text-gray-300';
+                                    else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-400' : 'text-gray-300';
+                                    else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-300';
+                                    else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-300';
+                                    return (
+                                      <Flame
+                                        key={i}
+                                        size={13}
+                                        strokeWidth={1.5}
+                                        className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
+                                        fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
+                                      />
+                                    );
+                                  })}
                                 </div>
                               </div>
                             )}
