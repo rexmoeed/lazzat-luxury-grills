@@ -22,6 +22,7 @@ import {
 // ...removed sauces import
 import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
 import { findSauce } from "@/lib/find-sauce";
+import { spices } from "@/lib/spices-data";
 
 
 
@@ -918,31 +919,50 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             </div>
                             {/* Heat Level Dots/Flames */}
                             {selectedItem.heatLevel > 0 && (
-                              <div className="mb-6 flex items-center gap-2">
-                                <span className="text-xs font-medium">Spice Level</span>
-                                {Array.from({ length: 7 }).map((_, i) => {
-                                  let color = 'text-gray-300';
-                                  if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-500' : 'text-gray-300';
-                                  else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-400' : 'text-gray-300';
-                                  else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-300';
-                                  else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-300';
-                                  return (
-                                    <Flame
-                                      key={i}
-                                      size={13}
-                                      strokeWidth={1.5}
-                                      className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
-                                      fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
-                                    />
-                                  );
-                                })}
+                              <div className="mb-6">
+                                <div
+                                  className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                  style={{
+                                    background: 'linear-gradient(90deg, #1a2c16 0%, #23180f 10%, #23180f 90%, #3a1a1a 100%)',
+                                    boxShadow: '0 1px 8px 0 #1a1a1a inset',
+                                    width: '260px',
+                                    minWidth: '260px',
+                                    maxWidth: '260px',
+                                  }}
+                                >
+                                  <span className="text-xs font-semibold text-white mr-2">Spice</span>
+                                  {Array.from({ length: 7 }).map((_, i) => {
+                                    let color = 'text-gray-300';
+                                    if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-400' : 'text-gray-700';
+                                    else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-300' : 'text-gray-700';
+                                    else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-700';
+                                    else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-700';
+                                    return (
+                                      <Flame
+                                        key={i}
+                                        size={18}
+                                        strokeWidth={1.5}
+                                        className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
+                                        fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
+                                      />
+                                    );
+                                  })}
+                                </div>
                               </div>
                             )}
                             {/* Allergens Section */}
                             {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
                               <div className="mb-6 pb-6 border-b border-primary/10">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-xs font-medium">
+                                <div
+                                  className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                  style={{
+                                    background: 'rgba(35, 24, 15, 0.35)',
+                                    width: '260px',
+                                    minWidth: '260px',
+                                    maxWidth: '260px',
+                                  }}
+                                >
+                                  <span className="text-xs font-semibold text-white mr-2">
                                     {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
                                   </span>
                                   {selectedItem.allergens.map((a) => {
@@ -950,7 +970,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                     if (!Icon) return null;
                                     return (
                                       <span key={a} className="flex items-center text-xs">
-                                        <Icon size={15} className="text-red-500" />
+                                        <Icon size={18} className="text-red-500" />
                                       </span>
                                     );
                                   })}
@@ -1056,6 +1076,98 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 </div>
                               </div>
                             )}
+                            {/* Seasonings Section */}
+                            {spices && spices.length > 0 && selectedItem && (() => {
+                              // Show for Sides (not rice/naan), Grills & Skewers, Döner, Wraps
+                              const cat = selectedItem.category;
+                              const name = selectedItem.name.toLowerCase();
+                              const isRice = name.includes("rice");
+                              const isNaan = name.includes("naan");
+                              const isColeslaw = name.includes("coleslaw");
+                              // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
+                              const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji"];
+                              const showSeasonings =
+                                !excludedCategories.includes(cat) &&
+                                !isRice &&
+                                !isNaan;
+                              if (!showSeasonings) return null;
+                              let selectedSeasonings = [];
+                              if (isColeslaw) {
+                                // Only mild, fresh seasonings for coleslaw
+                                selectedSeasonings = spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name));
+                              } else if (cat === "Sides") {
+                                // Sides: avoid spicy for salad/veg, allow both spicy and mild for fries/corn
+                                if (name.includes("fries")) {
+                                  selectedSeasonings = spices.filter(s => [
+                                    "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
+                                  ].includes(s.name));
+                                } else if (name.includes("corn")) {
+                                  selectedSeasonings = spices.filter(s => [
+                                    "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
+                                  ].includes(s.name));
+                                } else if (name.includes("salad") || name.includes("vegetable")) {
+                                  selectedSeasonings = spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name));
+                                } else {
+                                  // Default: offer a mix of mild and moderate
+                                  selectedSeasonings = spices.filter(s => s.level <= 3).slice(0, 3);
+                                }
+                              } else if (cat === "Grills & Skewers") {
+                                // Grills: support both high and low spice
+                                selectedSeasonings = spices.filter(s => [
+                                  "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
+                                ].includes(s.name));
+                              } else if (cat === "Döner") {
+                                // Döner: support both high and low spice
+                                selectedSeasonings = spices.filter(s => [
+                                  "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
+                                ].includes(s.name));
+                              } else if (cat === "Wraps") {
+                                // Wraps: support both high and low spice
+                                selectedSeasonings = spices.filter(s => [
+                                  "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
+                                ].includes(s.name));
+                              } else if (cat === "Grills & Skewers" || cat === "Döner" || cat === "Wraps" || cat === "Sides") {
+                                // fallback for any other item in these categories
+                                selectedSeasonings = spices.filter(s => s.level <= 7 && s.level >= 0).slice(0, 4);
+                              } else {
+                                // For other categories (e.g. main dishes that can support spices)
+                                selectedSeasonings = spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
+                              }
+                              if (selectedSeasonings.length === 0) return null;
+                              return (
+                                <div className="mb-6">
+                                  <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                    Seasonings
+                                  </h4>
+                                  <div className="space-y-3">
+                                    {selectedSeasonings.map((seasoning) => (
+                                      <div
+                                        key={seasoning.name}
+                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
+                                      >
+                                        {seasoning.image && (
+                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                            <img
+                                              src={seasoning.image}
+                                              alt={seasoning.name}
+                                              className="w-full h-full object-cover"
+                                            />
+                                          </div>
+                                        )}
+                                        <div className="flex-1 min-w-0">
+                                          <div className="flex items-center justify-between gap-2 mb-1">
+                                            <span className="text-sm font-semibold truncate">{seasoning.name}</span>
+                                          </div>
+                                          <p className="text-xs text-muted-foreground line-clamp-2">
+                                            {seasoning.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              );
+                            })()}
                             {/* Customizations Section */}
                             {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
                               <div className="mb-6">
