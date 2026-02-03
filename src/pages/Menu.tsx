@@ -944,24 +944,21 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                             {/* Allergens Section */}
                             {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
                               <div className="mb-6 pb-6 border-b border-primary/10">
-                                <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
-                                  Allergen Information
-                                </h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedItem.allergens.map((a) => {
-                                    const Icon = allergenIconMap[a]?.icon;
-                                    const label = allergenIconMap[a]?.label;
-                                    if (!Icon) return null;
-                                    return (
-                                      <div
-                                        key={a}
-                                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-destructive/10 border border-destructive/30 text-sm"
-                                      >
-                                        <Icon size={16} className="text-red-400" />
-                                        <span className="font-medium">{label}</span>
-                                      </div>
-                                    );
-                                  })}
+                                <div className="flex items-center gap-2 px-3 py-1 bg-background/80 border border-primary/10 rounded-lg max-w-xs" style={{minWidth: 220}}>
+                                  <span className="text-xs font-medium mr-2">Allergens</span>
+                                  <div className="flex items-center gap-3 ml-1">
+                                    {selectedItem.allergens.map((a) => {
+                                      const Icon = allergenIconMap[a]?.icon;
+                                      const label = allergenIconMap[a]?.label;
+                                      if (!Icon) return null;
+                                      return (
+                                        <span key={a} className="flex items-center gap-1 text-xs">
+                                          <Icon size={15} className="text-red-500" />
+                                          <span className="font-medium text-foreground">{label}</span>
+                                        </span>
+                                      );
+                                    })}
+                                  </div>
                                 </div>
                               </div>
                             )}
