@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { allergenIconMap } from "@/lib/menu-constants";
 
 /* CENTRAL DATA */
 import { sauces } from "@/lib/sauces-data";
@@ -227,21 +228,41 @@ const SignatureFlavors = () => {
               {flavor.description}
             </p>
 
+            {/* Heat Level Dots/Flames - no box, no label */}
             <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(flavor.level, 5) }).map((_, i) => (
-                <Flame
-                  key={i}
-                  size={16}
-                  className={
-                    flavor.level <= 3
-                      ? "text-primary"
-                      : flavor.level <= 6
-                      ? "text-orange-500"
-                      : "text-red-500"
-                  }
-                />
-              ))}
+              {Array.from({ length: 7 }).map((_, i) => {
+                let color = 'text-gray-300';
+                if (i === 0) color = i < flavor.level ? 'text-green-500' : 'text-gray-300';
+                else if (i === 1) color = i < flavor.level ? 'text-yellow-400' : 'text-gray-300';
+                else if (i >= 2 && i <= 5) color = i < flavor.level ? 'text-orange-400' : 'text-gray-300';
+                else if (i === 6) color = i < flavor.level ? 'text-red-500' : 'text-gray-300';
+                return (
+                  <Flame
+                    key={i}
+                    size={12}
+                    strokeWidth={1.5}
+                    className={color + (i < flavor.level ? '' : ' opacity-40')}
+                    fill={i < flavor.level ? 'currentColor' : 'none'}
+                  />
+                );
+              })}
             </div>
+            {/* Allergens - no box, no label */}
+            {Array.isArray(flavor.allergens) && flavor.allergens.length > 0 && (
+              <div className="flex items-center gap-2 mt-2">
+                {flavor.allergens.map((a) => {
+                  const Icon = allergenIconMap[a]?.icon;
+                  const label = allergenIconMap[a]?.label;
+                  if (!Icon) return null;
+                  return (
+                    <span key={a} className="flex items-center gap-1 text-xs">
+                      <Icon size={13} className="text-red-500" />
+                      <span className="font-medium text-foreground">{label}</span>
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </div>
         ))}
       </div>
@@ -286,23 +307,41 @@ const SignatureFlavors = () => {
                   {selectedFlavor.description}
                 </p>
 
+                {/* Heat Level Dots/Flames - no box, no label */}
                 <div className="flex items-center gap-1">
-                  {Array.from({
-                    length: Math.min(selectedFlavor.level, 5),
-                  }).map((_, i) => (
-                    <Flame
-                      key={i}
-                      size={18}
-                      className={
-                        selectedFlavor.level <= 3
-                          ? "text-primary"
-                          : selectedFlavor.level <= 6
-                          ? "text-orange-500"
-                          : "text-red-500"
-                      }
-                    />
-                  ))}
+                  {Array.from({ length: 7 }).map((_, i) => {
+                    let color = 'text-gray-300';
+                    if (i === 0) color = i < selectedFlavor.level ? 'text-green-500' : 'text-gray-300';
+                    else if (i === 1) color = i < selectedFlavor.level ? 'text-yellow-400' : 'text-gray-300';
+                    else if (i >= 2 && i <= 5) color = i < selectedFlavor.level ? 'text-orange-400' : 'text-gray-300';
+                    else if (i === 6) color = i < selectedFlavor.level ? 'text-red-500' : 'text-gray-300';
+                    return (
+                      <Flame
+                        key={i}
+                        size={13}
+                        strokeWidth={1.5}
+                        className={color + (i < selectedFlavor.level ? '' : ' opacity-40')}
+                        fill={i < selectedFlavor.level ? 'currentColor' : 'none'}
+                      />
+                    );
+                  })}
                 </div>
+                {/* Allergens - no box, no label */}
+                {Array.isArray(selectedFlavor.allergens) && selectedFlavor.allergens.length > 0 && (
+                  <div className="flex items-center gap-2 mt-2">
+                    {selectedFlavor.allergens.map((a) => {
+                      const Icon = allergenIconMap[a]?.icon;
+                      const label = allergenIconMap[a]?.label;
+                      if (!Icon) return null;
+                      return (
+                        <span key={a} className="flex items-center gap-1 text-xs">
+                          <Icon size={13} className="text-red-500" />
+                          <span className="font-medium text-foreground">{label}</span>
+                        </span>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               <button className="mt-6 w-full rounded-md bg-primary py-3 font-semibold text-black hover:opacity-90 transition">
