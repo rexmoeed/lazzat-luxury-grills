@@ -11,6 +11,8 @@ import {
 } from "@/lib/menu-constants";
 
 import React, { useMemo, useState, useRef } from "react";
+import AllergenInfo from "@/components/shared/AllergenInfo";
+import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";
 import { Layout } from "@/components/layout/Layout";
 import { Flame, X, Filter, ChevronDown, ChevronLeft, ChevronRight, Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
@@ -26,6 +28,14 @@ import { spices } from "@/lib/spices-data";
 
 
 
+// Type guard helpers
+function isMenuItem(item: any): item is MenuItem {
+  return item && typeof item === 'object' && 'category' in item && 'heatLevel' in item;
+}
+function isSauceItem(item: any): item is SauceItem {
+  return item && typeof item === 'object' && 'level' in item && !('category' in item);
+}
+
 export default function MenuPage() {
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
@@ -34,7 +44,11 @@ export default function MenuPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("none");
   const [showFilters, setShowFilters] = useState<boolean>(true);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  // Modal stack: allows back navigation
+  const [modalStack, setModalStack] = useState<any[]>([]);
+  const selectedItem = modalStack.length > 0 ? modalStack[modalStack.length - 1] : null;
+  // Allergen Info modal state
+  const [showAllergenModal, setShowAllergenModal] = useState(false);
   const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
@@ -132,7 +146,7 @@ const findSide = (name: string) =>
   };
 
   // Now that getSidePairings is defined, compute sideRecommendations
-  const sideRecommendations = selectedItem ? getSidePairings(selectedItem) : [];
+  const sideRecommendations = isMenuItem(selectedItem) ? getSidePairings(selectedItem) : [];
 const categories = [
   "All",
   "Grills & Skewers",
@@ -643,6 +657,23 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
         </Helmet>
         <Layout>
         <main id="main-content" tabIndex={-1} aria-label="Menu page main content">
+          {/* ...existing code... */}
+                {/* Allergen Info Modal (only show if product modal is open) */}
+                {/* Allergen Info Modal rendered at root so it overlays the product modal */}
+                {showAllergenModal && (
+                  <div className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-2">
+                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] sm:max-h-[80vh] overflow-y-auto mx-2 animate-zoom-in">
+                      <button
+                        aria-label="Close allergen info"
+                        onClick={() => setShowAllergenModal(false)}
+                        className="absolute top-4 right-4 w-10 h-10 rounded-full bg-background/90 border border-primary/20 flex items-center justify-center hover:bg-primary/10 hover:border-primary transition-all focus:outline-none focus:ring-2 focus:ring-primary"
+                      >
+                        <X size={20} />
+                      </button>
+                      <AllergenInfo />
+                    </div>
+                  </div>
+                )}
           <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-background" aria-labelledby="menu-hero-title">
             <div className="container-luxury px-4 text-center">
               <div className="gold-divider w-16 mx-auto mb-6" />
@@ -767,8 +798,8 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                           tabIndex={0}
                           role="button"
                           aria-label={`View details for ${item.name}`}
-                          onClick={() => setSelectedItem(item)}
-                          onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setSelectedItem(item)}
+                          onClick={() => setModalStack([item])}
+                          onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setModalStack([item])}
                           className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                           {item.image && (
@@ -825,8 +856,8 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 tabIndex={0}
                                 role="button"
                                 aria-label={`View details for ${item.name}`}
-                                onClick={() => setSelectedItem(item)}
-                                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setSelectedItem(item)}
+                                onClick={() => setModalStack([item])}
+                                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && setModalStack([item])}
                                 className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
                               >
                                 <div className="relative aspect-[4/3] overflow-hidden">
@@ -871,7 +902,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                   aria-labelledby="modal-title"
                   aria-describedby="modal-desc"
                   tabIndex={-1}
-                  onClick={() => setSelectedItem(null)}
+                  onClick={() => setModalStack([])}
                 >
                   <div className="w-full h-full md:h-auto md:max-h-[75vh] flex items-center justify-center">
                     <div
@@ -881,31 +912,48 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       {/* Close Button */}
                       <button
                         aria-label="Close menu item details"
-                        onClick={() => setSelectedItem(null)}
+                        onClick={() => setModalStack([])}
                         className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-primary/30 flex items-center justify-center hover:bg-primary/10 hover:border-primary transition-all focus:outline-none focus:ring-2 focus:ring-primary"
                       >
                         <X size={20} />
                       </button>
+                      {/* Back Button */}
+                      {modalStack.length > 1 && (
+                        <button
+                          aria-label="Back to previous item"
+                          onClick={() => setModalStack((stack) => stack.slice(0, -1))}
+                          className="absolute top-4 left-4 z-20 w-10 h-10 rounded-full bg-background/90 backdrop-blur border border-primary/30 flex items-center justify-center hover:bg-background/90 hover:border-primary transition-all focus:outline-none focus:ring-2 focus:ring-primary"
+                        >
+                          &#8592;
+                        </button>
+                      )}
+                      {/* ...existing code... */}
                       <div className="grid grid-cols-1 lg:grid-cols-5 gap-0 h-full md:h-auto md:max-h-[75vh]">
-                        {/* Image Section - boxed to show full image */}
-                        <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex items-center justify-center px-2 py-3">
-                          <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black">
+                        {/* Image Section with Allergen Info Button */}
+                        <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex flex-col items-center justify-center px-2 py-3 relative">
+                          <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black flex items-center justify-center">
                             <img
                               src={selectedItem.image}
                               alt={selectedItem.name}
                               className="w-full h-full object-contain"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
-                            {/* Category Badge on Image */}
-                            <div className="absolute bottom-4 left-4">
-                              <span className="inline-block px-4 py-1.5 bg-primary/90 backdrop-blur text-primary-foreground text-xs font-medium uppercase tracking-wider rounded-full">
-                                {selectedItem.category}
-                                {selectedItem.subCategory && ` • ${selectedItem.subCategory}`}
+                            {/* Allergen Info Button - bottom center, floating, styled */}
+                            <button
+                              type="button"
+                              aria-label="Show allergen info"
+                              onClick={() => setShowAllergenModal(true)}
+                              className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 px-5 py-2 rounded-full bg-primary/90 text-primary-foreground text-sm font-semibold shadow-lg hover:bg-primary focus:outline-none focus:ring-2 focus:ring-primary transition-all border border-primary/30"
+                            >
+                              <span className="flex items-center gap-2">
+                                <span className="w-4 h-4 rounded-full bg-white/80 border border-primary/40 flex items-center justify-center">
+                                  <span className="text-primary text-xs font-bold">i</span>
+                                </span>
+                                Allergen Info
                               </span>
-                            </div>
+                            </button>
                           </div>
                         </div>
-                        {/* Content Section - Takes 3 columns */}
+                        {/* Content Section */}
                         <div className="lg:col-span-3 flex flex-col h-[calc(100vh-19rem)] md:h-full md:max-h-[75vh]">
                           <div className="p-6 md:p-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
                             {/* Header */}
@@ -917,274 +965,345 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                 {selectedItem.description}
                               </p>
                             </div>
-                            {/* Heat Level Dots/Flames */}
-                            {selectedItem.heatLevel > 0 && (
-                              <div className="mb-6">
-                                <div
-                                  className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
-                                  style={{
-                                    background: 'linear-gradient(90deg, #1a2c16 0%, #23180f 10%, #23180f 90%, #3a1a1a 100%)',
-                                    boxShadow: '0 1px 8px 0 #1a1a1a inset',
-                                    width: '260px',
-                                    minWidth: '260px',
-                                    maxWidth: '260px',
-                                  }}
-                                >
-                                  <span className="text-xs font-semibold text-white mr-2">Spice</span>
-                                  {Array.from({ length: 7 }).map((_, i) => {
-                                    let color = 'text-gray-300';
-                                    if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-400' : 'text-gray-700';
-                                    else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-300' : 'text-gray-700';
-                                    else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-700';
-                                    else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-700';
-                                    return (
-                                      <Flame
-                                        key={i}
-                                        size={18}
-                                        strokeWidth={1.5}
-                                        className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
-                                        fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
-                                      />
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            )}
-                            {/* Allergens Section */}
-                            {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
-                              <div className="mb-6 pb-6 border-b border-primary/10">
-                                <div
-                                  className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
-                                  style={{
-                                    background: 'rgba(35, 24, 15, 0.35)',
-                                    width: '260px',
-                                    minWidth: '260px',
-                                    maxWidth: '260px',
-                                  }}
-                                >
-                                  <span className="text-xs font-semibold text-white mr-2">
-                                    {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
-                                  </span>
-                                  {selectedItem.allergens.map((a) => {
-                                    const Icon = allergenIconMap[a]?.icon;
-                                    if (!Icon) return null;
-                                    return (
-                                      <span key={a} className="flex items-center text-xs">
-                                        <Icon size={18} className="text-red-500" />
+                            {/* If MenuItem, show menu details */}
+                            {isMenuItem(selectedItem) && (
+                              <>
+                                {/* Heat Level Dots/Flames */}
+                                {selectedItem.heatLevel > 0 && (
+                                  <div className="mb-6">
+                                    <div
+                                      className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                      style={{
+                                        background: 'linear-gradient(90deg, #1a2c16 0%, #23180f 10%, #23180f 90%, #3a1a1a 100%)',
+                                        boxShadow: '0 1px 8px 0 #1a1a1a inset',
+                                        width: '260px',
+                                        minWidth: '260px',
+                                        maxWidth: '260px',
+                                      }}
+                                    >
+                                      <span className="text-xs font-semibold text-white mr-2">Spice</span>
+                                      {Array.from({ length: 7 }).map((_, i) => {
+                                        let color = 'text-gray-300';
+                                        if (i === 0) color = i < selectedItem.heatLevel ? 'text-green-400' : 'text-gray-700';
+                                        else if (i === 1) color = i < selectedItem.heatLevel ? 'text-yellow-300' : 'text-gray-700';
+                                        else if (i >= 2 && i <= 5) color = i < selectedItem.heatLevel ? 'text-orange-400' : 'text-gray-700';
+                                        else if (i === 6) color = i < selectedItem.heatLevel ? 'text-red-500' : 'text-gray-700';
+                                        return (
+                                          <Flame
+                                            key={i}
+                                            size={18}
+                                            strokeWidth={1.5}
+                                            className={color + (i < selectedItem.heatLevel ? '' : ' opacity-40')}
+                                            fill={i < selectedItem.heatLevel ? 'currentColor' : 'none'}
+                                          />
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Allergens Section */}
+                                {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
+                                  <div className="mb-6 pb-6 border-b border-primary/10">
+                                    <div
+                                      className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                      style={{
+                                        background: 'rgba(35, 24, 15, 0.35)',
+                                        width: '260px',
+                                        minWidth: '260px',
+                                        maxWidth: '260px',
+                                      }}
+                                    >
+                                      <span className="text-xs font-semibold text-white mr-2">
+                                        {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
                                       </span>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            )}
-                            {/* Side Pairings Section */}
-                            {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
-                              <div className="mb-6">
-                                <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                  Recommended Sides
-                                </h4>
-                                <div className="space-y-3">
-                                  {sideRecommendations.map((name) => {
-                                    const side = findSide(name);
-                                    if (!side) {
-                                      return (
-                                        <span
-                                          key={name}
-                                          className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
-                                        >
-                                          {name}
-                                        </span>
-                                      );
-                                    }
-                                    return (
-                                      <div
-                                        key={name}
-                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
-                                      >
-                                        {side.image && (
-                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                            <img
-                                              src={side.image}
-                                              alt={side.name}
-                                              className="w-full h-full object-cover"
-                                            />
-                                          </div>
-                                        )}
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center justify-between gap-2 mb-1">
-                                            <span className="text-sm font-semibold truncate">{side.name}</span>
-                                            {typeof side.price === "number" && (
-                                              <span className="text-xs font-semibold text-primary">
-                                                ${side.price.toFixed(2)}
-                                              </span>
+                                      {selectedItem.allergens.map((a) => {
+                                        const Icon = allergenIconMap[a]?.icon;
+                                        if (!Icon) return null;
+                                        return (
+                                          <span key={a} className="flex items-center text-xs">
+                                            <Icon size={18} className="text-red-500" />
+                                          </span>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Side Pairings Section */}
+                                {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
+                                  <div className="mb-6">
+                                    <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                      Recommended Sides
+                                    </h4>
+                                    <div className="space-y-3">
+                                      {sideRecommendations.map((name) => {
+                                        const side = findSide(name);
+                                        if (!side) {
+                                          return (
+                                            <span
+                                              key={name}
+                                              className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                            >
+                                              {name}
+                                            </span>
+                                          );
+                                        }
+                                        return (
+                                          <button
+                                            key={name}
+                                            className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors w-full text-left"
+                                            onClick={() => setModalStack((stack) => [...stack, side])}
+                                          >
+                                            {side.image && (
+                                              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                                <img
+                                                  src={side.image}
+                                                  alt={side.name}
+                                                  className="w-full h-full object-cover"
+                                                />
+                                              </div>
                                             )}
-                                          </div>
-                                          <p className="text-xs text-muted-foreground line-clamp-2">
-                                            {side.description}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            )}
-                            {/* Sauce Pairings Section */}
-                            {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
-                              <div className="mb-6">
-                                <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                  Recommended Sauces
-                                </h4>
-                                <div className="space-y-3">
-                                  {selectedItem.saucePairings.map((name) => {
-                                    const sauce = findSauce(name);
-                                    if (!sauce) {
-                                      return (
-                                        <span
-                                          key={name}
-                                          className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
-                                        >
-                                          {name}
-                                        </span>
-                                      );
+                                            <div className="flex-1 min-w-0">
+                                              <div className="flex items-center justify-between gap-2 mb-1">
+                                                <span className="text-sm font-semibold truncate">{side.name}</span>
+                                                {typeof side.price === "number" && (
+                                                  <span className="text-xs font-semibold text-primary">
+                                                    ${side.price.toFixed(2)}
+                                                  </span>
+                                                )}
+                                              </div>
+                                              <p className="text-xs text-muted-foreground line-clamp-2">
+                                                {side.description}
+                                              </p>
+                                            </div>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Sauce Pairings Section */}
+                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
+                                  <div className="mb-6">
+                                    <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                      Recommended Sauces
+                                    </h4>
+                                    <div className="space-y-3">
+                                      {selectedItem.saucePairings.map((name) => {
+                                        const sauce = findSauce(name);
+                                        if (!sauce) {
+                                          return (
+                                            <span
+                                              key={name}
+                                              className="inline-block text-xs bg-secondary px-3 py-1.5 rounded-full border border-primary/20"
+                                            >
+                                              {name}
+                                            </span>
+                                          );
+                                        }
+                                        return (
+                                          <button
+                                            key={name}
+                                            className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors w-full text-left"
+                                            onClick={() => setModalStack((stack) => [...stack, sauce])}
+                                          >
+                                            {sauce.image && (
+                                              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                                <img
+                                                  src={sauce.image}
+                                                  alt={sauce.name}
+                                                  className="w-full h-full object-cover"
+                                                />
+                                              </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                              <div className="flex items-center justify-between gap-2 mb-1">
+                                                <span className="text-sm font-semibold truncate">{sauce.name}</span>
+                                              </div>
+                                              <p className="text-xs text-muted-foreground line-clamp-2">
+                                                {sauce.description}
+                                              </p>
+                                            </div>
+                                          </button>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                                {/* Seasonings Section */}
+                                {spices && spices.length > 0 && selectedItem && (() => {
+                                  // Show for Sides (not rice/naan), Grills & Skewers, Döner, Wraps
+                                  const cat = selectedItem.category;
+                                  const name = selectedItem.name.toLowerCase();
+                                  const isRice = name.includes("rice");
+                                  const isNaan = name.includes("naan");
+                                  const isColeslaw = name.includes("coleslaw");
+                                  // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
+                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji"];
+                                  const showSeasonings =
+                                    !excludedCategories.includes(cat) &&
+                                    !isRice &&
+                                    !isNaan;
+                                  if (!showSeasonings) return null;
+                                  let selectedSeasonings = [];
+                                  if (isColeslaw) {
+                                    // Only mild, fresh seasonings for coleslaw
+                                    selectedSeasonings = spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name));
+                                  } else if (cat === "Sides") {
+                                    // Sides: avoid spicy for salad/veg, allow both spicy and mild for fries/corn
+                                    if (name.includes("fries")) {
+                                      selectedSeasonings = spices.filter(s => [
+                                        "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
+                                      ].includes(s.name));
+                                    } else if (name.includes("corn")) {
+                                      selectedSeasonings = spices.filter(s => [
+                                        "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
+                                      ].includes(s.name));
+                                    } else if (name.includes("salad") || name.includes("vegetable")) {
+                                      selectedSeasonings = spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name));
+                                    } else {
+                                      // Default: offer a mix of mild and moderate
+                                      selectedSeasonings = spices.filter(s => s.level <= 3).slice(0, 3);
                                     }
-                                    return (
-                                      <div
-                                        key={name}
-                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
-                                      >
-                                        {sauce.image && (
-                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                            <img
-                                              src={sauce.image}
-                                              alt={sauce.name}
-                                              className="w-full h-full object-cover"
-                                            />
-                                          </div>
-                                        )}
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center justify-between gap-2 mb-1">
-                                            <span className="text-sm font-semibold truncate">{sauce.name}</span>
-                                          </div>
-                                          <p className="text-xs text-muted-foreground line-clamp-2">
-                                            {sauce.description}
-                                          </p>
-                                        </div>
+                                  } else if (cat === "Grills & Skewers") {
+                                    // Grills: support both high and low spice
+                                    selectedSeasonings = spices.filter(s => [
+                                      "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
+                                    ].includes(s.name));
+                                  } else if (cat === "Döner") {
+                                    // Döner: support both high and low spice
+                                    selectedSeasonings = spices.filter(s => [
+                                      "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
+                                    ].includes(s.name));
+                                  } else if (cat === "Wraps") {
+                                    // Wraps: support both high and low spice
+                                    selectedSeasonings = spices.filter(s => [
+                                      "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
+                                    ].includes(s.name));
+                                  } else if (cat === "Grills & Skewers" || cat === "Döner" || cat === "Wraps" || cat === "Sides") {
+                                    // fallback for any other item in these categories
+                                    selectedSeasonings = spices.filter(s => s.level <= 7 && s.level >= 0).slice(0, 4);
+                                  } else {
+                                    // For other categories (e.g. main dishes that can support spices)
+                                    selectedSeasonings = spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
+                                  }
+                                  if (selectedSeasonings.length === 0) return null;
+                                  return (
+                                    <div className="mb-6">
+                                      <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
+                                        Seasonings
+                                      </h4>
+                                      <div className="space-y-3">
+                                        {selectedSeasonings.map((seasoning) => (
+                                          <button
+                                            key={seasoning.name}
+                                            className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors w-full text-left"
+                                            onClick={() => setModalStack((stack) => [...stack, seasoning])}
+                                          >
+                                            {seasoning.image && (
+                                              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
+                                                <img
+                                                  src={seasoning.image}
+                                                  alt={seasoning.name}
+                                                  className="w-full h-full object-cover"
+                                                />
+                                              </div>
+                                            )}
+                                            <div className="flex-1 min-w-0">
+                                              <div className="flex items-center justify-between gap-2 mb-1">
+                                                <span className="text-sm font-semibold truncate">{seasoning.name}</span>
+                                              </div>
+                                              <p className="text-xs text-muted-foreground line-clamp-2">
+                                                {seasoning.description}
+                                              </p>
+                                            </div>
+                                          </button>
+                                        ))}
                                       </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
+                                    </div>
+                                  );
+                                })()}
+                                {/* Customizations Section */}
+                                {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
+                                  <div className="mb-6">
+                                    <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                                      Available Customizations
+                                    </h4>
+                                    <div className="flex flex-wrap gap-2">
+                                      {selectedItem.customizations.map((c) => (
+                                        <span
+                                          key={c}
+                                          className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
+                                        >
+                                          {c}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
                             )}
-                            {/* Seasonings Section */}
-                            {spices && spices.length > 0 && selectedItem && (() => {
-                              // Show for Sides (not rice/naan), Grills & Skewers, Döner, Wraps
-                              const cat = selectedItem.category;
-                              const name = selectedItem.name.toLowerCase();
-                              const isRice = name.includes("rice");
-                              const isNaan = name.includes("naan");
-                              const isColeslaw = name.includes("coleslaw");
-                              // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
-                              const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji"];
-                              const showSeasonings =
-                                !excludedCategories.includes(cat) &&
-                                !isRice &&
-                                !isNaan;
-                              if (!showSeasonings) return null;
-                              let selectedSeasonings = [];
-                              if (isColeslaw) {
-                                // Only mild, fresh seasonings for coleslaw
-                                selectedSeasonings = spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name));
-                              } else if (cat === "Sides") {
-                                // Sides: avoid spicy for salad/veg, allow both spicy and mild for fries/corn
-                                if (name.includes("fries")) {
-                                  selectedSeasonings = spices.filter(s => [
-                                    "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
-                                  ].includes(s.name));
-                                } else if (name.includes("corn")) {
-                                  selectedSeasonings = spices.filter(s => [
-                                    "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
-                                  ].includes(s.name));
-                                } else if (name.includes("salad") || name.includes("vegetable")) {
-                                  selectedSeasonings = spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name));
-                                } else {
-                                  // Default: offer a mix of mild and moderate
-                                  selectedSeasonings = spices.filter(s => s.level <= 3).slice(0, 3);
-                                }
-                              } else if (cat === "Grills & Skewers") {
-                                // Grills: support both high and low spice
-                                selectedSeasonings = spices.filter(s => [
-                                  "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
-                                ].includes(s.name));
-                              } else if (cat === "Döner") {
-                                // Döner: support both high and low spice
-                                selectedSeasonings = spices.filter(s => [
-                                  "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
-                                ].includes(s.name));
-                              } else if (cat === "Wraps") {
-                                // Wraps: support both high and low spice
-                                selectedSeasonings = spices.filter(s => [
-                                  "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
-                                ].includes(s.name));
-                              } else if (cat === "Grills & Skewers" || cat === "Döner" || cat === "Wraps" || cat === "Sides") {
-                                // fallback for any other item in these categories
-                                selectedSeasonings = spices.filter(s => s.level <= 7 && s.level >= 0).slice(0, 4);
-                              } else {
-                                // For other categories (e.g. main dishes that can support spices)
-                                selectedSeasonings = spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
-                              }
-                              if (selectedSeasonings.length === 0) return null;
-                              return (
+                            {/* If SauceItem (sauce or seasoning), show details */}
+                            {isSauceItem(selectedItem) && (
+                              <>
+                                {/* Heat Level Dots/Flames */}
                                 <div className="mb-6">
-                                  <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                    Seasonings
-                                  </h4>
-                                  <div className="space-y-3">
-                                    {selectedSeasonings.map((seasoning) => (
-                                      <div
-                                        key={seasoning.name}
-                                        className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors"
-                                      >
-                                        {seasoning.image && (
-                                          <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                            <img
-                                              src={seasoning.image}
-                                              alt={seasoning.name}
-                                              className="w-full h-full object-cover"
-                                            />
-                                          </div>
-                                        )}
-                                        <div className="flex-1 min-w-0">
-                                          <div className="flex items-center justify-between gap-2 mb-1">
-                                            <span className="text-sm font-semibold truncate">{seasoning.name}</span>
-                                          </div>
-                                          <p className="text-xs text-muted-foreground line-clamp-2">
-                                            {seasoning.description}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    ))}
+                                  <div
+                                    className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                    style={{
+                                      background: 'linear-gradient(90deg, #1a2c16 0%, #23180f 10%, #23180f 90%, #3a1a1a 100%)',
+                                      boxShadow: '0 1px 8px 0 #1a1a1a inset',
+                                      width: '260px',
+                                      minWidth: '260px',
+                                      maxWidth: '260px',
+                                    }}
+                                  >
+                                    <span className="text-xs font-semibold text-white mr-2">Spice</span>
+                                    {Array.from({ length: 7 }).map((_, i) => {
+                                      let color = 'text-gray-300';
+                                      if (i === 0) color = i < selectedItem.level ? 'text-green-400' : 'text-gray-700';
+                                      else if (i === 1) color = i < selectedItem.level ? 'text-yellow-300' : 'text-gray-700';
+                                      else if (i >= 2 && i <= 5) color = i < selectedItem.level ? 'text-orange-400' : 'text-gray-700';
+                                      else if (i === 6) color = i < selectedItem.level ? 'text-red-500' : 'text-gray-700';
+                                      return (
+                                        <Flame
+                                          key={i}
+                                          size={18}
+                                          strokeWidth={1.5}
+                                          className={color + (i < selectedItem.level ? '' : ' opacity-40')}
+                                          fill={i < selectedItem.level ? 'currentColor' : 'none'}
+                                        />
+                                      );
+                                    })}
                                   </div>
                                 </div>
-                              );
-                            })()}
-                            {/* Customizations Section */}
-                            {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
-                              <div className="mb-6">
-                                <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
-                                  Available Customizations
-                                </h4>
-                                <div className="flex flex-wrap gap-2">
-                                  {selectedItem.customizations.map((c) => (
-                                    <span
-                                      key={c}
-                                      className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
+                                {/* Allergens Section */}
+                                {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
+                                  <div className="mb-6 pb-6 border-b border-primary/10">
+                                    <div
+                                      className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                      style={{
+                                        background: 'rgba(35, 24, 15, 0.35)',
+                                        width: '260px',
+                                        minWidth: '260px',
+                                        maxWidth: '260px',
+                                      }}
                                     >
-                                      {c}
-                                    </span>
-                                  ))}
-                                </div>
-                              </div>
+                                      <span className="text-xs font-semibold text-white mr-2">
+                                        {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
+                                      </span>
+                                      {selectedItem.allergens.map((a) => {
+                                        const Icon = allergenIconMap[a]?.icon;
+                                        if (!Icon) return null;
+                                        return (
+                                          <span key={a} className="flex items-center text-xs">
+                                            <Icon size={18} className="text-red-500" />
+                                          </span>
+                                        );
+                                      })}
+                                    </div>
+                                  </div>
+                                )}
+                              </>
                             )}
                           </div>
                           {/* Footer with CTA */}
