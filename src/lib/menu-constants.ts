@@ -1,4 +1,4 @@
-import { Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
+import { Milk, Egg, Wheat, Nut, Fish, Leaf, Wine } from "lucide-react";
 import type { Allergen } from "@/lib/menu-types";
 
 export const quickFilters = [
@@ -14,6 +14,8 @@ export const dietaryFilters = [
   { id: "vegan", label: "Vegan" },
   { id: "vegetarian", label: "Vegetarian" },
   { id: "gluten-free", label: "Gluten-free" },
+  { id: "dairy-free", label: "Dairy-free" },
+  { id: "nut-free", label: "Nut-free" },
 ];
 export const allergenFilters: { id: Allergen; label: string }[] = [
   { id: "milk", label: "Dairy" },
@@ -25,6 +27,7 @@ export const allergenFilters: { id: Allergen; label: string }[] = [
   { id: "sesame", label: "Sesame" },
   { id: "shellfish", label: "Shellfish" },
   { id: "fish", label: "Fish" },
+  { id: "mustard", label: "Mustard" },
 ];
 export const miscFilters = [
   { id: "spicy", label: "Spicy" },
@@ -40,6 +43,7 @@ export const allergenIconMap = {
   sesame: { icon: Leaf, label: "Sesame" },
   shellfish: { icon: Fish, label: "Shellfish" },
   fish: { icon: Fish, label: "Fish" },
+  mustard: { icon: Wine, label: "Mustard" },
 };
 export const sidesTabs = [
   { id: "carb", label: "Carbs" },

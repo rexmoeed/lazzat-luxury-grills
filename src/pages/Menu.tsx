@@ -260,18 +260,38 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
 
   /**
    * Deterministic dietary matching:
-   * - Honors explicit item.dietary when present.
-   * - Derives a safe default: vegetarian if no meat keywords; vegan if vegetarian AND no milk/eggs.
-   * - Gluten-free is only honored when explicitly provided (avoid accidental false-positives).
+   * - Honors explicit item.dietary only (no inference).
+   * - If explicit flags conflict with allergens, remove the conflicting flag.
    */
   const deriveDietary = (item: MenuItem): DietaryFlag[] => {
-    // Only trust explicit dietary flags for vegan, vegetarian, gluten-free
-    let flags = new Set(item.dietary || []);
-    // Remove vegan/vegetarian if item contains eggs
-    if (itemHasAllergen(item, "eggs")) {
-      flags.delete("vegan");
-      flags.delete("vegetarian");
+    const flags = new Set(item.dietary || []);
+
+    if (flags.has("vegan")) {
+      if (
+        itemHasAllergen(item, "milk") ||
+        itemHasAllergen(item, "eggs") ||
+        itemHasAllergen(item, "fish") ||
+        itemHasAllergen(item, "shellfish")
+      ) {
+        flags.delete("vegan");
+      }
     }
+
+    if (flags.has("gluten-free") && itemHasAllergen(item, "gluten")) {
+      flags.delete("gluten-free");
+    }
+
+    if (flags.has("dairy-free") && itemHasAllergen(item, "milk")) {
+      flags.delete("dairy-free");
+    }
+
+    if (
+      flags.has("nut-free") &&
+      (itemHasAllergen(item, "tree-nuts") || itemHasAllergen(item, "peanuts"))
+    ) {
+      flags.delete("nut-free");
+    }
+
     return Array.from(flags);
   };
 
@@ -323,40 +343,38 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     );
   }
 
-  /* Step 3: POSITIVE FILTERS (OR SEMANTICS - includes item if ANY filter matches) */
+  /* Step 3: POSITIVE FILTERS (AND across groups, OR within each group) */
   const positiveFilters = selected.filter(
     (f) => !excludedAllergens.includes(f as Allergen)
   );
 
   if (positiveFilters.length > 0) {
+    const selectedQuick = positiveFilters.filter((f) =>
+      quickFilters.some((q) => q.id === f)
+    );
+    const selectedDietary = positiveFilters.filter((f) =>
+      dietaryFilters.some((d) => d.id === f)
+    );
+    const selectedMisc = positiveFilters.filter((f) =>
+      miscFilters.some((m) => m.id === f)
+    );
+
     items = items.filter((item) => {
-      // Quick filters: match food type/protein
-      const quickMatch = positiveFilters.some((f) =>
-        quickFilters.some(
-          (q) => q.id === f && matchesFoodType(item, f)
-        )
-      );
+      const quickMatch =
+        selectedQuick.length === 0 ||
+        selectedQuick.some((f) => matchesFoodType(item, f));
 
-      // Dietary filters: vegan, vegetarian, gluten-free (AND logic)
-      const selectedDietary = positiveFilters.filter((f) =>
-        dietaryFilters.some((d) => d.id === f)
-      );
-      let dietMatch = false;
-      if (selectedDietary.length > 0) {
-        dietMatch = selectedDietary.every((f) => itemMatchesDiet(item, f));
-      }
+      const dietMatch =
+        selectedDietary.length === 0 ||
+        selectedDietary.every((f) => itemMatchesDiet(item, f));
 
-      // Misc filters: spicy, etc.
-      const miscMatch = positiveFilters.some((f) => {
-        if (f === "spicy") return (item.heatLevel ?? 0) >= SPICY_THRESHOLD;
-        return false;
-      });
+      const miscMatch =
+        selectedMisc.length === 0 ||
+        selectedMisc.every((f) =>
+          f === "spicy" ? (item.heatLevel ?? 0) >= SPICY_THRESHOLD : false
+        );
 
-      // If any dietary filter is selected, require AND match for all selected dietary filters
-      if (selectedDietary.length > 0) {
-        return dietMatch;
-      }
-      return quickMatch || miscMatch;
+      return quickMatch && dietMatch && miscMatch;
     });
   }
 
@@ -437,7 +455,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
             <div>
               <h3 className="font-serif text-lg">Filters & Sort</h3>
               <p className="text-xs text-muted-foreground">
-                Select multiple — results are combined (OR)
+                Select filters to narrow results. Dietary filters are applied together.
               </p>
             </div>
 
@@ -451,6 +469,9 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 
           {/* CONTENT */}
           <div className="overflow-y-auto max-h-[75vh] md:max-h-[60vh] px-4 py-4 space-y-6">
+            <div className="rounded-lg border border-primary/15 bg-background/70 p-3 text-xs text-muted-foreground">
+              Dietary filters are guidance only. Please inform staff about allergies or dietary needs.
+            </div>
 
             {/* QUICK FILTERS */}
             <div>
@@ -662,7 +683,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                 {/* Allergen Info Modal rendered at root so it overlays the product modal */}
                 {showAllergenModal && (
                   <div className="fixed inset-0 z-[100] bg-black/70 flex items-center justify-center p-2">
-                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] sm:max-h-[80vh] overflow-y-auto mx-2 animate-zoom-in">
+                    <div className="relative bg-background rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] sm:max-h-[80vh] overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50 mx-2 animate-zoom-in">
                       <button
                         aria-label="Close allergen info"
                         onClick={() => setShowAllergenModal(false)}
@@ -932,11 +953,13 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                         {/* Image Section with Allergen Info Button */}
                         <div className="lg:col-span-2 h-60 lg:h-full lg:max-h-[75vh] bg-black/80 flex flex-col items-center justify-center px-2 py-3 relative">
                           <div className="relative w-full h-full rounded-xl border border-primary/20 overflow-hidden bg-black flex items-center justify-center">
-                            <img
-                              src={selectedItem.image}
-                              alt={selectedItem.name}
-                              className="w-full h-full object-contain"
-                            />
+                            {selectedItem?.image && (
+                              <img
+                                src={selectedItem.image}
+                                alt={selectedItem.name}
+                                className="w-full h-full object-contain"
+                              />
+                            )}
                             {/* Allergen Info Button - bottom center, floating, styled */}
                             <button
                               type="button"
@@ -958,10 +981,10 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                           <div className="p-6 md:p-8 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
                             {/* Header */}
                             <div className="mb-6">
-                              <h2 className="font-serif text-3xl md:text-4xl mb-3 text-foreground">
+                              <h2 id="modal-title" className="font-serif text-3xl md:text-4xl mb-3 text-foreground">
                                 {selectedItem.name}
                               </h2>
-                              <p className="text-muted-foreground leading-relaxed text-base">
+                              <p id="modal-desc" className="text-muted-foreground leading-relaxed text-base">
                                 {selectedItem.description}
                               </p>
                             </div>
