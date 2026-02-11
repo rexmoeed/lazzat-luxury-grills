@@ -115,7 +115,7 @@ export const spices: SauceItem[] = [
     level: 2,
     description: "Mustard seeds, finely crushed",
     image: mustard,
-    allergens: [],
+    allergens: ["mustard"],
   },
   {
     name: "Onion Powder",
