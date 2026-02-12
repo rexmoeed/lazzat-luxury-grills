@@ -399,7 +399,10 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     "lamb",
     "salmon",
     "seekh",
+    "doner",
     "biryani",
+    "sajji",
+    "desserts",
     "fruit-entremet",
     "cheesecakes",
     "tiramisu",
@@ -555,30 +558,6 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
 </div>
 
 
-            {/* MISC */}
-            <div>
-              <h4 className="text-sm font-medium mb-2">Other</h4>
-              <div className="flex flex-wrap gap-2">
-  {miscFilters.map((m) => {
-    const active = selectedFilters.has(m.id);
-    return (
-      <button
-      type="button"
-        key={m.id}
-        onClick={() => toggleFilter(m.id)}
-        className={cn(
-          "px-3 py-1.5 rounded-full text-sm transition",
-          active
-            ? "bg-orange-500 text-white shadow"
-            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-        )}
-      >
-        {m.label}
-      </button>
-    );
-  })}
-</div>
-            </div>
 
           </div>
 

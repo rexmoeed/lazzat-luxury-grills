@@ -9,6 +9,7 @@ export const quickFilters = [
   { id: "doner", label: "Döner" },
   { id: "biryani", label: "Biryani" },
   { id: "sajji", label: "Sajji" },
+  { id: "desserts", label: "Desserts" },
 ];
 export const dietaryFilters = [
   { id: "vegan", label: "Vegan" },
