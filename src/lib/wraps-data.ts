@@ -21,7 +21,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       saucePairings: ["BBQ sauce"],
       customizations: ["Extra Sauce", "No Onions"],
       allergens: ["gluten"],
-      dietary: [],
+      dietary: ["dairy-free", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
@@ -38,8 +38,8 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       // isPopular intentionally omitted
       saucePairings: ["BBQ sauce"],
       customizations: ["No Cheese", "Extra Veggies"],
-      allergens: ["gluten"],
-      dietary: ["vegetarian", "vegan"],
+      allergens: ["gluten", "milk"],
+      dietary: ["vegetarian", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
@@ -57,7 +57,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       saucePairings: ["BBQ sauce", "Chipotle sauce"],
       customizations: ["Extra Sauce", "No Tomato"],
       allergens: ["gluten"],
-      dietary: [],
+      dietary: ["dairy-free", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
   ],

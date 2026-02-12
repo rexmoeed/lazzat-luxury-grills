@@ -21,7 +21,7 @@ export const donerItems: Record<string, MenuItem[]> = {
         saucePairings: ["BBQ sauce", "Sweet and spicy"],
       customizations: ["Extra Sauce", "No Onions", "Add Cheese"],
       allergens: ["gluten"],
-      dietary: [],
+      dietary: ["dairy-free", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
@@ -39,7 +39,7 @@ export const donerItems: Record<string, MenuItem[]> = {
         saucePairings: ["BBQ sauce", "Chipotle sauce", "Sweet and spicy", "Jalapeno chipotle sauce"],
       customizations: ["Extra Spicy", "No Tomato", "Add Cheese"],
       allergens: ["gluten"],
-      dietary: [],
+      dietary: ["dairy-free", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
     {
@@ -57,7 +57,7 @@ export const donerItems: Record<string, MenuItem[]> = {
         saucePairings: ["BBQ sauce", "Chipotle sauce", "Sweet and spicy", "Jalapeno chipotle sauce"],
       customizations: ["Extra Sauce", "No Cucumber", "Add Cheese"],
       allergens: ["gluten"],
-      dietary: [],
+      dietary: ["dairy-free", "nut-free"],
       sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
     },
   ],

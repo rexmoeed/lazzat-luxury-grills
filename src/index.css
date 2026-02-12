@@ -418,3 +418,28 @@ html, body {
 .scrollbar-thumb-primary\/50:hover::-webkit-scrollbar-thumb {
   background: hsl(43 56% 52% / 0.5);
 }
+
+/* Themed scrollbar for filter panel */
+.scrollbar-gold::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollbar-gold::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, rgba(24, 20, 12, 0.3), rgba(12, 10, 6, 0.6));
+  border-radius: 999px;
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(218, 170, 67, 0.65), rgba(161, 120, 32, 0.9));
+  border-radius: 999px;
+  border: 2px solid rgba(12, 10, 6, 0.6);
+}
+
+.scrollbar-gold::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, rgba(236, 189, 86, 0.8), rgba(184, 138, 42, 0.95));
+}
+
+.scrollbar-gold {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(218, 170, 67, 0.7) rgba(12, 10, 6, 0.4);
+}

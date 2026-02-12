@@ -31,7 +31,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Char", "Boneless"],
       allergens: ["milk"], // yogurt / cream-based marinade
-      dietary: [],
+      dietary: ["gluten-free", "nut-free"],
     },
     {
       id: 4,
@@ -51,7 +51,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Add Cheese", "Boneless"],
       allergens: ["milk"], // dairy binding / optional cheese
-      dietary: [],
+      dietary: ["gluten-free", "nut-free"],
     },
   ],
 
@@ -74,7 +74,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Herb", "Half Portion"],
       allergens: [], // no major allergens in base preparation
-      dietary: [],
+      dietary: ["gluten-free", "dairy-free", "nut-free"],
     },
     {
       id: 5,
@@ -93,7 +93,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Spice", "Boneless"],
       allergens: [], // spice-based, no dairy by default
-      dietary: [],
+      dietary: ["gluten-free", "dairy-free", "nut-free"],
     },
     {
       id: 6,
@@ -112,7 +112,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Lemon", "Crispy Edges"],
       allergens: [], // herb & oil marinade
-      dietary: [],
+      dietary: ["gluten-free", "dairy-free", "nut-free"],
     },
   ],
 
@@ -134,7 +134,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Lemon"],
       allergens: ["fish", "milk"], // salmon + yogurt-based tikka marinade
-      dietary: [],
+      dietary: ["gluten-free", "nut-free"],
     },
   ],
 
@@ -158,7 +158,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       ],
       customizations: ["Extra Char", "Extra Sauce"],
       allergens: ["milk"], // paneer = cheese (dairy)
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "gluten-free", "nut-free"],
     },
   ],
 

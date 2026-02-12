@@ -242,10 +242,14 @@ const MEAT_KEYWORDS = [
   /* MATCH FOOD TYPES */
   const matchesFoodType = (item: MenuItem, type: string) => {
     const t = slugify(type);
+    const alt = t === "doner" ? "d-ner" : null;
     return (
       slugify(item.subCategory) === t ||
+      (alt && slugify(item.subCategory) === alt) ||
       slugify(item.category) === t ||
-      slugify(item.name).includes(t)
+      (alt && slugify(item.category) === alt) ||
+      slugify(item.name).includes(t) ||
+      (alt && slugify(item.name).includes(alt))
     );
   };
 
@@ -308,10 +312,11 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
    * Filter Pipeline:
    * 1. Category filter (All vs specific category)
    * 2. Allergen EXCLUSIONS - removes items with selected allergens (hard rule)
-   * 3. POSITIVE FILTERS - includes items matching ANY selected filter (OR logic)
-   *    - Quick filters: protein/type shortcuts (chicken, lamb, salmon, etc.)
-   *    - Dietary filters: vegan, vegetarian, gluten-free
-   *    - Misc filters: spicy (heat level >= threshold)
+   * 3. POSITIVE FILTERS - combines filter groups with AND across groups:
+   *    - Quick filters: protein/type shortcuts (chicken, lamb, salmon, etc.) - OR within group
+   *    - Dietary filters: vegan, vegetarian, gluten-free - AND within group (must match ALL)
+   *    - Misc filters: spicy (heat level >= threshold) - AND within group
+   *    - Groups combined: quickMatch AND dietMatch AND miscMatch
    * 4. SORT - applies ordering:
    *    - "spice-low" / "spice-high" - sorts by heat level
    *    - Food type filters - acts as secondary filter (displays only that type)
@@ -454,9 +459,6 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
           <div className="flex items-center justify-between px-4 py-3 border-b border-primary/10">
             <div>
               <h3 className="font-serif text-lg">Filters & Sort</h3>
-              <p className="text-xs text-muted-foreground">
-                Select filters to narrow results. Dietary filters are applied together.
-              </p>
             </div>
 
             <button
@@ -468,7 +470,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
           </div>
 
           {/* CONTENT */}
-          <div className="overflow-y-auto max-h-[75vh] md:max-h-[60vh] px-4 py-4 space-y-6">
+          <div className="overflow-y-auto max-h-[75vh] md:max-h-[60vh] px-4 py-4 space-y-6 scrollbar-gold">
             <div className="rounded-lg border border-primary/15 bg-background/70 p-3 text-xs text-muted-foreground">
               Dietary filters are guidance only. Please inform staff about allergies or dietary needs.
             </div>
@@ -577,53 +579,6 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
   })}
 </div>
             </div>
-
-            {/* SORT */}
-            <div>
-  <h4 className="text-sm font-medium mb-2">Sort</h4>
-
-  <div className="relative -mx-4 px-4">
-  {/* LEFT ARROW */}
-  <button
-    type="button"
-    onClick={() => scrollSort("left")}
-    className="absolute left-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-  >
-    <ChevronLeft size={16} />
-  </button>
-
-  {/* SCROLLABLE SORT BUTTONS */}
-  <div
-    ref={sortScrollRef}
-    className="flex items-center gap-2 overflow-x-auto whitespace-nowrap h-12 px-10 scrollbar-hide"
-  >
-    {sortOptions.map((s) => (
-      <button
-        key={s.value}
-        onClick={() => setSortBy(s.value)}
-        className={cn(
-          "px-3 py-1.5 rounded-full text-sm transition shrink-0",
-          sortBy === s.value
-            ? "bg-primary text-primary-foreground shadow"
-            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-        )}
-      >
-        {s.label}
-      </button>
-    ))}
-  </div>
-
-  {/* RIGHT ARROW */}
-  <button
-    type="button"
-    onClick={() => scrollSort("right")}
-    className="absolute right-1 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
-  >
-    <ChevronRight size={16} />
-  </button>
-</div>
-
-</div>
 
           </div>
 

@@ -81,7 +81,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 33,
@@ -96,7 +96,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 34,
@@ -144,7 +144,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 42,
@@ -159,7 +159,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 43,
@@ -174,7 +174,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 44,
@@ -207,7 +207,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 51,
@@ -222,7 +222,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 52,
@@ -237,7 +237,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 53,
@@ -252,7 +252,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     
   ],
@@ -271,6 +271,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten", "tree-nuts"],
+      dietary: ["vegetarian"],
     },
   ],
 
@@ -288,7 +289,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 71,
@@ -303,6 +304,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 72,
@@ -317,6 +319,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten", "tree-nuts", "soy"],
+      dietary: ["vegetarian"],
     },
     {
       id: 73,
@@ -331,6 +334,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten", "soy"],
+      dietary: ["vegetarian", "nut-free"],
     },
   ],
 
@@ -348,6 +352,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 81,
@@ -362,6 +367,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
   id: 82,
@@ -377,6 +383,7 @@ export const desserts: Record<string, MenuItem[]> = {
   saucePairings: [],
   customizations: [],
   allergens: ["milk", "eggs", "gluten", "soy"],
+  dietary: ["vegetarian", "nut-free"],
 },
 
 
@@ -426,7 +433,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
     {
       id: 93,
@@ -441,7 +448,7 @@ export const desserts: Record<string, MenuItem[]> = {
       saucePairings: [],
       customizations: [],
       allergens: ["milk", "eggs", "gluten"],
-      dietary: ["vegetarian"],
+      dietary: ["vegetarian", "nut-free"],
     },
   ],
 };
