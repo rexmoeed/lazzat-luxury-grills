@@ -43,13 +43,11 @@ export default function MenuPage() {
   const [activeSidesTab, setActiveSidesTab] = useState<string>("carb");
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [sortBy, setSortBy] = useState<string>("none");
-  const [showFilters, setShowFilters] = useState<boolean>(true);
   // Modal stack: allows back navigation
-  const [modalStack, setModalStack] = useState<any[]>([]);
+  const [modalStack, setModalStack] = useState<(MenuItem | SauceItem | null)[]>([]);
   const selectedItem = modalStack.length > 0 ? modalStack[modalStack.length - 1] : null;
   // Allergen Info modal state
   const [showAllergenModal, setShowAllergenModal] = useState(false);
-  const [filterMode, setFilterMode] = useState<"OR" | "AND">("OR");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
   // ...removed sauceFilter state
@@ -213,26 +211,6 @@ const sortOptions = [
   { value: "juices", label: "Juices" },
 ];
 
-/* --- NEW: multi-select filter definitions --- */
-/* quickFilters are protein / type shortcuts (map to existing quick sorts) */
-/* dietaryFilters: these ideally should be flags on your menuItems (vegan/vegetarian/gluten-free) — currently we use heuristics */
-/* spiceFilter options are handled separately via sauce heat or item.heatLevel */
-
-const MEAT_KEYWORDS = [
-  "chicken",
-  "lamb",
-  "beef",
-  "salmon",
-  "fish",
-  "seekh",
-  "meat",
-  "sajji",
-  "doner",
-];
-
-
-// Remove duplicate export default and keep only one MenuPage definition (the one at the top of the file)
-
 
 
   /* MATCH FOOD TYPES */
@@ -321,7 +299,7 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
   let items = [...menuItemsFlat];
 
   /* Step 1: CATEGORY FILTER */
-  if (activeCategory !== "All" && activeCategory !== "Sauces") {
+  if (activeCategory !== "All") {
     items = items.filter(
       (item) => item.category === activeCategory
     );
@@ -731,11 +709,11 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       </div>
                     )}
                     {/* ...removed Sauces Filter Dropdown */}
-                    {/* Grid for Sides, Sauces, or other single category */}
+                    {/* Grid for Sides or other single category */}
                     <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
                       {(activeCategory === "Sides"
-                        ? filteredItems.filter((item) => item.category === "Sides" && item.sideType === activeSidesTab)
-                        : filteredItems.filter((item) => item.category === activeCategory)
+                        ? filteredItems.filter((item) => item.sideType === activeSidesTab)
+                        : filteredItems
                       ).map((item) => (
                         <div
                           key={item.id}
@@ -776,7 +754,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                       ))}
                     </div>
                     {/* No items found */}
-                    {filteredItems.filter((item) => item.category === activeCategory).length === 0 && (
+                    {filteredItems.length === 0 && (
                       <div className="text-center py-16">
                         <p className="text-muted-foreground">
                           No items found in this category.
@@ -787,7 +765,7 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                 )}
                 {activeCategory === "All" && (
                   <>
-                    {categories.filter(cat => cat !== "All" && cat !== "Sides").map((cat) => {
+                    {categories.filter(cat => cat !== "All").map((cat) => {
                       const items = filteredItems.filter(item => item.category === cat);
                       if (items.length === 0) return null;
                       return (
