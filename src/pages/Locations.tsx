@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { useEffect, useState } from "react";
-import { MapPin, Clock, Phone, Navigation, Copy, Share2, Wifi, Car, ShoppingBag } from "lucide-react";
+import { MapPin, Clock, Phone, Navigation, Copy, Share2, Wifi, Car, ShoppingBag, LucideIcon } from "lucide-react";
 
 /* =====================
    Location Data
@@ -100,7 +100,7 @@ const isLocationOpen = (hours: typeof locations[0]['hours']) => {
   return currentTime >= openTime && currentTime <= closeTime;
 };
 
-const amenityIcons: Record<string, { icon: any; label: string }> = {
+const amenityIcons: Record<string, { icon: LucideIcon; label: string }> = {
   parking: { icon: Car, label: "Parking Available" },
   wifi: { icon: Wifi, label: "Free WiFi" },
   takeaway: { icon: ShoppingBag, label: "Takeaway Only" },

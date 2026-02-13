@@ -10,7 +10,7 @@ import {
   hashCode,
 } from "@/lib/menu-constants";
 
-import React, { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef } from "react";
 import AllergenInfo from "@/components/shared/AllergenInfo";
 import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";

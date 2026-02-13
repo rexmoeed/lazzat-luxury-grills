@@ -1,11 +1,7 @@
-import React from "react";
 import { Layout } from "@/components/layout/Layout";
 import SignatureFlavors from "@/components/shared/SignatureFlavors";
 
-
-
-
-const Flavours: React.FC = () => {
+const Flavours = () => {
   return (
     <Layout>
 
