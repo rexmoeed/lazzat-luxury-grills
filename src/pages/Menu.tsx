@@ -197,13 +197,11 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
 };
 
 // Sort options for the sort bar
+// Note: Protein filters (chicken, lamb, etc.) are in the Filter Drawer, not here
 const sortOptions = [
   { value: "none", label: "Default" },
-  { value: "chicken", label: "Chicken" },
-  { value: "lamb", label: "Lamb" },
-  { value: "salmon", label: "Salmon" },
-  { value: "seekh", label: "Seekh" },
-  { value: "biryani", label: "Biryani" },
+  { value: "spice-low", label: "Spice: Low to High" },
+  { value: "spice-high", label: "Spice: High to Low" },
   { value: "fruit-entremet", label: "Fruit Entremet" },
   { value: "cheesecakes", label: "Cheesecakes" },
   { value: "tiramisu", label: "Tiramisu" },
@@ -213,8 +211,6 @@ const sortOptions = [
   { value: "tres-leches", label: "Tres Leches" },
   { value: "shakes", label: "Shakes" },
   { value: "juices", label: "Juices" },
-  { value: "spice-low", label: "Spice: Low to High" },
-  { value: "spice-high", label: "Spice: High to Low" },
 ];
 
 /* --- NEW: multi-select filter definitions --- */
@@ -393,16 +389,9 @@ const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
     return [...items].sort((a, b) => (b.heatLevel ?? 0) - (a.heatLevel ?? 0));
   }
 
-  // Food type shortcuts: filter to show only selected type
+  // Subcategory sorts: filter to show only selected subcategory
+  // Note: Main protein types (chicken, lamb, etc.) removed - use Filter Drawer instead
   const quickTypes = [
-    "chicken",
-    "lamb",
-    "salmon",
-    "seekh",
-    "doner",
-    "biryani",
-    "sajji",
-    "desserts",
     "fruit-entremet",
     "cheesecakes",
     "tiramisu",
