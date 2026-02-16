@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { allergenIconMap, type Allergen } from "@/lib/menu-constants";
+import { allergenIconMap } from "@/lib/menu-constants";
+import type { Allergen } from "@/lib/menu-types";
 
 /* CENTRAL DATA */
 import { sauces } from "@/lib/sauces-data";
