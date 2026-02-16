@@ -29,12 +29,64 @@ import { spices } from "@/lib/spices-data";
 
 
 // Type guard helpers
-function isMenuItem(item: any): item is MenuItem {
-  return item && typeof item === 'object' && 'category' in item && 'heatLevel' in item;
+function isMenuItem(item: unknown): item is MenuItem {
+  return !!item && typeof item === "object" && "category" in item && "heatLevel" in item;
 }
-function isSauceItem(item: any): item is SauceItem {
-  return item && typeof item === 'object' && 'level' in item && !('category' in item);
+function isSauceItem(item: unknown): item is SauceItem {
+  return !!item && typeof item === "object" && "level" in item && !("category" in item);
 }
+
+const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
+  if (!item.allergens || item.allergens.length === 0) return false;
+  return item.allergens.includes(allergen);
+};
+
+/**
+ * Deterministic dietary matching:
+ * - Honors explicit item.dietary only (no inference).
+ * - If explicit flags conflict with allergens, remove the conflicting flag.
+ */
+const deriveDietary = (item: MenuItem): DietaryFlag[] => {
+  const flags = new Set(item.dietary || []);
+
+  if (flags.has("vegan")) {
+    if (
+      itemHasAllergen(item, "milk") ||
+      itemHasAllergen(item, "eggs") ||
+      itemHasAllergen(item, "fish") ||
+      itemHasAllergen(item, "shellfish")
+    ) {
+      flags.delete("vegan");
+    }
+  }
+
+  if (flags.has("vegetarian")) {
+    if (itemHasAllergen(item, "fish") || itemHasAllergen(item, "shellfish")) {
+      flags.delete("vegetarian");
+    }
+  }
+
+  if (flags.has("gluten-free") && itemHasAllergen(item, "gluten")) {
+    flags.delete("gluten-free");
+  }
+
+  if (flags.has("dairy-free") && itemHasAllergen(item, "milk")) {
+    flags.delete("dairy-free");
+  }
+
+  if (
+    flags.has("nut-free") &&
+    (itemHasAllergen(item, "tree-nuts") || itemHasAllergen(item, "peanuts"))
+  ) {
+    flags.delete("nut-free");
+  }
+
+  return Array.from(flags);
+};
+
+const itemMatchesDiet = (item: MenuItem, dietId: string) => {
+  return deriveDietary(item).includes(dietId as DietaryFlag);
+};
 
 export default function MenuPage() {
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
@@ -104,15 +156,12 @@ export default function MenuPage() {
     });
   };
 
-// ...removed findSauce helper
+  // Side catalog pulled from existing menu items
+  const sidesCatalog = menuItemsFlat.filter((item) => item.category === "Sides");
 
-// Side catalog pulled from existing menu items
-const sidesCatalog = menuItemsFlat.filter((item) => item.category === "Sides");
-
-// Find side details by name (case-insensitive)
-const findSide = (name: string) =>
-  sidesCatalog.find((s) => s.name.toLowerCase() === name.toLowerCase());
-
+  // Find side details by name (case-insensitive)
+  const findSide = (name: string) =>
+    sidesCatalog.find((s) => s.name.toLowerCase() === name.toLowerCase());
 
   // Fallback side pairings by category when an item does not define its own
   const defaultSidePairingsByCategory: Record<string, string[]> = {
@@ -123,18 +172,8 @@ const findSide = (name: string) =>
       "Cheese Stuffed Naan",
       "Garlic & Herb Naan",
     ],
-    Biryani: [
-      "Side Salad",
-      "Coleslaw",
-      "Grilled Vegetables",
-      "Corn on the Cob"
-    ],
-    Sajji: [
-      "Side Salad",
-      "Coleslaw",
-      "Grilled Vegetables",
-      "Corn on the Cob"
-    ],
+    Biryani: ["Side Salad", "Coleslaw", "Grilled Vegetables", "Corn on the Cob"],
+    Sajji: ["Side Salad", "Coleslaw", "Grilled Vegetables", "Corn on the Cob"],
   };
 
   const getSidePairings = (item: MenuItem): string[] => {
@@ -143,19 +182,21 @@ const findSide = (name: string) =>
     return defaultSidePairingsByCategory[item.category] || [];
   };
 
-  // Now that getSidePairings is defined, compute sideRecommendations
-  const sideRecommendations = isMenuItem(selectedItem) ? getSidePairings(selectedItem) : [];
-const categories = [
-  "All",
-  "Grills & Skewers",
-  "Döner",
-  "Wraps",
-  "Biryani",
-  "Sajji",
-  "Desserts",
-  "Sides",
-  "Shakes & Juices",
-];
+  const sideRecommendations = isMenuItem(selectedItem)
+    ? getSidePairings(selectedItem)
+    : [];
+
+  const categories = [
+    "All",
+    "Grills & Skewers",
+    "Döner",
+    "Wraps",
+    "Biryani",
+    "Sajji",
+    "Desserts",
+    "Sides",
+    "Shakes & Juices",
+  ];
 
 // Category headings for display
 const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
@@ -226,58 +267,6 @@ const sortOptions = [
       (alt && slugify(item.name).includes(alt))
     );
   };
-
-  /* Heuristics for dietary filters.
-     IMPORTANT: Prefer explicit dietary flags on menu items. We derive defaults safely when missing.
-  */
-const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
-  if (!item.allergens || item.allergens.length === 0) return false;
-  return item.allergens.includes(allergen);
-};
-
-
-  /**
-   * Deterministic dietary matching:
-   * - Honors explicit item.dietary only (no inference).
-   * - If explicit flags conflict with allergens, remove the conflicting flag.
-   */
-  const deriveDietary = (item: MenuItem): DietaryFlag[] => {
-    const flags = new Set(item.dietary || []);
-
-    if (flags.has("vegan")) {
-      if (
-        itemHasAllergen(item, "milk") ||
-        itemHasAllergen(item, "eggs") ||
-        itemHasAllergen(item, "fish") ||
-        itemHasAllergen(item, "shellfish")
-      ) {
-        flags.delete("vegan");
-      }
-    }
-
-    if (flags.has("gluten-free") && itemHasAllergen(item, "gluten")) {
-      flags.delete("gluten-free");
-    }
-
-    if (flags.has("dairy-free") && itemHasAllergen(item, "milk")) {
-      flags.delete("dairy-free");
-    }
-
-    if (
-      flags.has("nut-free") &&
-      (itemHasAllergen(item, "tree-nuts") || itemHasAllergen(item, "peanuts"))
-    ) {
-      flags.delete("nut-free");
-    }
-
-    return Array.from(flags);
-  };
-
-  const itemMatchesDiet = (item: MenuItem, dietId: string) => {
-    return deriveDietary(item).includes(dietId as DietaryFlag);
-  };
-
-  
 
 
   /**
@@ -1103,9 +1092,6 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                     selectedSeasonings = spices.filter(s => [
                                       "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
                                     ].includes(s.name));
-                                  } else if (cat === "Grills & Skewers" || cat === "Döner" || cat === "Wraps" || cat === "Sides") {
-                                    // fallback for any other item in these categories
-                                    selectedSeasonings = spices.filter(s => s.level <= 7 && s.level >= 0).slice(0, 4);
                                   } else {
                                     // For other categories (e.g. main dishes that can support spices)
                                     selectedSeasonings = spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);

@@ -95,7 +95,15 @@ const isLocationOpen = (hours: typeof locations[0]['hours']) => {
   let closeTime = parseInt(endHour) * 60 + parseInt(endMin);
   if (endPeriod === 'PM' && endHour !== '12') closeTime += 12 * 60;
   if (endPeriod === 'AM' && endHour === '12') closeTime = parseInt(endMin);
-  if (closeTime < openTime) closeTime += 24 * 60; // Next day
+  
+  // Handle closing past midnight
+  if (closeTime < openTime) {
+    closeTime += 24 * 60; // Next day
+    // If current time is past midnight but before close time, adjust it too
+    if (currentTime < openTime) {
+      return currentTime <= (closeTime - 24 * 60);
+    }
+  }
 
   return currentTime >= openTime && currentTime <= closeTime;
 };

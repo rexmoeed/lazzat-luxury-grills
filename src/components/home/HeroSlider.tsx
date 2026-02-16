@@ -34,10 +34,11 @@ export const HeroSlider = () => {
   // autoplay interval
   useEffect(() => {
     const timer = setInterval(() => {
-      nextSlide();
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [currentSlide]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // ensure only current video's playing
   useEffect(() => {
