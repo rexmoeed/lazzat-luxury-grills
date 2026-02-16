@@ -69,16 +69,14 @@ export const Footer = () => {
             </a>
           </div>
         </div>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-3 md:gap-6 text-[11px] md:text-xs text-muted-foreground font-sans border-t border-primary/10 pt-4 mt-2">
-          <p>© 2026 Lazzat. All rights reserved.</p>
+        <div className="flex flex-col items-center gap-3 text-[11px] md:text-xs text-muted-foreground font-sans border-t border-primary/10 pt-4 mt-2">
+          <p className="text-center">© 2026 Lazzat. All rights reserved.</p>
           <div className="flex gap-4 md:gap-6">
-            <Link to="/privacy" className="hover:text-primary transition-colors duration-300 relative group">
+            <Link to="/privacy" className="hover:text-primary transition-colors duration-300">
               Privacy
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
             </Link>
-            <Link to="/terms" className="hover:text-primary transition-colors duration-300 relative group">
-              Terms
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary group-hover:w-full transition-all duration-300" />
+            <Link to="/terms" className="hover:text-primary transition-colors duration-300">
+              Terms & Service
             </Link>
           </div>
         </div>

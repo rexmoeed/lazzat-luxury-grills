@@ -1,37 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/about</loc>
+    <loc>https://lazzat.ca/about</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/contact</loc>
+    <loc>https://lazzat.ca/contact</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/flavours</loc>
+    <loc>https://lazzat.ca/flavours</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/</loc>
+    <loc>https://lazzat.ca/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/locations</loc>
+    <loc>https://lazzat.ca/locations</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/menu</loc>
+    <loc>https://lazzat.ca/menu</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lazzat-luxury-grills-lime.vercel.app/order</loc>
+    <loc>https://lazzat.ca/order</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lazzat.ca/privacy</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lazzat.ca/terms</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

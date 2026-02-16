@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-const DOMAIN = "https://lazzat-luxury-grills-lime.vercel.app"; // your domain
+const DOMAIN = "https://lazzat.ca"; // production domain
 const PAGES_DIR = path.resolve("src/pages");
 const OUTPUT_FILE = path.resolve("public/sitemap.xml");
 
