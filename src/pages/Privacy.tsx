@@ -56,7 +56,7 @@ const Privacy = () => {
           <div>
             <h2 className="font-serif text-2xl text-black mb-3">Contact</h2>
             <p className="text-sm md:text-base text-black/80 leading-relaxed">
-              For privacy questions, please email hello@lazzat.ca.
+              For privacy questions, please email hello@lazzat.ca
             </p>
           </div>
           </div>
