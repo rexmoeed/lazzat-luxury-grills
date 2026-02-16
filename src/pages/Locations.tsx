@@ -39,7 +39,8 @@ const locations = [
 /* =====================
    Helpers
 ===================== */
-const isIOS = () => /iPad|iPhone|iPod/.test(navigator.userAgent);
+const isIOS = () =>
+  typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const getMapsLink = (address: string) => {
   const encoded = encodeURIComponent(address);

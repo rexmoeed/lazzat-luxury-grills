@@ -29,7 +29,7 @@ const slides = [
 export const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
-  const videoRefs = useRef([]); // holds refs for video elements
+  const videoRefs = useRef<HTMLVideoElement[]>([]); // holds refs for video elements
 
   // autoplay interval
   useEffect(() => {
