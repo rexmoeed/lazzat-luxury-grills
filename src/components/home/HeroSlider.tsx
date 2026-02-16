@@ -200,7 +200,7 @@ export const HeroSlider = () => {
       </div>
 
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden md:flex flex-col items-center gap-2 text-foreground/50 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 hidden flex-col items-center gap-2 text-foreground/50 animate-bounce">
         <span className="text-xs font-sans tracking-widest uppercase">Scroll</span>
         <div className="w-px h-8 bg-gradient-to-b from-foreground/50 to-transparent" />
       </div>
