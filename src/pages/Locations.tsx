@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import { MapPin, Clock, Phone, Navigation, Copy, Share2, Wifi, Car, ShoppingBag, LucideIcon } from "lucide-react";
 
 /* =====================
@@ -132,24 +133,19 @@ const Locations = () => {
       setLocationStatus('error');
       return;
     }
-
     setLocationStatus('loading');
     setHasRequestedLocation(true);
-
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         setUserCoords({ lat: latitude, lng: longitude });
-
         const nearest = locations.reduce((prev, curr) => {
           const prevDist = getDistance(latitude, longitude, prev.lat, prev.lng);
           const currDist = getDistance(latitude, longitude, curr.lat, curr.lng);
           return currDist < prevDist ? curr : prev;
         });
-
         setNearestId(nearest.id);
         setLocationStatus('success');
-
         document
           .getElementById(`location-${nearest.id}`)
           ?.scrollIntoView({ behavior: "smooth", block: "center" });
