@@ -4,6 +4,7 @@ import { RouteLoader } from "@/components/shared/RouteLoader";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { AboutSection } from "@/components/home/AboutSection";
 import { OurSignatureFlavours } from "@/components/home/OurSignatureFlavours";
+import { HowItWorks } from "@/components/home/HowItWorks";
 
 const FeaturedItems = lazy(() =>
   import("@/components/home/FeaturedItems").then((module) => ({
@@ -37,7 +38,9 @@ const Index = () => {
       <HeroSlider />
 
       <AboutSection />
+
       <OurSignatureFlavours />
+      <HowItWorks />
 
       <Suspense
         fallback={
