@@ -1,5 +1,6 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { menuItemsFlat } from "@/lib/menu-data";
 import { sauces } from "@/lib/sauces-data";
@@ -7,9 +8,10 @@ import { sauces } from "@/lib/sauces-data";
 export const FeaturedItems = () => {
   // Get first available from each category
   const grillsBiryaniSajji = menuItemsFlat.find((item) => ["Grills & Skewers", "Biryani", "Sajji"].includes(item.category));
-  const sauce = sauces[0];
-  const juice = menuItemsFlat.find((item) => item.category === "Shakes & Juices");
+  const wrap = menuItemsFlat.find((item) => item.category === "Wraps");
+  const seekhKebab = menuItemsFlat.find((item) => item.name.toLowerCase().includes("seekh"));
   const dessert = menuItemsFlat.find((item) => item.category === "Desserts");
+  const sauce = sauces[0];
 
   const cards = [
     grillsBiryaniSajji && {
@@ -19,6 +21,20 @@ export const FeaturedItems = () => {
       accent: grillsBiryaniSajji.category,
       description: grillsBiryaniSajji.description,
     },
+    wrap && {
+      title: "Wraps",
+      name: wrap.name,
+      image: wrap.image,
+      accent: wrap.category,
+      description: wrap.description,
+    },
+    seekhKebab && {
+      title: "Seekh Kebab",
+      name: seekhKebab.name,
+      image: seekhKebab.image,
+      accent: seekhKebab.category,
+      description: seekhKebab.description,
+    },
     sauce && {
       title: "Signature Sauces",
       name: sauce.name,
@@ -26,23 +42,9 @@ export const FeaturedItems = () => {
       accent: `Level ${sauce.level}`,
       description: sauce.description,
     },
-    juice && {
-      title: "Juices & Shakes",
-      name: juice.name,
-      image: juice.image,
-      accent: juice.category,
-      description: juice.description,
-    },
-    dessert && {
-      title: "Desserts",
-      name: dessert.name,
-      image: dessert.image,
-      accent: dessert.category,
-      description: dessert.description,
-    },
   ].filter(Boolean);
 
-  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   return (
     <section className="section-padding bg-background">
@@ -51,21 +53,24 @@ export const FeaturedItems = () => {
         <div className="text-center mb-12">
           <div className="gold-divider w-16 mx-auto mb-6" />
           <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-4">
-            Featured <span className="text-primary">Creations</span>
+            Made in Canada, <span className="text-primary">Made for Everyone</span>
           </h2>
+          <p className="font-sans text-muted-foreground max-w-2xl mx-auto mb-2">
+            We chose the name Lazzat because it means taste, delight and richness - a word shared across Arabic, Urdu, Hindi, Persian and Turkish.
+          </p>
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-            Discover our most celebrated dishes, each crafted with passion and precision.
+            Just like our name, our menu doesn’t belong to one culture - it belongs to everyone. That’s what makes it Canadian at heart.
           </p>
         </div>
 
         {/* Gallery Grid (AmbienceGallery style) */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+          <div className="flex flex-wrap justify-center gap-0.5 sm:gap-1 md:gap-1 lg:gap-1 xl:gap-2">
           {cards.map((card, index) => (
             <button
               key={index}
-              onClick={() => setSelectedImage(index)}
+              onClick={() => navigate('/menu')}
               className={cn(
-                "group relative overflow-hidden rounded-lg aspect-square cursor-pointer shadow-[0_10px_30px_-22px_rgba(0,0,0,0.5)]",
+                "group flex flex-col items-center justify-center overflow-hidden rounded-lg bg-transparent shadow-md cursor-pointer w-40 h-40 sm:w-48 sm:h-48 md:w-60 md:h-60 lg:w-72 lg:h-72",
                 index === 0 && "md:col-span-2 md:row-span-2"
               )}
               aria-label={card.name}
@@ -73,44 +78,15 @@ export const FeaturedItems = () => {
               <img
                 src={card.image}
                 alt={card.name}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                className="w-36 h-36 sm:w-40 sm:h-40 md:w-52 md:h-52 lg:w-64 lg:h-64 object-cover rounded-lg border border-gold/20"
                 loading="lazy"
               />
-              <div className="absolute inset-0 bg-background/0 group-hover:bg-background/40 transition-colors duration-500" />
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                <span className="text-[11px] font-sans text-foreground uppercase tracking-widest">
-                  View
-                </span>
-              </div>
-              <div className="absolute inset-0 border-2 border-primary/0 group-hover:border-primary/50 rounded-lg transition-all duration-500" />
             </button>
           ))}
         </div>
 
         {/* Lightbox Modal */}
-        {selectedImage !== null && cards[selectedImage] && (
-          <div
-            className="fixed inset-0 z-50 bg-background/95 backdrop-blur-lg flex items-center justify-center p-3 md:p-4"
-            onClick={() => setSelectedImage(null)}
-          >
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 w-12 h-12 rounded-full border border-foreground/30 flex items-center justify-center text-foreground hover:border-primary hover:text-primary transition-colors duration-300"
-              aria-label="Close"
-            >
-              <span style={{fontSize:24, fontWeight:'bold'}}>×</span>
-            </button>
-            <img
-              src={cards[selectedImage].image}
-              alt={cards[selectedImage].name}
-              className="max-w-full max-h-[75vh] object-contain rounded-lg animate-zoom-in"
-            />
-            <div className="absolute bottom-8 left-0 right-0 flex flex-col items-center">
-              <span className="font-serif text-lg md:text-2xl text-foreground mb-1">{cards[selectedImage].name}</span>
-              <span className="text-xs md:text-base text-muted-foreground text-center max-w-md">{cards[selectedImage].description}</span>
-            </div>
-          </div>
-        )}
+        {/* Removed Lightbox Modal */}
 
         {/* CTA */}
         <div className="text-center mt-12">
