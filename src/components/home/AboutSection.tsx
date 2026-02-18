@@ -28,25 +28,18 @@ export const AboutSection = () => {
   <div>
     <div className="gold-divider w-16 mb-6" />
     <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-6">
-      A Story Told Through <span className="text-primary">Flavor</span>
+      Our Story
     </h2>
 
     <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
       <p>
-        At Lazzat, food is more than what’s on the plate, it’s an experience
-        shaped by flavors from the world’s most vibrant kitchens. Each
-        creation is thoughtfully crafted to take you beyond the ordinary.
+        At Lazzat, we started with a simple question: Why does fresh, flavorful food take so long, and why does fast food so often feel flavorless?
       </p>
-
       <p>
-        Takeout doesn’t have to feel rushed or forgettable. Here, it’s
-        reimagined with fresh, high-quality ingredients and careful
-        preparation—balancing comfort with quality.
+        After years of running kitchens across Canada, our team saw the same problem everywhere: if food was quick, it lacked depth; if it had flavor, it was greasy or slow. We built Lazzat to change that.
       </p>
-
       <p>
-        Food is more than fuel; it’s a bridge that connects us. Every bite
-        celebrates flavors that unite us, no matter where we’re from.
+        Here, you get the best sauces, <span className="text-primary">grills and spices - all under one roof</span>.
       </p>
     </div>
   </div>
