@@ -14,15 +14,15 @@ const slides = [
     image: heroRestaurant,
     video: heroRestaurantVidMp4,
     poster: heroRestaurant, // optional poster image
-    headline: "The Everything in One Place Grill",
-    subhead: "Premium global grills crafted fresh daily.",
+    headline: "Fresh Takeaway BBQ & Skewers",
+    subhead: "Your go-to grill Restaurant in Brampton.",
   },
   {
     image: heroGrill,
     video: heroGrillVidMp4,
     poster: heroGrill,
-    headline: "Where every Bite is a Masterpiece",
-    subhead: "Every dish tells a story of passion and flame.",
+    headline: "Fresh. Fast. Full of Flavor.",
+    subhead: "Where Real Spices Meet Speed.",
   },
 ];
 
