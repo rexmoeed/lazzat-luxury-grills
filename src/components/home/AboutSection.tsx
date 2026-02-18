@@ -36,7 +36,7 @@ export const AboutSection = () => {
         At Lazzat, we started with a simple question: Why does fresh, flavorful food take so long, and why does fast food so often feel flavorless?
       </p>
       <p>
-        After years of running kitchens across Canada, our team saw the same problem everywhere: if food was quick, it lacked depth; if it had flavor, it was greasy or slow. We built Lazzat to change that.
+        After years of running kitchens across <span className="text-primary">Canada</span>, our team saw the same problem everywhere: if food was quick, it lacked depth; if it had flavor, it was greasy or slow. We built <span className="text-primary">Lazzat</span> to change that.
       </p>
       <p>
         Here, you get the best sauces, <span className="text-primary">grills and spices - all under one roof</span>.
@@ -50,23 +50,24 @@ export const AboutSection = () => {
           <div className="order-2 lg:order-1">
             <div className="gold-divider w-16 mb-6" />
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-foreground mb-6 leading-tight">
-              Where <span className="text-primary">Tradition</span> Meets{" "}
-              <span className="text-primary">Innovation</span>
+              Why Choose <span className="text-primary">Lazzat</span> ?
             </h2>
 
-            <div className="space-y-4 text-muted-foreground font-sans leading-relaxed">
+            <div className="space-y-2 text-muted-foreground font-sans leading-relaxed">
               <p>
-                Born from a passion for authentic flavors and premium ingredients,
-                Lazzat brings together the finest grilling traditions from around
-                the world.
+                Because you shouldn’t have to choose between:
               </p>
               <p>
-                Our open kitchen philosophy means you see every flame, every
-                sizzle, every moment of culinary artistry.
+                <span className="text-primary">Speed</span> and <span className="text-primary">Flavor</span>
               </p>
               <p>
-                From charcoal grills to aromatic spice blends passed down through
-                generations, every dish is crafted with intention.
+                <span className="text-primary">Healthy</span> and <span className="text-primary">Hearty</span>
+              </p>
+              <p>
+                <span className="text-primary">Traditional Spices</span> and <span className="text-primary">Modern balance</span>
+              </p>
+              <p>
+                At <span className="text-primary">Lazzat</span>, you get it all - real spices, fresh grills and signature sauces that celebrate <span className="text-primary">Canada’s multicultural spirit.</span>
               </p>
             </div>
           </div>
