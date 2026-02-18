@@ -50,7 +50,7 @@ export const OurSignatureFlavours = () => {
           {signatureFlavors.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center bg-transparent rounded-xl shadow-lg p-4 sm:p-6 gap-3 sm:gap-4 border border-gold hover:scale-[1.02] transition-transform w-full"
+              className="flex flex-col items-center bg-transparent rounded-xl shadow-lg p-4 sm:p-6 gap-3 sm:gap-4 border-[0.5px] border-gold/30 hover:scale-[1.02] transition-transform w-full"
             >
               <div className="flex flex-col items-center w-full mb-1 sm:mb-2">
                 <h3 className="font-serif text-lg md:text-xl text-foreground mb-0.5 sm:mb-1 font-semibold text-center break-words">
@@ -68,7 +68,7 @@ export const OurSignatureFlavours = () => {
                     key={i}
                     src={img}
                     alt="Signature flavor visual"
-                    className="w-28 h-20 sm:w-36 sm:h-24 md:w-48 md:h-32 object-cover rounded-lg gold-border shadow-md border border-gold/50 bg-white/40"
+                    className="w-28 h-20 sm:w-36 sm:h-24 md:w-48 md:h-32 object-cover rounded-lg gold-border shadow-md border-[0.5px] border-gold/30 bg-white/40"
                     loading="lazy"
                   />
                 ))}
