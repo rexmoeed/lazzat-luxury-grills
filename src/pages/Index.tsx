@@ -3,6 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { RouteLoader } from "@/components/shared/RouteLoader";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { AboutSection } from "@/components/home/AboutSection";
+import { OurSignatureFlavours } from "@/components/home/OurSignatureFlavours";
 
 const FeaturedItems = lazy(() =>
   import("@/components/home/FeaturedItems").then((module) => ({
@@ -34,7 +35,9 @@ const Index = () => {
   return (
     <Layout>
       <HeroSlider />
+
       <AboutSection />
+      <OurSignatureFlavours />
 
       <Suspense
         fallback={

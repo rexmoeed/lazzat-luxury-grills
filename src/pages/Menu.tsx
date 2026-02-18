@@ -11,6 +11,7 @@ import {
 } from "@/lib/menu-constants";
 
 import { useMemo, useState, useRef } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import AllergenInfo from "@/components/shared/AllergenInfo";
 import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";
@@ -89,6 +90,8 @@ const itemMatchesDiet = (item: MenuItem, dietId: string) => {
 };
 
 export default function MenuPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
   // State declarations
@@ -97,6 +100,7 @@ export default function MenuPage() {
   const [sortBy, setSortBy] = useState<string>("none");
   // Modal stack: allows back navigation
   const [modalStack, setModalStack] = useState<(MenuItem | SauceItem | null)[]>([]);
+
   const selectedItem = modalStack.length > 0 ? modalStack[modalStack.length - 1] : null;
   // Allergen Info modal state
   const [showAllergenModal, setShowAllergenModal] = useState(false);
