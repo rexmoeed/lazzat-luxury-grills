@@ -182,6 +182,32 @@ const About = () => {
 
       {/* Healthy Promise Section */}
       <HealthyPromise />
+
+      {/* Taste the World Section */}
+      <section className="relative py-10 md:py-16 bg-background">
+        <div className="container-luxury px-4 max-w-2xl mx-auto text-center">
+          <h2 className="font-serif text-3xl md:text-4xl text-foreground mb-2">Taste the World.</h2>
+          <h3 className="font-serif text-2xl md:text-3xl text-primary mb-2">Crafted Fresh.</h3>
+          <h3 className="font-serif text-2xl md:text-3xl text-foreground mb-4">Served Fast.</h3>
+          <p className="font-sans text-base md:text-lg text-muted-foreground mb-6">
+            Experience premium global grills that honor tradition while embracing innovation. Your extraordinary meal awaits.
+          </p>
+          <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+            <a
+              href="/order"
+              className="btn-gold pulse-gold w-full sm:w-auto text-center"
+            >
+              Order Now
+            </a>
+            <a
+              href="/locations"
+              className="btn-outline-white pulse-gold w-full sm:w-auto text-center"
+            >
+              Find a Location
+            </a>
+          </div>
+        </div>
+      </section>
     </Layout>
   );
 };
