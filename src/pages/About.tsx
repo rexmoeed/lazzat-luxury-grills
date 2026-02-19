@@ -1,267 +1,187 @@
-import { useMemo, useState } from "react";
 import { Layout } from "@/components/layout/Layout";
-import heroRestaurant from "@/assets/hero-restaurant.jpg";
-import aboutKitchen from "@/assets/about-kitchen.jpg";
-import heroGrill from "@/assets/hero-grill.jpg";
-import lazzatWall from "@/assets/Lazzat-wall-Design.jpg";
+import lazzatFoodBox from "@/assets/lazzat-food-item-box.jpeg";
+import lazzatFoodBoxes from "@/assets/lazzat-food-boxes.jpeg";
+import lazzatMulticulture from "@/assets/lazzat-multiculture.jpeg";
+import lazzatSauceBranding from "@/assets/lazzat-sauce-branding-shot.jpeg";
+import lazzatExterior from "@/assets/lazzat-exterior.jpeg";
+import lazzatWallDesign from "@/assets/Lazzat-wall-Design.jpg";
+import { HealthyPromise } from "@/components/home/HealthyPromise";
 import { menuItemsFlat } from "@/lib/menu-data";
-import type { MenuItem } from "@/lib/menu-types";
 
 const About = () => {
-  const [activeTab, setActiveTab] = useState('story');
-
-  const previewItems = useMemo<MenuItem[]>(() => {
-    const popular = menuItemsFlat.filter((item) => item.isPopular).slice(0, 3);
-    if (popular.length === 3) return popular;
-    // fallback: first three items if popular not enough
-    return menuItemsFlat.slice(0, 3);
-  }, []);
-
-  const navTabs = [
-    { label: 'Story', id: 'story' },
-    { label: 'Menu', id: 'menu' },
-    { label: 'Values', id: 'values' },
-    { label: 'Open Kitchen', id: 'open-kitchen' },
-    { label: 'Visit', id: 'visit' },
-  ];
-
   return (
     <Layout>
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="relative pt-16 pb-8 md:pt-28 md:pb-16 bg-background">
         <div className="container-luxury px-4">
           <div className="text-center max-w-4xl mx-auto">
             <div className="gold-divider w-12 md:w-16 mx-auto mb-4 md:mb-6" />
             <h1 className="font-serif text-3xl md:text-5xl lg:text-6xl text-foreground mb-4 md:mb-6">
-              Our <span className="text-primary">Story</span>
+              The Lazzat <span className="text-primary">Story</span>
             </h1>
-            <p className="font-sans text-sm md:text-lg text-muted-foreground leading-relaxed">
-              From humble beginnings to becoming a destination for premium grills,
-              Lazzat's journey is one of passion, tradition, and innovation.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Section Navigation Tabs */}
-      <section className="sticky top-16 md:top-20 z-30 bg-background/95 backdrop-blur border-b border-primary/10 py-2 md:py-4">
-        <div className="container-luxury px-2 md:px-4">
-          <div className="flex flex-wrap items-center justify-center gap-1 md:gap-4 overflow-x-auto md:overflow-visible">
-            {navTabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-3 md:px-4 py-1 md:py-1.5 rounded-full text-xs md:text-sm font-medium whitespace-nowrap transition-all ${
-                  activeTab === tab.id
-                    ? 'bg-primary text-background border border-primary'
-                    : 'border border-primary/20 text-foreground hover:border-primary hover:text-primary hover:bg-primary/5'
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
           </div>
         </div>
       </section>
 
       {/* Story Section */}
-      {activeTab === 'story' && (
       <section className="relative pt-12 pb-8 md:pt-28 md:pb-16 bg-background">
         <div className="container-luxury px-4">
-          {/*  EDIT: ambient wrapper */}
-          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-center">
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
             <div>
-              <div className="story-glow-image p-2 md:p-3">
-  <img
-    src={lazzatWall}
-    alt="Lazzat brand story wall art"
-    className="w-full rounded-lg gold-border relative z-10"
-  />
-</div>
+              <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
+                <img
+                  src={lazzatFoodBox}
+                  alt="Lazzat food item box"
+                  className="w-full rounded-lg gold-border relative z-10"
+                />
+              </div>
             </div>
-
             <div>
               <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
-                A Story Told Through <span className="text-primary">Flavor</span>
+                It All Started with a <span className="text-primary">Question</span>
               </h2>
-
               <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
                 <p>
-                  At Lazzat, food is more than what’s on the plate,it’s an experience
-                  shaped by flavors from the world’s most vibrant kitchens.
-                </p>
-                <p>
-                  Takeout doesn’t have to feel rushed or forgettable. Here, it’s
-                  reimagined with fresh, high-quality ingredients and careful
-                  preparation.
-                </p>
-                <p>
-                  Food is more than fuel; it’s a bridge that connects us, celebrating
-                  flavors that unite us.
+                  “Why does fresh, flavorful food take so long? And why does fast food feel flavorless?”<br/>
+                  From years of running kitchens across Canada, our team saw firsthand how speed often meant blandness and flavor often meant greasy or slow. Lazzat was born to answer that question and redefine what fast casual could be: fresh, fast and packed with global taste.
                 </p>
               </div>
             </div>
           </div>
         </div>
       </section>
-      )}
 
-      {/* Explore Menu (subtle preview) */}
-      {activeTab === 'menu' && (
-      <section className="pt-8 pb-12 md:pt-10 md:pb-14 bg-background">
+      {/* Journey Section */}
+      <section className="relative pt-8 pb-8 md:pt-16 md:pb-16 bg-background">
         <div className="container-luxury px-4">
-          <div className="text-center mb-6 md:mb-8">
-            <div className="gold-divider w-12 md:w-16 mx-auto mb-3 md:mb-4" />
-            <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-2 md:mb-3">
-              Explore Our <span className="text-primary">Menu</span>
-            </h2>
-            <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto">
-              A few guest favorites—crafted for takeaway that still feels premium.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-5">
-            {previewItems.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-xl border border-primary/10 bg-card/60 overflow-hidden backdrop-blur-sm hover:border-primary/40 transition-colors"
-              >
-                {item.image && (
-                  <div className="relative w-full h-24 md:h-28 overflow-hidden">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-                  </div>
-                )}
-                <div className="text-[9px] md:text-[11px] uppercase tracking-widest text-primary px-3 md:px-4 pt-2 md:pt-3">
-                  {item.category}
-                  {item.subCategory ? ` • ${item.subCategory}` : ""}
-                </div>
-                <div className="px-3 md:px-4 pb-3 md:pb-4 pt-1">
-                  <h3 className="font-serif text-base md:text-lg text-foreground mb-1">{item.name}</h3>
-                  <p className="text-[11px] md:text-xs text-muted-foreground leading-relaxed line-clamp-2">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <a href="/menu" className="btn-outline-white inline-block">
-              View Full Menu
-            </a>
-          </div>
-        </div>
-      </section>
-      )}
-
-      {/* Values – MOVED UP + GLOW */}
-      {activeTab === 'values' && (
-      <section className="pt-8 pb-12 md:pt-12 md:pb-16 bg-card">
-        <div className="container-luxury px-4">
-          <div className="text-center mb-10 md:mb-16">
-            <div className="gold-divider w-12 md:w-16 mx-auto mb-4 md:mb-6" />
-            <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-3 md:mb-4">
-              Our <span className="text-primary">Values</span>
-            </h2>
-            <p className="text-xs md:text-sm text-muted-foreground max-w-2xl mx-auto">
-              Why choose us? Premium ingredients, transparent open-kitchen cooking, and takeaway crafted to feel elevated—not rushed.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
-            {[
-              {
-                title: "Quality First",
-                description:
-                  "Premium ingredients, expert preparation, and uncompromising standards.",
-              },
-              {
-                title: "Cultural Roots",
-                description:
-                  "Honoring global traditions while innovating for modern palates.",
-              },
-              {
-                title: "Genuine Hospitality",
-                description:
-                  "Warm service, thoughtful spaces, and lasting impressions.",
-              },
-            ].map((value) => (
-              <div
-                key={value.title}
-                className="relative text-center p-4 md:p-8 rounded-lg lazzat-glow-soft border border-primary/10 hover:border-primary/30 transition-all shadow-[0_10px_30px_-20px_rgba(0,0,0,0.6)]"
-              >
-                <div className="absolute inset-x-6 top-0 h-1 bg-gradient-to-r from-primary/30 via-primary/60 to-primary/30 rounded-b-full" />
-                <h3 className="font-serif text-lg md:text-xl text-foreground mb-2 md:mb-4">
-                  {value.title}
-                </h3>
-                <p className="text-xs md:text-sm font-sans text-muted-foreground">
-                  {value.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-      )}
-
-      {/* Open Kitchen */}
-      {activeTab === 'open-kitchen' && (
-      <section className="pt-8 pb-12 md:pt-12 md:pb-16 bg-background">
-        <div className="container-luxury px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-20 items-center">
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
             <div className="order-2 lg:order-1">
               <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
-                The <span className="text-primary">Open Kitchen</span> Philosophy
+                Our <span className="text-primary">Journey of Refinement</span>
               </h2>
-              <div className="space-y-3 md:space-y-4 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
-                <p>Every flame, every sizzle, every detail on display.</p>
+              <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
                 <p>
-                  Traditional techniques meet modern precision, without shortcuts.
+                  This wasn’t an overnight idea - it was four years of testing, failing, refining and rebuilding. We reverse-engineered customer behavior, built streamlined processes and crafted a menu where signature peri-peri meets creamy garlic, South Asian richness meets Mediterranean balance and every dish is cooked fresh and served fast.
                 </p>
               </div>
             </div>
             <div className="order-1 lg:order-2">
-              <img
-                src={aboutKitchen}
-                alt="Chefs grilling in Lazzat open kitchen"
-                className="w-full h-48 md:h-80 object-cover rounded-lg gold-border"
-              />
+              <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
+                <img
+                  src={lazzatMulticulture}
+                  alt="Lazzat multicultural food"
+                  className="w-full rounded-lg gold-border relative z-10"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
-      )}
 
-      {/* CTA */}
-      {activeTab === 'visit' && (
-      <section className="pt-8 pb-12 md:pt-14 md:pb-16 bg-gradient-to-b from-background via-background to-black/40 relative overflow-hidden">
-        <div className="container-luxury px-4 text-center">
-          <img
-            src={heroGrill}
-            alt="Close-up of Lazzat grill with skewers"
-            className="w-full max-w-4xl h-48 md:h-80 object-cover mx-auto rounded-lg mb-4 md:mb-8"
-          />
-          <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
-            Experience the <span className="text-primary">Lazzat</span> Difference
-          </h2>
-          <p className="font-sans text-sm md:text-base text-muted-foreground max-w-2xl mx-auto mb-4 md:mb-8">
-            Great food isn’t just about eating it’s about enjoying the finer
-            things in life, together.
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
-            <a href="/locations" className="btn-gold inline-block">
-              Find a Location
-            </a>
-            <a href="/menu" className="btn-outline-white inline-block">
-              View Menu
-            </a>
+      {/* Why Lazzat Paragraph and Image (two columns) */}
+      <section className="relative pt-8 pb-8 md:pt-16 md:pb-16 bg-background">
+        <div className="container-luxury px-4">
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
+            <div className="order-1 lg:order-1">
+              <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
+                <img
+                  src={lazzatFoodBoxes}
+                  alt="Lazzat food boxes"
+                  className="w-full rounded-lg gold-border relative z-10"
+                />
+              </div>
+            </div>
+            <div className="order-2 lg:order-2">
+              <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">Why <span className="text-primary">Lazzat?</span></h2>
+                <p className="text-left">
+                  Because you shouldn’t have to choose between speed, health and flavor. At Lazzat, you get all three - in every bite. Our name means “taste”. “Delight” and “richness” across Arabic, Urdu, Hindi, Persian, and Turkish reflect our inclusive, multicultural vision. Like Canada itself, Lazzat belongs to everyone.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-      )}
+
+      {/* Built by Experience, Not Guesswork Section */}
+      <section className="relative pt-8 pb-8 md:pt-16 md:pb-16 bg-background">
+        <div className="container-luxury px-4">
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
+            <div className="order-1 lg:order-1">
+              <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">Built by <span className="text-primary">Experience</span>, Not Guesswork</h2>
+                <p className="text-left">
+                  Our founders are seasoned pro chefs and restaurant operators, with over a decade each in kitchens across Canada. We’d managed every role and witnessed what worked and what didn’t. That’s why Lazzat is grounded in real experience, not guesswork.
+                </p>
+              </div>
+            </div>
+            <div className="order-2 lg:order-2">
+              <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
+                <img
+                  src={lazzatSauceBranding}
+                  alt="Lazzat sauce branding shot"
+                  className="w-full rounded-lg gold-border relative z-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Not Just Cuisine, But Commitment Section */}
+      <section className="relative pt-8 pb-8 md:pt-16 md:pb-16 bg-background">
+        <div className="container-luxury px-4">
+          <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
+            <div className="order-2 lg:order-2">
+              <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">Not Just Cuisine, But Commitment</h2>
+                <p className="text-left">
+                  We don’t replicate. We elevate. We’re not a single cuisine, but a collection: real spices, diverse sauces, clean proteins - all assembled for the flavor-hungry, health-conscious, and culturally curious.
+                </p>
+              </div>
+            </div>
+            <div className="order-1 lg:order-1">
+              <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
+                <img
+                  src={lazzatExterior}
+                  alt="Lazzat exterior"
+                  className="w-full rounded-lg gold-border relative z-10"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Menu Nod Section */}
+      <section className="relative py-10 md:py-16 bg-background">
+        <div className="container-luxury px-4 max-w-2xl mx-auto text-center">
+          <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4">Curious about our flavors?</h2>
+          <p className="font-sans text-base md:text-lg text-muted-foreground mb-6">
+            Explore our full menu to discover the signature dishes, sauces, and sides that make Lazzat unique.
+          </p>
+          <div className="flex flex-wrap justify-center gap-4 mb-6">
+            {menuItemsFlat.slice(0, 4).map((item) => (
+              <img
+                key={item.id}
+                src={item.image}
+                alt={item.name}
+                className="w-44 h-44 md:w-56 md:h-56 object-cover rounded-2xl shadow-xl border border-primary/20 bg-white"
+                loading="lazy"
+              />
+            ))}
+          </div>
+          <a
+            href="/menu"
+            className="inline-block px-6 py-3 rounded-lg bg-primary text-white font-semibold shadow-md hover:bg-primary/90 transition-colors duration-200"
+          >
+            View Our Menu
+          </a>
+        </div>
+      </section>
+
+      {/* Healthy Promise Section */}
+      <HealthyPromise />
     </Layout>
   );
 };
