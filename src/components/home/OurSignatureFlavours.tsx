@@ -42,7 +42,7 @@ export const OurSignatureFlavours = () => {
   return (
     <section className="section-padding bg-background px-2 sm:px-0">
       <div className="container-luxury">
-        <div className="gold-divider w-16 mb-6" />
+        <div className="gold-divider w-16 mb-6 mx-auto" />
         <h2 className="font-serif text-4xl md:text-5xl text-white mb-8 sm:mb-12 text-center tracking-tight">
           <span className="text-primary">Signature Flavors</span>
         </h2>
@@ -64,13 +64,14 @@ export const OurSignatureFlavours = () => {
               </div>
               <div className="flex gap-2 sm:gap-4 flex-wrap justify-center w-full">
                 {item.images.map((img, i) => (
-                  <img
-                    key={i}
-                    src={img}
-                    alt="Signature flavor visual"
-                    className="w-28 h-20 sm:w-36 sm:h-24 md:w-48 md:h-32 object-cover rounded-lg gold-border shadow-md border-[0.5px] border-gold/30 bg-white/40"
-                    loading="lazy"
-                  />
+                  <div key={i} className="story-glow-image w-28 h-20 sm:w-36 sm:h-24 md:w-48 md:h-32">
+                    <img
+                      src={img}
+                      alt="Signature flavor visual"
+                      className="w-full h-full object-cover rounded-lg gold-border shadow-md border-[0.5px] border-gold/30 bg-white/40 relative z-10"
+                      loading="lazy"
+                    />
+                  </div>
                 ))}
               </div>
             </div>

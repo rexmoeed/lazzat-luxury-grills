@@ -123,7 +123,7 @@ export const HeroSlider = () => {
       {/* Content */}
       <div className="relative z-10 h-full flex items-center justify-center px-4">
         <div className="text-center max-w-4xl mx-auto">
-          <div className="w-16 h-0.5 bg-primary mx-auto mb-8 animate-fade-up" />
+
 
           <h1
             className="font-serif text-4xl md:text-6xl lg:text-7xl text-foreground leading-tight mb-6 animate-fade-up"

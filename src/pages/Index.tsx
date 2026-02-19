@@ -4,16 +4,13 @@ import { RouteLoader } from "@/components/shared/RouteLoader";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { AboutSection } from "@/components/home/AboutSection";
 import { OurSignatureFlavours } from "@/components/home/OurSignatureFlavours";
+
 import { HowItWorks } from "@/components/home/HowItWorks";
+import CustomerFavourite from "@/components/home/CustomerFavourite";
 
 const FeaturedItems = lazy(() =>
   import("@/components/home/FeaturedItems").then((module) => ({
     default: module.FeaturedItems,
-  }))
-);
-const AmbienceGallery = lazy(() =>
-  import("@/components/home/AmbienceGallery").then((module) => ({
-    default: module.AmbienceGallery,
   }))
 );
 const HealthyPromise = lazy(() =>
@@ -39,8 +36,10 @@ const Index = () => {
 
       <AboutSection />
 
+
       <OurSignatureFlavours />
       <HowItWorks />
+      <CustomerFavourite />
 
       <Suspense
         fallback={
@@ -48,7 +47,7 @@ const Index = () => {
         }
       >
         <FeaturedItems />
-        <AmbienceGallery />
+
         <HealthyPromise />
         <CustomerReviews />
         <FinalCTA />

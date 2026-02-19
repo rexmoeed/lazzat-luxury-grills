@@ -77,12 +77,12 @@ export const AboutSection = () => {
             {images.map((img, index) => (
               <div
                 key={index}
-                className="relative aspect-[4/3] overflow-hidden rounded-lg gold-border"
+                className="story-glow-image aspect-[4/3] overflow-hidden rounded-lg gold-border"
               >
                 <img
                   src={img.src}
                   alt={img.alt}
-                  className="absolute inset-0 w-full h-full object-cover hover-zoom"
+                  className="absolute inset-0 w-full h-full object-cover hover-zoom relative z-10"
                   loading="lazy"
                 />
               </div>
