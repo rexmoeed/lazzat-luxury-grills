@@ -5,7 +5,7 @@ export const HowItWorks = () => (
     <div className="container-luxury">
       <div className="gold-divider w-16 mb-6 mx-auto" />
       <h2 className="font-serif text-4xl md:text-5xl text-white mb-8 sm:mb-12 text-center tracking-tight">
-        How It Works
+        Why We’re Among the Best Restaurants in <span className="text-gold">Brampton</span>
       </h2>
       <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
         <div className="flex-1 flex justify-center items-center mb-6 md:mb-0 md:mr-6">
