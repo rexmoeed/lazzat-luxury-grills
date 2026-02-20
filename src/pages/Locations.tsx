@@ -209,7 +209,7 @@ const Locations = () => {
         <div className="container-luxury px-4 text-center">
           <div className="gold-divider w-16 mx-auto mb-6" />
           <h1 className="font-serif text-4xl md:text-5xl text-foreground mb-4">
-            Our <span className="text-primary">Locations</span>
+            Order Now <span className="text-primary">- Restaurants Open Now in Brampton</span>
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
             We automatically highlight the nearest Lazzat branch for you.
