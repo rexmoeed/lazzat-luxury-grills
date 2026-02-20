@@ -11,10 +11,11 @@ const Order = () => {
           <div className="text-center">
             <div className="gold-divider w-16 mx-auto mb-6" />
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-              Order <span className="text-primary">Now</span>
+              Order Now<span className="text-primary">– Restaurant`s Open Now in Brampton</span>
             </h1>
             <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-              Premium grills delivered fresh to your door.
+             Hungry and short on time? We’re one of the restaurants open now in Brampton, offering easy online ordering for pickup or delivery.
+
             </p>
           </div>
         </div>
