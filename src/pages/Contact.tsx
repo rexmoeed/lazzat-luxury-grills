@@ -76,7 +76,7 @@ function LocationsList() {
   }, []);
 
   return (
-    <div className="container-luxury px-4 max-w-3xl mx-auto">
+    <div className="container-luxury px-2 sm:px-4 max-w-3xl mx-auto">
       <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-6 mt-10 text-center">Our Locations</h2>
       {locationStatus === 'loading' && (
         <div className="text-center text-sm text-muted-foreground mb-4">Detecting your location...</div>
@@ -84,7 +84,7 @@ function LocationsList() {
       {locationStatus === 'error' && (
         <div className="text-center text-sm text-red-500 mb-4">Could not detect your location.</div>
       )}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {locationsWithCoords.map(loc => (
           <div
             key={loc.id}
@@ -149,26 +149,26 @@ const Contact = () => {
   return (
     <Layout>
       {/* Hero */}
-      <section className="pt-24 pb-12 md:pt-32 md:pb-16 bg-background">
-        <div className="container-luxury px-4">
+      <section className="pt-20 pb-8 sm:pt-24 sm:pb-12 md:pt-32 md:pb-16 bg-background">
+        <div className="container-luxury px-2 sm:px-4">
           <div className="text-center">
             <div className="gold-divider w-16 mx-auto mb-6" />
             <h1 className="font-serif text-4xl md:text-5xl lg:text-6xl text-foreground mb-4">
-              Contact <span className="text-primary">Us</span>
+              Let’s Talk <span className="text-primary">- Lazzat is Listening</span>
             </h1>
             <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-              We'd love to hear from you. Reach out for feedback, franchise inquiries, or just to say hello.
+             Have a question, an idea or want to explore opportunities? Whether it’s feedback, inquiries or franchise interest, our team would love to hear from you.
             </p>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section className="pt-6 pb-12 md:pt-8 md:pb-16 bg-card">
-        <div className="container-luxury px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+      <section className="pt-4 pb-10 sm:pt-6 sm:pb-12 md:pt-8 md:pb-16 bg-card">
+        <div className="container-luxury px-2 sm:px-4">
+          <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-20">
             {/* Contact Info */}
-            <div>
+            <div className="order-2 lg:order-1">
               <h2 className="font-serif text-3xl text-foreground mb-8">
                 Get in <span className="text-primary">Touch</span>
               </h2>
@@ -236,9 +236,9 @@ const Contact = () => {
             </div>
 
             {/* Contact Form */}
-            <div>
-              <form onSubmit={handleSubmit} className="space-y-6" aria-label="Contact form">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="order-1 lg:order-2">
+              <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6" aria-label="Contact form">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label htmlFor="contact-name" className="block font-sans text-sm text-foreground mb-2">
                       Name *
@@ -281,7 +281,7 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div>
                     <label htmlFor="contact-phone" className="block font-sans text-sm text-foreground mb-2">
                       Phone
@@ -349,7 +349,7 @@ const Contact = () => {
 
                 <button
                   type="submit"
-                  className="btn-gold w-full flex items-center justify-center gap-2 disabled:opacity-60"
+                  className="btn-gold w-full flex items-center justify-center gap-2 disabled:opacity-60 min-h-[48px] sm:min-h-[56px]"
                   disabled={loading}
                   aria-busy={loading}
                   aria-label="Send Message"
@@ -371,17 +371,17 @@ const Contact = () => {
       </section>
 
       {/* Locations List (simple) */}
-      <section className="pt-0 pb-12 md:pt-0 md:pb-16 bg-background">
+      <section className="pt-0 pb-10 sm:pb-12 md:pb-16 bg-background">
         <LocationsList />
       </section>
 
       {/* View Menu Section */}
-      <section className="py-10 bg-card text-center">
+      <section className="py-8 sm:py-10 bg-card text-center">
         <h2 className="font-serif text-2xl md:text-3xl text-foreground mb-4">Ready to Explore Our Menu?</h2>
         <p className="text-muted-foreground mb-6">Discover our full range of grills, desserts, shakes, and more.</p>
         <a
           href="/menu"
-          className="btn-gold inline-block w-full max-w-xs mx-auto px-6 py-3 text-base md:text-lg font-semibold rounded-full shadow hover:scale-105 transition-transform"
+          className="btn-gold inline-block w-full max-w-xs mx-auto px-4 py-3 sm:px-6 sm:py-3 text-base md:text-lg font-semibold rounded-full shadow hover:scale-105 transition-transform"
           style={{ minWidth: '0' }}
         >
           View Menu
