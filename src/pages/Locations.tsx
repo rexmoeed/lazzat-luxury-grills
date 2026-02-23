@@ -76,14 +76,12 @@ const isLocationOpen = (hours: typeof locations[0]['hours']) => {
   const day = now.getDay(); // 0 = Sunday
   const currentTime = now.getHours() * 60 + now.getMinutes();
 
-  let hoursString = '';
-  if (day === 0) {
-    hoursString = hours.sunday;
-  } else if (day === 5 || day === 6) {
-    hoursString = hours.weekend;
-  } else {
-    hoursString = hours.weekday;
-  }
+  const hoursString =
+    day === 0
+      ? hours.sunday
+      : day === 5 || day === 6
+        ? hours.weekend
+        : hours.weekday;
 
   const match = hoursString.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)/);
   if (!match) return false;

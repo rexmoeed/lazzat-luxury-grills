@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ const navLinks = [
 export const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [, startTransition] = useTransition();
   const location = useLocation();
 
   useEffect(() => {
@@ -44,8 +45,10 @@ export const Header = () => {
   }, [isMobileMenuOpen]);
 
   useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [location]);
+    startTransition(() => {
+      setIsMobileMenuOpen(false);
+    });
+  }, [location.pathname, startTransition]);
 
   return (
     <>

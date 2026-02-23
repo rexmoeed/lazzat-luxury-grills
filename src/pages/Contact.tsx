@@ -48,11 +48,14 @@ const locationsWithCoords = [
 function LocationsList() {
   const [nearestId, setNearestId] = useState(null);
   const [userCoords, setUserCoords] = useState(null);
-  const [locationStatus, setLocationStatus] = useState(null);
+  const [locationStatus, setLocationStatus] = useState(
+    typeof navigator !== 'undefined' && navigator.geolocation ? 'loading' : 'error'
+  );
 
   useEffect(() => {
-    if (!navigator.geolocation) return;
-    setLocationStatus('loading');
+    if (!navigator.geolocation) {
+      return;
+    }
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;

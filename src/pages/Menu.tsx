@@ -89,6 +89,89 @@ const itemMatchesDiet = (item: MenuItem, dietId: string) => {
   return deriveDietary(item).includes(dietId as DietaryFlag);
 };
 
+// Category headings data (needed by CategoryHeading component)
+const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
+  "Grills & Skewers": {
+    title: "Grills & Skewers",
+    subtitle: "Charcoal grilled meats and skewers."
+  },
+  "Döner": {
+    title: "Döner",
+    subtitle: "Classic döner kebabs and wraps."
+  },
+  "Wraps": {
+    title: "Wraps",
+    subtitle: "Freshly made wraps with premium fillings."
+  },
+  "Biryani": {
+    title: "Biryani",
+    subtitle: "Aromatic rice dishes with spices."
+  },
+  "Desserts": {
+    title: "Desserts",
+    subtitle: "Sweet treats and indulgent delights."
+  },
+  "Sajji": {
+    title: "Sajji",
+    subtitle: "Traditional Sajji specialties."
+  },
+  "Sides": {
+    title: "Sides",
+    subtitle: "Perfect accompaniments for your meal."
+  },
+  "Shakes & Juices": {
+    title: "Shakes & Juices",
+    subtitle: "Refreshing shakes and juices."
+  },
+};
+
+// Helper component moved outside to avoid recreation on every render
+function CategoryHeading({ category }: { category: string }) {
+  if (!categoryHeadings[category]) return null;
+  return (
+    <div className="mb-6">
+      <h2 className="font-serif text-3xl">{categoryHeadings[category].title}</h2>
+      <p className="text-sm text-muted-foreground">{categoryHeadings[category].subtitle}</p>
+    </div>
+  );
+}
+
+// FilterDrawer component moved outside to avoid recreation on every render
+const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        className={cn(
+          "fixed inset-0 z-40 bg-black/40 backdrop-blur-xl transition-opacity",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        aria-hidden="true"
+      />
+
+      {/* Drawer Panel */}
+      <div
+        className={cn(
+          "fixed right-0 top-0 h-screen w-full max-w-md z-50 bg-background/95 backdrop-blur-sm border-l border-primary/20 flex flex-col gap-4 p-6 transition-transform duration-500 overflow-y-auto",
+          open ? "translate-x-0" : "translate-x-full"
+        )}
+      >
+        {/* Close Button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 p-2 hover:bg-muted rounded-lg"
+          aria-label="Close filter drawer"
+        >
+          <X size={20} />
+        </button>
+
+        <h3 className="font-serif text-xl mt-4">Filters</h3>
+      </div>
+    </>
+  );
+};
+
 export default function MenuPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -112,18 +195,6 @@ export default function MenuPage() {
   const clearFilters = () => setSelectedFilters(new Set());
 
   // ...removed filteredSauces helper
-
-  // Helper component to render category heading
-  function CategoryHeading({ category }: { category: string }) {
-    if (!categoryHeadings[category]) return null;
-    return (
-      <div className="mb-6">
-        <h2 className="font-serif text-3xl">{categoryHeadings[category].title}</h2>
-        <p className="text-sm text-muted-foreground">{categoryHeadings[category].subtitle}</p>
-      </div>
-    );
-  }
-
   // (Removed duplicate state declarations)
 
 
@@ -201,43 +272,6 @@ export default function MenuPage() {
     "Sides",
     "Shakes & Juices",
   ];
-
-// Category headings for display
-const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
-  "Grills & Skewers": {
-    title: "Grills & Skewers",
-    subtitle: "Charcoal grilled meats and skewers."
-  },
-  "Döner": {
-    title: "Döner",
-    subtitle: "Classic döner kebabs and wraps."
-  },
-  "Wraps": {
-    title: "Wraps",
-    subtitle: "Freshly made wraps with premium fillings."
-  },
-  "Biryani": {
-    title: "Biryani",
-    subtitle: "Aromatic rice dishes with spices."
-  },
-  "Desserts": {
-    title: "Desserts",
-    subtitle: "Sweet treats and indulgent delights."
-  },
-  "Sajji": {
-    title: "Sajji",
-    subtitle: "Traditional Sajji specialties."
-  },
-  "Sides": {
-    title: "Sides",
-    subtitle: "Perfect accompaniments for your meal."
-  },
-  // ...removed Sauces heading
-  "Shakes & Juices": {
-    title: "Shakes & Juices",
-    subtitle: "Refreshing shakes and juices."
-  },
-};
 
 // Sort options for the sort bar
 // Note: Protein filters (chicken, lamb, etc.) are in the Filter Drawer, not here
@@ -381,177 +415,6 @@ const sortOptions = [
   // Default: return all filtered items in original order
   return items;
 }, [activeCategory, sortBy, selectedFilters]);
-
-
-  /* --- Right-side glass drawer component (embedded) --- */
-const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
-  return (
-    <>
-      {/* Backdrop */}
-      <div
-        onClick={onClose}
-        className={cn(
-          "fixed inset-0 z-40 bg-black/40 backdrop-blur-xl transition-opacity",
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-      />
-
-      {/* PANEL CONTAINER */}
-      <div
-        className={cn(
-          "fixed inset-0 z-50 flex items-start md:items-center justify-center p-4 md:p-8 transition-all",
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-        aria-modal="true"
-        role="dialog"
-      >
-        {/* PANEL */}
-        <div
-          className={cn(
-            "w-full",
-            "md:max-w-2xl md:rounded-2xl md:border md:border-primary/20 md:bg-background/70 md:backdrop-blur-2xl md:shadow-2xl",
-            "bg-background h-full md:h-auto",
-            "transform transition-transform duration-300",
-            open
-              ? "md:scale-100 md:translate-y-0"
-              : "md:scale-90 md:translate-y-4"
-          )}
-          onClick={(e) => e.stopPropagation()}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between px-4 py-3 border-b border-primary/10">
-            <div>
-              <h3 className="font-serif text-lg">Filters & Sort</h3>
-            </div>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-md hover:bg-background/80"
-            >
-              <X size={18} />
-            </button>
-          </div>
-
-          {/* CONTENT */}
-          <div className="overflow-y-auto max-h-[75vh] md:max-h-[60vh] px-4 py-4 space-y-6 scrollbar-gold">
-            <div className="rounded-lg border border-primary/15 bg-background/70 p-3 text-xs text-muted-foreground">
-              Dietary filters are guidance only. Please inform staff about allergies or dietary needs.
-            </div>
-
-            {/* QUICK FILTERS */}
-            <div>
-              <h4 className="text-sm font-medium mb-2">Quick Filters</h4>
-              <div className="flex flex-wrap gap-2">
-                {quickFilters.map((q) => {
-                  const active = selectedFilters.has(q.id);
-                  return (
-                    <button
-                      type="button"
-                      key={q.id}
-                      onClick={() => toggleFilter(q.id)}
-                      className={cn(
-                        "px-3 py-1.5 rounded-full text-sm transition",
-                        active
-                          ? "bg-primary text-primary-foreground shadow"
-                          : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-                      )}
-                    >
-                      {q.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* DIETARY */}
-           <div>
-  <h4 className="text-sm font-medium mb-2">Dietary</h4>
-  <div className="flex flex-wrap gap-2">
-  {dietaryFilters.map((d) => {
-    const active = selectedFilters.has(d.id);
-    return (
-      <button
-      type="button"
-        key={d.id}
-        onClick={() => toggleFilter(d.id)}
-        className={cn(
-          "px-3 py-1.5 rounded-full text-sm transition",
-          active
-            ? "bg-primary text-primary-foreground shadow"
-            : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-        )}
-      >
-        {d.label}
-      </button>
-    );
-  })}
-</div>
-</div>
-
-{/* ALLERGEN EXCLUSIONS */}
-<div>
-  <h4 className="text-sm font-medium mb-2">Exclude Allergens</h4>
-  <div className="flex flex-wrap gap-2">
- {allergenFilters.map((a) => {
-  const active = selectedFilters.has(a.id);
-  const Icon = allergenIconMap[a.id]?.icon;
-
-  return (
-    <button
-    type="button"
-      key={a.id}
-      onClick={() => toggleFilter(a.id)}
-      className={cn(
-        "flex items-center gap-2 px-3 py-1.5 rounded-full text-sm transition border",
-        active
-          ? "bg-destructive text-destructive-foreground border-destructive"
-          : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-      )}
-    >
-      {Icon && <Icon size={14} className="text-red-400" />}
-      <span>{a.label}</span>
-    </button>
-  );
-})}
-
-</div>
-</div>
-
-
-
-          </div>
-
-          {/* FOOTER */}
-          <div className="px-4 py-3 border-t border-primary/10 flex items-center gap-3">
-            <button
-              onClick={onClose}
-              className="flex-1 px-4 py-2 rounded bg-secondary text-sm"
-            >
-              Close
-            </button>
-
-            <button
-              onClick={() => {
-                clearFilters();
-                setSortBy("none");
-              }}
-              className="px-4 py-2 rounded border border-primary/20 text-sm"
-            >
-              Reset
-            </button>
-
-            <button
-              onClick={onClose}
-              className="px-4 py-2 rounded btn-gold text-sm"
-            >
-              Apply
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
 
 
   return (
@@ -1061,45 +924,33 @@ const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void })
                                     !isRice &&
                                     !isNaan;
                                   if (!showSeasonings) return null;
-                                  let selectedSeasonings = [];
-                                  if (isColeslaw) {
-                                    // Only mild, fresh seasonings for coleslaw
-                                    selectedSeasonings = spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name));
-                                  } else if (cat === "Sides") {
-                                    // Sides: avoid spicy for salad/veg, allow both spicy and mild for fries/corn
-                                    if (name.includes("fries")) {
-                                      selectedSeasonings = spices.filter(s => [
-                                        "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
-                                      ].includes(s.name));
-                                    } else if (name.includes("corn")) {
-                                      selectedSeasonings = spices.filter(s => [
-                                        "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
-                                      ].includes(s.name));
-                                    } else if (name.includes("salad") || name.includes("vegetable")) {
-                                      selectedSeasonings = spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name));
-                                    } else {
-                                      // Default: offer a mix of mild and moderate
-                                      selectedSeasonings = spices.filter(s => s.level <= 3).slice(0, 3);
-                                    }
-                                  } else if (cat === "Grills & Skewers") {
-                                    // Grills: support both high and low spice
-                                    selectedSeasonings = spices.filter(s => [
-                                      "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
-                                    ].includes(s.name));
-                                  } else if (cat === "Döner") {
-                                    // Döner: support both high and low spice
-                                    selectedSeasonings = spices.filter(s => [
-                                      "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
-                                    ].includes(s.name));
-                                  } else if (cat === "Wraps") {
-                                    // Wraps: support both high and low spice
-                                    selectedSeasonings = spices.filter(s => [
-                                      "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
-                                    ].includes(s.name));
-                                  } else {
-                                    // For other categories (e.g. main dishes that can support spices)
-                                    selectedSeasonings = spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
-                                  }
+                                  const selectedSeasonings = isColeslaw
+                                    ? spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name))
+                                    : cat === "Sides"
+                                      ? name.includes("fries")
+                                        ? spices.filter(s => [
+                                            "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
+                                          ].includes(s.name))
+                                        : name.includes("corn")
+                                          ? spices.filter(s => [
+                                              "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
+                                            ].includes(s.name))
+                                          : name.includes("salad") || name.includes("vegetable")
+                                            ? spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name))
+                                            : spices.filter(s => s.level <= 3).slice(0, 3)
+                                      : cat === "Grills & Skewers"
+                                        ? spices.filter(s => [
+                                            "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
+                                          ].includes(s.name))
+                                        : cat === "Döner"
+                                          ? spices.filter(s => [
+                                              "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
+                                            ].includes(s.name))
+                                          : cat === "Wraps"
+                                            ? spices.filter(s => [
+                                                "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
+                                              ].includes(s.name))
+                                            : spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
                                   if (selectedSeasonings.length === 0) return null;
                                   return (
                                     <div className="mb-6">
