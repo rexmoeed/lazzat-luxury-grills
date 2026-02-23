@@ -82,7 +82,7 @@ export const AboutSection = () => {
                 <img
                   src={img.src}
                   alt={img.alt}
-                  className="absolute inset-0 w-full h-full object-cover hover-zoom relative z-10"
+                  className="absolute inset-0 w-full h-full object-cover hover-zoom z-10"
                   loading="lazy"
                 />
               </div>
