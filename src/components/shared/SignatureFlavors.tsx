@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Flame } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { allergenIconMap } from "@/lib/menu-constants";
 import type { Allergen } from "@/lib/menu-types";
+import { useLocation, useNavigate } from "react-router-dom";
 
 /* CENTRAL DATA */
 import { sauces } from "@/lib/sauces-data";
 import { spices } from "@/lib/spices-data";
+import {
+  mergeFlavours,
+  filterFlavours,
+  sortFlavours,
+  computeFlavorCounts,
+  type FlavorEntry,
+  type FlavorSort,
+  type HeatFilter,
+  type TypeFilter,
+} from "@/lib/flavours-filter-engine";
 
 type FlavorSource = "sauce" | "spice";
-type FlavorEntry = (typeof sauces)[number] & { source: FlavorSource };
 
 /* REUSABLE COMPONENTS */
 const HeatIndicator = ({ level }: { level: number }) => (
@@ -52,70 +62,92 @@ const AllergenBadges = ({ allergens }: { allergens?: Allergen[] }) => {
   );
 };
 
-const heatFilters = [
+const heatFilters: { label: string; value: HeatFilter }[] = [
   { label: "All", value: "all" },
   { label: "Mild (1–3)", value: "mild" },
   { label: "Medium (4–6)", value: "medium" },
   { label: "Hot (7+)", value: "hot" },
 ];
 
-const typeFilters: { label: string; value: "all" | FlavorSource }[] = [
+const typeFilters: { label: string; value: TypeFilter }[] = [
   { label: "All", value: "all" },
   { label: "Sauces", value: "sauce" },
   { label: "Spices", value: "spice" },
 ];
 
-const sortOptions = [
+const sortOptions: { label: string; value: FlavorSort }[] = [
   { label: "Featured", value: "featured" },
   { label: "Heat: Low to High", value: "heat-asc" },
   { label: "Heat: High to Low", value: "heat-desc" },
   { label: "Name: A → Z", value: "name-asc" },
 ];
 
-const heatLabelMap: Record<string, string> = {
-  all: "All heat levels",
-  mild: "Mild (1–3)",
-  medium: "Medium (4–6)",
-  hot: "Hot (7+)",
-};
-
 const SignatureFlavors = () => {
-  const [heatFilter, setHeatFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState<"all" | FlavorSource>("all");
-  const [sortBy, setSortBy] = useState("featured");
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const initialParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+
+  const [heatFilter, setHeatFilter] = useState<HeatFilter>(() => {
+    const value = initialParams.get("heat");
+    return value === "mild" || value === "medium" || value === "hot" ? value : "all";
+  });
+  const [typeFilter, setTypeFilter] = useState<TypeFilter>(() => {
+    const value = initialParams.get("type");
+    return value === "sauce" || value === "spice" ? value : "all";
+  });
+  const [sortBy, setSortBy] = useState<FlavorSort>(() => {
+    const value = initialParams.get("sort");
+    return value === "heat-asc" || value === "heat-desc" || value === "name-asc" ? value : "featured";
+  });
   const [panelOpen, setPanelOpen] = useState(false);
   const [selectedFlavor, setSelectedFlavor] = useState<FlavorEntry | null>(null);
 
-  /* MERGE SAUCES + SPICES WITH SOURCE TAG */
-  const allFlavours: FlavorEntry[] = [
-    ...sauces.map((f) => ({ ...f, source: "sauce" as const })),
-    ...spices.map((f) => ({ ...f, source: "spice" as const })),
-  ];
+  const allFlavours = useMemo(
+    () => mergeFlavours({ sauces, spices }),
+    []
+  );
 
-  const filteredFlavours = allFlavours.filter((f) => {
-    // Heat filter
-    if (heatFilter === "mild" && f.level > 3) return false;
-    if (heatFilter === "medium" && (f.level < 4 || f.level > 6)) return false;
-    if (heatFilter === "hot" && f.level < 7) return false;
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
 
-    // Type filter
-    if (typeFilter !== "all" && f.source !== typeFilter) return false;
+    if (heatFilter !== "all") params.set("heat", heatFilter);
+    else params.delete("heat");
 
-    return true;
-  });
+    if (typeFilter !== "all") params.set("type", typeFilter);
+    else params.delete("type");
 
-  const sortedFlavours = [...filteredFlavours].sort((a, b) => {
-    switch (sortBy) {
-      case "heat-asc":
-        return a.level - b.level;
-      case "heat-desc":
-        return b.level - a.level;
-      case "name-asc":
-        return a.name.localeCompare(b.name);
-      default:
-        return 0;
+    if (sortBy !== "featured") params.set("sort", sortBy);
+    else params.delete("sort");
+
+    const nextSearch = params.toString();
+    const currentSearch = location.search.replace(/^\?/, "");
+
+    if (nextSearch !== currentSearch) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch ? `?${nextSearch}` : "",
+        },
+        { replace: true }
+      );
     }
-  });
+  }, [heatFilter, typeFilter, sortBy, location.pathname, location.search, navigate]);
+
+  const filteredFlavours = useMemo(
+    () => filterFlavours({ items: allFlavours, heatFilter, typeFilter }),
+    [allFlavours, heatFilter, typeFilter]
+  );
+
+  const sortedFlavours = useMemo(
+    () => sortFlavours({ items: filteredFlavours, sortBy }),
+    [filteredFlavours, sortBy]
+  );
+
+  const { heatCounts, typeCounts } = useMemo(
+    () => computeFlavorCounts({ items: allFlavours, typeFilter, sortBy }),
+    [allFlavours, typeFilter, sortBy]
+  );
 
   return (
     <div className="w-full">
@@ -125,7 +157,7 @@ const SignatureFlavors = () => {
           onClick={() => setPanelOpen((v) => !v)}
           className="px-5 py-2 rounded-full border border-primary/40 bg-background/80 backdrop-blur text-sm font-semibold tracking-wide hover:border-primary hover:text-primary transition-all shadow-sm"
         >
-          Filter & Sort
+          Filters
         </button>
 
         {/* Single-row Heat Pills */}
@@ -141,7 +173,7 @@ const SignatureFlavors = () => {
                   : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
               )}
             >
-              {f.label}
+              {f.label} ({heatCounts[f.value as HeatFilter] ?? 0})
             </button>
           ))}
         </div>
@@ -165,7 +197,7 @@ const SignatureFlavors = () => {
                           : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
                       )}
                     >
-                      {f.label}
+                        {f.label} ({heatCounts[f.value as HeatFilter] ?? 0})
                     </button>
                   ))}
                 </div>
@@ -187,7 +219,7 @@ const SignatureFlavors = () => {
                           : "text-muted-foreground border-muted hover:border-primary hover:text-primary"
                       )}
                     >
-                      {f.label}
+                      {f.label} ({typeCounts[f.value] ?? 0})
                     </button>
                   ))}
                 </div>
