@@ -137,36 +137,157 @@ function CategoryHeading({ category }: { category: string }) {
 }
 
 // FilterDrawer component moved outside to avoid recreation on every render
-const FilterDrawer = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+const FilterDrawer = ({
+  open,
+  onClose,
+  selectedFilters,
+  toggleFilter,
+  clearAll,
+  sortBy,
+  setSortBy,
+  sortOptions,
+}: {
+  open: boolean;
+  onClose: () => void;
+  selectedFilters: Set<string>;
+  toggleFilter: (id: string) => void;
+  clearAll: () => void;
+  sortBy: string;
+  setSortBy: (value: string) => void;
+  sortOptions: { value: string; label: string }[];
+}) => {
+  const pillClass = (active: boolean) =>
+    cn(
+      "px-3 py-1.5 text-xs uppercase tracking-wide rounded-full border transition-all",
+      active
+        ? "bg-primary text-primary-foreground border-primary"
+        : "bg-secondary text-muted-foreground border-primary/20 hover:bg-primary/10 hover:border-primary/40"
+    );
+
   return (
     <>
       {/* Backdrop */}
       <div
         onClick={onClose}
         className={cn(
-          "fixed inset-0 z-40 bg-black/40 backdrop-blur-xl transition-opacity",
+          "fixed inset-0 z-[60] bg-black/50 backdrop-blur-xl transition-opacity",
           open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         )}
         aria-hidden="true"
       />
 
-      {/* Drawer Panel */}
+      {/* Popup Panel */}
       <div
         className={cn(
-          "fixed right-0 top-0 h-screen w-full max-w-md z-50 bg-background/95 backdrop-blur-sm border-l border-primary/20 flex flex-col gap-4 p-6 transition-transform duration-500 overflow-y-auto",
-          open ? "translate-x-0" : "translate-x-full"
+          "fixed left-1/2 top-1/2 z-[70] w-[95vw] md:w-[min(90vw,760px)] max-h-[85vh] -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-background/95 backdrop-blur-xl border border-primary/20 shadow-2xl overflow-hidden transition-all duration-300",
+          open ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
         )}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Sort and filters"
       >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-muted rounded-lg"
-          aria-label="Close filter drawer"
-        >
-          <X size={20} />
-        </button>
+        <div className="border-b border-primary/20 px-5 py-4 flex items-center justify-between">
+          <h3 className="font-serif text-xl">Sort & Filters</h3>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-muted rounded-lg"
+            aria-label="Close filter panel"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
-        <h3 className="font-serif text-xl mt-4">Filters</h3>
+        <div className="p-5 overflow-y-auto max-h-[calc(85vh-132px)] space-y-6">
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Quick Filters</p>
+            <div className="flex flex-wrap gap-2">
+              {quickFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  onClick={() => toggleFilter(filter.id)}
+                  className={pillClass(selectedFilters.has(filter.id))}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Dietary</p>
+            <div className="flex flex-wrap gap-2">
+              {dietaryFilters.map((filter) => {
+                const isActive = selectedFilters.has(filter.id);
+                return (
+                  <button
+                    key={filter.id}
+                    onClick={() => toggleFilter(filter.id)}
+                    className={cn(
+                      pillClass(isActive),
+                      isActive && "border-orange-500 bg-orange-500/15 text-orange-400"
+                    )}
+                  >
+                    {filter.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Exclude Allergens</p>
+            <div className="flex flex-wrap gap-2">
+              {allergenFilters.map((filter) => {
+                const Icon = allergenIconMap[filter.id]?.icon;
+                const isActive = selectedFilters.has(filter.id);
+                return (
+                  <button
+                    key={filter.id}
+                    onClick={() => toggleFilter(filter.id)}
+                    className={cn(
+                      pillClass(isActive),
+                      "inline-flex items-center gap-1.5",
+                      isActive && "border-red-500 bg-red-500/15 text-red-400"
+                    )}
+                  >
+                    {Icon && <Icon size={14} className={isActive ? "text-red-400" : ""} />}
+                    <span>{filter.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Other</p>
+            <div className="flex flex-wrap gap-2">
+              {miscFilters.map((filter) => (
+                <button
+                  key={filter.id}
+                  onClick={() => toggleFilter(filter.id)}
+                  className={pillClass(selectedFilters.has(filter.id))}
+                >
+                  {filter.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="border-t border-primary/20 px-5 py-4 flex items-center gap-3">
+          <button
+            onClick={clearAll}
+            className="flex-1 px-4 py-2 rounded-lg border border-primary/30 text-sm hover:bg-primary/10 transition-all"
+          >
+            Clear All
+          </button>
+          <button
+            onClick={onClose}
+            className="flex-1 btn-gold text-sm py-2"
+          >
+            Apply
+          </button>
+        </div>
       </div>
     </>
   );
@@ -289,6 +410,12 @@ const sortOptions = [
   { value: "shakes", label: "Shakes" },
   { value: "juices", label: "Juices" },
 ];
+
+
+  const clearAllFiltersAndSort = () => {
+    clearFilters();
+    setSortBy("none");
+  };
 
 
 
@@ -1084,7 +1211,16 @@ const sortOptions = [
                 </div>
               )}
               {/* Filter Drawer - render at root of page so it's above everything */}
-              <FilterDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+              <FilterDrawer
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                selectedFilters={selectedFilters}
+                toggleFilter={toggleFilter}
+                clearAll={clearAllFiltersAndSort}
+                sortBy={sortBy}
+                setSortBy={setSortBy}
+                sortOptions={sortOptions}
+              />
             </div>
           </section>
         </main>
