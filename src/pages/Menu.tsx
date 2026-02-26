@@ -2,30 +2,31 @@ import {
   quickFilters,
   dietaryFilters,
   allergenFilters,
-  miscFilters,
-  SPICY_THRESHOLD,
+  allFilterIds,
+  type FilterId,
   allergenIconMap,
   sidesTabs,
-  slugify,
-  hashCode,
 } from "@/lib/menu-constants";
 
-import { useMemo, useState, useRef } from "react";
+import { useMemo, useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AllergenInfo from "@/components/shared/AllergenInfo";
 import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";
 import { Layout } from "@/components/layout/Layout";
-import { Flame, X, Filter, ChevronDown, ChevronLeft, ChevronRight, Milk, Egg, Wheat, Nut, Fish, Leaf } from "lucide-react";
+import { Flame, X, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   menuItemsFlat,
-  menuItemsGrouped,
 } from "@/lib/menu-data";
 // ...removed sauces import
-import type { MenuItem, Allergen, DietaryFlag } from "@/lib/menu-types";
+import type { MenuItem } from "@/lib/menu-types";
 import { findSauce } from "@/lib/find-sauce";
 import { spices } from "@/lib/spices-data";
+import {
+  filterMenuItems,
+  hasSelectedDietaryFilter,
+} from "@/lib/menu-filter-engine";
 
 
 
@@ -36,58 +37,6 @@ function isMenuItem(item: unknown): item is MenuItem {
 function isSauceItem(item: unknown): item is SauceItem {
   return !!item && typeof item === "object" && "level" in item && !("category" in item);
 }
-
-const itemHasAllergen = (item: MenuItem, allergen: Allergen) => {
-  if (!item.allergens || item.allergens.length === 0) return false;
-  return item.allergens.includes(allergen);
-};
-
-/**
- * Deterministic dietary matching:
- * - Honors explicit item.dietary only (no inference).
- * - If explicit flags conflict with allergens, remove the conflicting flag.
- */
-const deriveDietary = (item: MenuItem): DietaryFlag[] => {
-  const flags = new Set(item.dietary || []);
-
-  if (flags.has("vegan")) {
-    if (
-      itemHasAllergen(item, "milk") ||
-      itemHasAllergen(item, "eggs") ||
-      itemHasAllergen(item, "fish") ||
-      itemHasAllergen(item, "shellfish")
-    ) {
-      flags.delete("vegan");
-    }
-  }
-
-  if (flags.has("vegetarian")) {
-    if (itemHasAllergen(item, "fish") || itemHasAllergen(item, "shellfish")) {
-      flags.delete("vegetarian");
-    }
-  }
-
-  if (flags.has("gluten-free") && itemHasAllergen(item, "gluten")) {
-    flags.delete("gluten-free");
-  }
-
-  if (flags.has("dairy-free") && itemHasAllergen(item, "milk")) {
-    flags.delete("dairy-free");
-  }
-
-  if (
-    flags.has("nut-free") &&
-    (itemHasAllergen(item, "tree-nuts") || itemHasAllergen(item, "peanuts"))
-  ) {
-    flags.delete("nut-free");
-  }
-
-  return Array.from(flags);
-};
-
-const itemMatchesDiet = (item: MenuItem, dietId: string) => {
-  return deriveDietary(item).includes(dietId as DietaryFlag);
-};
 
 // Category headings data (needed by CategoryHeading component)
 const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
@@ -136,6 +85,29 @@ function CategoryHeading({ category }: { category: string }) {
   );
 }
 
+const isSideTab = (value: string): value is "carb" | "green" =>
+  value === "carb" || value === "green";
+
+const parseInitialCategory = (search: string): string => {
+  const value = new URLSearchParams(search).get("category");
+  if (!value) return "All";
+  return value in categoryHeadings ? value : "All";
+};
+
+const parseInitialSideTab = (search: string): "carb" | "green" => {
+  const value = new URLSearchParams(search).get("side");
+  return value && isSideTab(value) ? value : "carb";
+};
+
+const parseInitialSelectedFilters = (search: string): Set<FilterId> => {
+  const value = new URLSearchParams(search).get("filters") || "";
+  const ids = value
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((entry): entry is FilterId => allFilterIds.includes(entry as FilterId));
+  return new Set(ids);
+};
+
 // FilterDrawer component moved outside to avoid recreation on every render
 const FilterDrawer = ({
   open,
@@ -143,18 +115,14 @@ const FilterDrawer = ({
   selectedFilters,
   toggleFilter,
   clearAll,
-  sortBy,
-  setSortBy,
-  sortOptions,
+  filterCounts,
 }: {
   open: boolean;
   onClose: () => void;
-  selectedFilters: Set<string>;
-  toggleFilter: (id: string) => void;
+  selectedFilters: Set<FilterId>;
+  toggleFilter: (id: FilterId) => void;
   clearAll: () => void;
-  sortBy: string;
-  setSortBy: (value: string) => void;
-  sortOptions: { value: string; label: string }[];
+  filterCounts: Partial<Record<FilterId, number>>;
 }) => {
   const pillClass = (active: boolean) =>
     cn(
@@ -184,10 +152,10 @@ const FilterDrawer = ({
         )}
         role="dialog"
         aria-modal="true"
-        aria-label="Sort and filters"
+        aria-label="Filters"
       >
         <div className="border-b border-primary/20 px-5 py-4 flex items-center justify-between">
-          <h3 className="font-serif text-xl">Sort & Filters</h3>
+          <h3 className="font-serif text-xl">Filters</h3>
           <button
             onClick={onClose}
             className="p-2 hover:bg-muted rounded-lg"
@@ -207,7 +175,7 @@ const FilterDrawer = ({
                   onClick={() => toggleFilter(filter.id)}
                   className={pillClass(selectedFilters.has(filter.id))}
                 >
-                  {filter.label}
+                  {filter.label} ({filterCounts[filter.id] ?? 0})
                 </button>
               ))}
             </div>
@@ -227,7 +195,7 @@ const FilterDrawer = ({
                       isActive && "border-orange-500 bg-orange-500/15 text-orange-400"
                     )}
                   >
-                    {filter.label}
+                    {filter.label} ({filterCounts[filter.id] ?? 0})
                   </button>
                 );
               })}
@@ -251,27 +219,13 @@ const FilterDrawer = ({
                     )}
                   >
                     {Icon && <Icon size={14} className={isActive ? "text-red-400" : ""} />}
-                    <span>{filter.label}</span>
+                    <span>{filter.label} ({filterCounts[filter.id] ?? 0})</span>
                   </button>
                 );
               })}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <p className="text-xs uppercase tracking-wider text-muted-foreground">Other</p>
-            <div className="flex flex-wrap gap-2">
-              {miscFilters.map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => toggleFilter(filter.id)}
-                  className={pillClass(selectedFilters.has(filter.id))}
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="border-t border-primary/20 px-5 py-4 flex items-center gap-3">
@@ -299,9 +253,8 @@ export default function MenuPage() {
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
   // State declarations
-  const [activeSidesTab, setActiveSidesTab] = useState<string>("carb");
-  const [activeCategory, setActiveCategory] = useState<string>("All");
-  const [sortBy, setSortBy] = useState<string>("none");
+    const [activeSidesTab, setActiveSidesTab] = useState<"carb" | "green">(() => parseInitialSideTab(location.search));
+    const [activeCategory, setActiveCategory] = useState<string>(() => parseInitialCategory(location.search));
   // Modal stack: allows back navigation
   const [modalStack, setModalStack] = useState<(MenuItem | SauceItem | null)[]>([]);
 
@@ -309,7 +262,7 @@ export default function MenuPage() {
   // Allergen Info modal state
   const [showAllergenModal, setShowAllergenModal] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedFilters, setSelectedFilters] = useState<Set<string>>(new Set());
+  const [selectedFilters, setSelectedFilters] = useState<Set<FilterId>>(() => parseInitialSelectedFilters(location.search));
   // ...removed sauceFilter state
 
   // Helper to clear filters
@@ -319,17 +272,6 @@ export default function MenuPage() {
   // (Removed duplicate state declarations)
 
 
-
-  // Scroll ref for Sort buttons (inside Filter Drawer)
-  const sortScrollRef = useRef<HTMLDivElement>(null);
-
-  const scrollSort = (dir: "left" | "right") => {
-    if (!sortScrollRef.current) return;
-    sortScrollRef.current.scrollBy({
-      left: dir === "left" ? -200 : 200,
-      behavior: "smooth",
-    });
-  };
 
   // Scroll ref for CATEGORY buttons (mobile)
   const categoryScrollRef = useRef<HTMLDivElement>(null);
@@ -343,7 +285,7 @@ export default function MenuPage() {
   };
 
   // Filter logic for multi-select filters
-  const toggleFilter = (id: string) => {
+  const toggleFilter = (id: FilterId) => {
     setSelectedFilters((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
@@ -394,154 +336,74 @@ export default function MenuPage() {
     "Shakes & Juices",
   ];
 
-// Sort options for the sort bar
-// Note: Protein filters (chicken, lamb, etc.) are in the Filter Drawer, not here
-const sortOptions = [
-  { value: "none", label: "Default" },
-  { value: "spice-low", label: "Spice: Low to High" },
-  { value: "spice-high", label: "Spice: High to Low" },
-  { value: "fruit-entremet", label: "Fruit Entremet" },
-  { value: "cheesecakes", label: "Cheesecakes" },
-  { value: "tiramisu", label: "Tiramisu" },
-  { value: "brownies", label: "Brownies" },
-  { value: "cinnamon-rolls", label: "Cinnamon Rolls" },
-  { value: "cakes", label: "Cakes" },
-  { value: "tres-leches", label: "Tres Leches" },
-  { value: "shakes", label: "Shakes" },
-  { value: "juices", label: "Juices" },
-];
-
-
-  const clearAllFiltersAndSort = () => {
+  const clearAllFilters = () => {
     clearFilters();
-    setSortBy("none");
   };
 
+  const hasDietarySelection = hasSelectedDietaryFilter(selectedFilters);
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+
+    if (selectedFilters.size > 0) {
+      params.set("filters", Array.from(selectedFilters).join(","));
+    } else {
+      params.delete("filters");
+    }
+
+    if (activeCategory !== "All") {
+      params.set("category", activeCategory);
+    } else {
+      params.delete("category");
+    }
+
+    if (activeCategory === "Sides") {
+      params.set("side", activeSidesTab);
+    } else {
+      params.delete("side");
+    }
+
+    const nextSearch = params.toString();
+    const currentSearch = location.search.replace(/^\?/, "");
+    if (nextSearch !== currentSearch) {
+      navigate(
+        {
+          pathname: location.pathname,
+          search: nextSearch ? `?${nextSearch}` : "",
+        },
+        { replace: true }
+      );
+    }
+  }, [selectedFilters, activeCategory, activeSidesTab, location.pathname, location.search, navigate]);
+
+  const filterCounts = useMemo(() => {
+    const categoryItems =
+      activeCategory === "All"
+        ? menuItemsFlat
+        : menuItemsFlat.filter((item) => item.category === activeCategory);
+
+    const counts: Partial<Record<FilterId, number>> = {};
+    for (const id of allFilterIds) {
+      const scopedFilters = new Set<FilterId>(selectedFilters);
+      scopedFilters.delete(id);
+      scopedFilters.add(id);
+      counts[id] = filterMenuItems({
+        items: categoryItems,
+        activeCategory: "All",
+        selectedFilters: scopedFilters,
+      }).length;
+    }
+    return counts;
+  }, [activeCategory, selectedFilters]);
 
 
-  /* MATCH FOOD TYPES */
-  const matchesFoodType = (item: MenuItem, type: string) => {
-    const t = slugify(type);
-    const alt = t === "doner" ? "d-ner" : null;
-    return (
-      slugify(item.subCategory) === t ||
-      (alt && slugify(item.subCategory) === alt) ||
-      slugify(item.category) === t ||
-      (alt && slugify(item.category) === alt) ||
-      slugify(item.name).includes(t) ||
-      (alt && slugify(item.name).includes(alt))
-    );
-  };
-
-
-  /**
-   * FILTER MENU ITEMS
-   * 
-   * Filter Pipeline:
-   * 1. Category filter (All vs specific category)
-   * 2. Allergen EXCLUSIONS - removes items with selected allergens (hard rule)
-   * 3. POSITIVE FILTERS - combines filter groups with AND across groups:
-   *    - Quick filters: protein/type shortcuts (chicken, lamb, salmon, etc.) - OR within group
-   *    - Dietary filters: vegan, vegetarian, gluten-free - AND within group (must match ALL)
-   *    - Misc filters: spicy (heat level >= threshold) - AND within group
-   *    - Groups combined: quickMatch AND dietMatch AND miscMatch
-   * 4. SORT - applies ordering:
-   *    - "spice-low" / "spice-high" - sorts by heat level
-   *    - Food type filters - acts as secondary filter (displays only that type)
-   */
   const filteredItems = useMemo(() => {
-  let items = [...menuItemsFlat];
-
-  /* Step 1: CATEGORY FILTER */
-  if (activeCategory !== "All") {
-    items = items.filter(
-      (item) => item.category === activeCategory
-    );
-  }
-
-  const selected = Array.from(selectedFilters);
-
-  /* Step 2: ALLERGEN EXCLUSIONS (HARD RULE - removes items containing selected allergens) */
-  const excludedAllergens = selected.filter(
-    (f): f is Allergen =>
-      allergenFilters.some((a) => a.id === f)
-  );
-
-  if (excludedAllergens.length > 0) {
-    items = items.filter(
-      (item) =>
-        !excludedAllergens.some((a) =>
-          itemHasAllergen(item, a)
-        )
-    );
-  }
-
-  /* Step 3: POSITIVE FILTERS (AND across groups, OR within each group) */
-  const positiveFilters = selected.filter(
-    (f) => !excludedAllergens.includes(f as Allergen)
-  );
-
-  if (positiveFilters.length > 0) {
-    const selectedQuick = positiveFilters.filter((f) =>
-      quickFilters.some((q) => q.id === f)
-    );
-    const selectedDietary = positiveFilters.filter((f) =>
-      dietaryFilters.some((d) => d.id === f)
-    );
-    const selectedMisc = positiveFilters.filter((f) =>
-      miscFilters.some((m) => m.id === f)
-    );
-
-    items = items.filter((item) => {
-      const quickMatch =
-        selectedQuick.length === 0 ||
-        selectedQuick.some((f) => matchesFoodType(item, f));
-
-      const dietMatch =
-        selectedDietary.length === 0 ||
-        selectedDietary.every((f) => itemMatchesDiet(item, f));
-
-      const miscMatch =
-        selectedMisc.length === 0 ||
-        selectedMisc.every((f) =>
-          f === "spicy" ? (item.heatLevel ?? 0) >= SPICY_THRESHOLD : false
-        );
-
-      return quickMatch && dietMatch && miscMatch;
+    return filterMenuItems({
+      items: menuItemsFlat,
+      activeCategory,
+      selectedFilters,
     });
-  }
-
-  /* Step 4: SORTING */
-  // Sort by heat level (ascending or descending)
-  if (sortBy === "spice-low") {
-    return [...items].sort((a, b) => (a.heatLevel ?? 0) - (b.heatLevel ?? 0));
-  }
-
-  if (sortBy === "spice-high") {
-    return [...items].sort((a, b) => (b.heatLevel ?? 0) - (a.heatLevel ?? 0));
-  }
-
-  // Subcategory sorts: filter to show only selected subcategory
-  // Note: Main protein types (chicken, lamb, etc.) removed - use Filter Drawer instead
-  const quickTypes = [
-    "fruit-entremet",
-    "cheesecakes",
-    "tiramisu",
-    "brownies",
-    "cinnamon-rolls",
-    "cakes",
-    "tres-leches",
-    "shakes",
-    "juices",
-  ];
-
-  if (quickTypes.includes(sortBy)) {
-    return items.filter((i) => matchesFoodType(i, sortBy));
-  }
-
-  // Default: return all filtered items in original order
-  return items;
-}, [activeCategory, sortBy, selectedFilters]);
+  }, [activeCategory, selectedFilters]);
 
 
   return (
@@ -636,21 +498,21 @@ const sortOptions = [
                         <ChevronRight size={16} />
                       </button>
                     </div>
-                    {/* MOBILE Sort & Filters — BELOW slider (not inside arrow container) */}
+                    {/* MOBILE Filters — BELOW slider (not inside arrow container) */}
                     <div className="md:hidden mt-3 flex justify-center w-full">
                       <button
                         onClick={() => setDrawerOpen(true)}
                         className="flex items-center gap-2 bg-secondary/80 backdrop-blur px-5 py-2.5 text-sm font-medium rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all"
                       >
                         <Filter size={16} className="text-primary" />
-                        Sort & Filters
+                        Filters
                       </button>
                     </div>
                   </div>
-                  {/* Desktop Sort -> open drawer */}
+                  {/* Desktop Filters -> open drawer */}
                   <div className="hidden md:flex items-center gap-4">
                     <span className="text-sm text-muted-foreground tracking-wide">
-                      Sort & Filters
+                      Filters
                     </span>
                     <button
                       onClick={() => setDrawerOpen(true)}
@@ -678,7 +540,9 @@ const sortOptions = [
                         {sidesTabs.map((tab) => (
                           <button
                             key={tab.id}
-                            onClick={() => setActiveSidesTab(tab.id)}
+                            onClick={() => {
+                              if (isSideTab(tab.id)) setActiveSidesTab(tab.id);
+                            }}
                             className={cn(
                               "px-4 py-2 rounded-full text-sm font-semibold transition",
                               activeSidesTab === tab.id
@@ -695,7 +559,9 @@ const sortOptions = [
                     {/* Grid for Sides or other single category */}
                     <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
                       {(activeCategory === "Sides"
-                        ? filteredItems.filter((item) => item.sideType === activeSidesTab)
+                        ? hasDietarySelection
+                          ? filteredItems
+                          : filteredItems.filter((item) => item.sideType === activeSidesTab)
                         : filteredItems
                       ).map((item) => (
                         <div
@@ -1216,10 +1082,8 @@ const sortOptions = [
                 onClose={() => setDrawerOpen(false)}
                 selectedFilters={selectedFilters}
                 toggleFilter={toggleFilter}
-                clearAll={clearAllFiltersAndSort}
-                sortBy={sortBy}
-                setSortBy={setSortBy}
-                sortOptions={sortOptions}
+                clearAll={clearAllFilters}
+                filterCounts={filterCounts}
               />
             </div>
           </section>

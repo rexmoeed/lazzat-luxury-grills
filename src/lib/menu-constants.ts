@@ -7,17 +7,18 @@ export const quickFilters = [
   { id: "salmon", label: "Salmon" },
   { id: "seekh", label: "Seekh" },
   { id: "doner", label: "Döner" },
+  { id: "wraps", label: "Wraps" },
   { id: "biryani", label: "Biryani" },
   { id: "sajji", label: "Sajji" },
   { id: "desserts", label: "Desserts" },
-];
+] as const;
 export const dietaryFilters = [
   { id: "vegan", label: "Vegan" },
   { id: "vegetarian", label: "Vegetarian" },
   { id: "gluten-free", label: "Gluten-free" },
   { id: "dairy-free", label: "Dairy-free" },
   { id: "nut-free", label: "Nut-free" },
-];
+] as const;
 export const allergenFilters: { id: Allergen; label: string }[] = [
   { id: "milk", label: "Dairy" },
   { id: "eggs", label: "Eggs" },
@@ -32,6 +33,18 @@ export const allergenFilters: { id: Allergen; label: string }[] = [
 ];
 export const miscFilters = [
   { id: "spicy", label: "Spicy" },
+] as const;
+
+export type QuickFilterId = (typeof quickFilters)[number]["id"];
+export type DietaryFilterId = (typeof dietaryFilters)[number]["id"];
+export type MiscFilterId = (typeof miscFilters)[number]["id"];
+export type FilterId = QuickFilterId | DietaryFilterId | MiscFilterId | Allergen;
+
+export const allFilterIds: FilterId[] = [
+  ...quickFilters.map((f) => f.id),
+  ...dietaryFilters.map((f) => f.id),
+  ...allergenFilters.map((f) => f.id),
+  ...miscFilters.map((f) => f.id),
 ];
 export const SPICY_THRESHOLD = 4;
 export const allergenIconMap = {
