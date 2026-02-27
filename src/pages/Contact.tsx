@@ -67,6 +67,7 @@ function LocationsList() {
 
 const Contact = () => {
   const { toast } = useToast();
+  const uniquePhones = Array.from(new Set(branchLocations.map((location) => location.phone)));
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -144,20 +145,15 @@ const Contact = () => {
                     <h4 className="font-serif text-lg text-foreground mb-1">
                       Visit Us
                     </h4>
-                    <div className="mb-2 flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-primary mt-1" />
-                      <div>
-                        <span className="font-semibold text-foreground">Location 1:</span><br />
-                        <span className="font-sans text-sm text-muted-foreground">43/49 - 11685 Mcvean Dr<br />Brampton, ON L6P 4N5, Canada</span>
+                    {branchLocations.map((location, index) => (
+                      <div key={location.id} className="mb-2 flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-primary mt-1" />
+                        <div>
+                          <span className="font-semibold text-foreground">Location {index + 1}:</span><br />
+                          <span className="font-sans text-sm text-muted-foreground">{location.address}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex items-start gap-2">
-                      <MapPin className="w-4 h-4 text-primary mt-1" />
-                      <div>
-                        <span className="font-semibold text-foreground">Location 2:</span><br />
-                        <span className="font-sans text-sm text-muted-foreground">143 Clarence St Unit #10<br />Brampton, ON L6W 1T2, Canada</span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
 
@@ -169,12 +165,17 @@ const Contact = () => {
                     <h4 className="font-serif text-lg text-foreground mb-1">
                       Call Us
                     </h4>
-                    <a
-                      href="tel:+12125550100"
-                      className="font-sans text-sm text-muted-foreground hover:text-primary transition-colors"
-                    >
-                      +1 (212) 555-0100
-                    </a>
+                    <div className="space-y-1">
+                      {uniquePhones.map((phone) => (
+                        <a
+                          key={phone}
+                          href={`tel:${phone.replace(/[^+\d]/g, "")}`}
+                          className="block font-sans text-sm text-muted-foreground hover:text-primary transition-colors"
+                        >
+                          {phone}
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 </div>
 
