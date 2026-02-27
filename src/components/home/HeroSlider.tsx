@@ -30,6 +30,15 @@ export const HeroSlider = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const videoRefs = useRef<HTMLVideoElement[]>([]); // holds refs for video elements
+  const animationTimeoutsRef = useRef<number[]>([]);
+
+  const scheduleAnimationReset = () => {
+    const timeoutId = window.setTimeout(() => {
+      setIsAnimating(false);
+      animationTimeoutsRef.current = animationTimeoutsRef.current.filter((id) => id !== timeoutId);
+    }, 800);
+    animationTimeoutsRef.current.push(timeoutId);
+  };
 
   // autoplay interval
   useEffect(() => {
@@ -37,6 +46,15 @@ export const HeroSlider = () => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      animationTimeoutsRef.current.forEach((timeoutId) => {
+        window.clearTimeout(timeoutId);
+      });
+      animationTimeoutsRef.current = [];
+    };
   }, []);
 
   // ensure only current video's playing
@@ -63,14 +81,14 @@ export const HeroSlider = () => {
     if (isAnimating) return;
     setIsAnimating(true);
     setCurrentSlide((prev) => (prev + 1) % slides.length);
-    setTimeout(() => setIsAnimating(false), 800);
+    scheduleAnimationReset();
   };
 
   const prevSlide = () => {
     if (isAnimating) return;
     setIsAnimating(true);
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-    setTimeout(() => setIsAnimating(false), 800);
+    scheduleAnimationReset();
   };
 
   return (
@@ -187,7 +205,7 @@ export const HeroSlider = () => {
               if (!isAnimating) {
                 setIsAnimating(true);
                 setCurrentSlide(index);
-                setTimeout(() => setIsAnimating(false), 800);
+                scheduleAnimationReset();
               }
             }}
             className={cn(

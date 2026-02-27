@@ -1,49 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-// Simple locations list for display only
-const locations = [
-  {
-    id: 1,
-    name: "Lazzat Grill & Shakes",
-    address: "Lazzat Grill and Shakes 43/49 - 11685 Mcvean Dr Brampton ON L6P 4N5",
-    phone: "+1 (212) 555-0100",
-  },
-  {
-    id: 2,
-    name: "Lazzat Grill & Shakes",
-    address: "Lazzat Grill and Shakes 143 Clarence St, Unit 10 Brampton ON L6W 1T2",
-    phone: "+1 (234) 567-8200",
-  },
-];
-
-
-
-function getDistance(lat1, lon1, lat2, lon2) {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-}
-
-const locationsWithCoords = [
-  {
-    ...locations[0],
-    lat: 43.8065,
-    lng: -79.6421,
-  },
-  {
-    ...locations[1],
-    lat: 43.6847,
-    lng: -79.7599,
-  },
-];
+import { findNearestLocation, requestUserLocation } from "@/lib/location-utils";
+import { branchLocations } from "@/lib/locations-data";
+const locationsWithCoords = branchLocations;
 
 function LocationsList() {
   const [nearestId, setNearestId] = useState(null);
@@ -53,29 +14,14 @@ function LocationsList() {
   );
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      return;
-    }
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setUserCoords({ lat: latitude, lng: longitude });
-        // Find nearest
-        let minDist = Infinity;
-        let minId = null;
-        locationsWithCoords.forEach(loc => {
-          const dist = getDistance(latitude, longitude, loc.lat, loc.lng);
-          if (dist < minDist) {
-            minDist = dist;
-            minId = loc.id;
-          }
-        });
-        setNearestId(minId);
+    requestUserLocation({ timeout: 10000 })
+      .then((coords) => {
+        setUserCoords(coords);
+        const nearest = findNearestLocation(coords, locationsWithCoords);
+        setNearestId(nearest?.id ?? null);
         setLocationStatus('success');
-      },
-      () => setLocationStatus('error'),
-      { timeout: 10000 }
-    );
+      })
+      .catch(() => setLocationStatus('error'));
   }, []);
 
   return (
@@ -129,11 +75,23 @@ const Contact = () => {
     message: "",
   });
   const [loading, setLoading] = useState(false);
+  const submitTimeoutRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (submitTimeoutRef.current !== null) {
+        window.clearTimeout(submitTimeoutRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setTimeout(() => {
+    if (submitTimeoutRef.current !== null) {
+      window.clearTimeout(submitTimeoutRef.current);
+    }
+    submitTimeoutRef.current = window.setTimeout(() => {
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours.",
@@ -146,6 +104,7 @@ const Contact = () => {
         message: "",
       });
       setLoading(false);
+      submitTimeoutRef.current = null;
     }, 1200);
   };
 

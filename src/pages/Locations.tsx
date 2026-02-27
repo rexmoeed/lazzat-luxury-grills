@@ -1,76 +1,23 @@
 import { Layout } from "@/components/layout/Layout";
-import { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
+import { useEffect, useRef, useState } from "react";
 import { MapPin, Clock, Phone, Navigation, Copy, Share2, Wifi, Car, ShoppingBag, LucideIcon } from "lucide-react";
+import {
+  findNearestLocation,
+  getDistanceKm,
+  getMapsLink,
+  getTravelTimeMinutes,
+  requestUserLocation,
+} from "@/lib/location-utils";
+import { branchLocations } from "@/lib/locations-data";
 
 /* =====================
    Location Data
 ===================== */
-const locations = [
-  {
-    id: 1,
-    name: "Lazzat Grill & Shakes",
-    address: "Lazzat Grill and Shakes 43/49 - 11685 Mcvean Dr Brampton ON L6P 4N5",
-    lat: 43.8065,
-    lng: -79.6421,
-    phone: "+1 (212) 555-0100",
-    hours: {
-      weekday: "11:00 AM - 11:00 PM",
-      weekend: "11:00 AM - 12:00 AM",
-      sunday: "12:00 PM - 10:00 PM",
-    },
-    amenities: ["parking", "wifi", "takeaway"],
-  },
-  {
-    id: 2,
-    name: "Lazzat Grill & Shakes",
-    address: "Lazzat Grill and Shakes 143 Clarence St, Unit 10 Brampton ON L6W 1T2",
-    lat: 43.6847,
-    lng: -79.7599,
-    phone: "+1 (234) 567-8200",
-    hours: {
-      weekday: "10:00 AM - 10:00 PM",
-      weekend: "10:00 AM - 11:00 PM",
-      sunday: "11:00 AM - 9:00 PM",
-    },
-    amenities: ["parking", "wifi", "takeaway"],
-  },
-];
+const locations = branchLocations;
 
 /* =====================
    Helpers
 ===================== */
-const isIOS = () =>
-  typeof navigator !== "undefined" && /iPad|iPhone|iPod/.test(navigator.userAgent);
-
-const getMapsLink = (address: string) => {
-  const encoded = encodeURIComponent(address);
-  return isIOS()
-    ? `https://maps.apple.com/?q=${encoded}`
-    : `https://www.google.com/maps/dir/?api=1&destination=${encoded}`;
-};
-
-const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLon = ((lon2 - lon1) * Math.PI) / 180;
-
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) ** 2;
-
-  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
-};
-
-const getTravelTime = (distanceKm: number) => {
-  const avgSpeedKmh = 40; // Average city driving speed
-  const timeHours = distanceKm / avgSpeedKmh;
-  const timeMinutes = Math.round(timeHours * 60);
-  return timeMinutes;
-};
-
 const isLocationOpen = (hours: typeof locations[0]['hours']) => {
   const now = new Date();
   const day = now.getDay(); // 0 = Sunday
@@ -125,39 +72,35 @@ const Locations = () => {
   const [locationStatus, setLocationStatus] = useState<'loading' | 'success' | 'error' | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [hasRequestedLocation, setHasRequestedLocation] = useState(false);
-
-  const requestLocation = () => {
-    if (!navigator.geolocation) {
-      setLocationStatus('error');
-      return;
-    }
-    setLocationStatus('loading');
-    setHasRequestedLocation(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const { latitude, longitude } = pos.coords;
-        setUserCoords({ lat: latitude, lng: longitude });
-        const nearest = locations.reduce((prev, curr) => {
-          const prevDist = getDistance(latitude, longitude, prev.lat, prev.lng);
-          const currDist = getDistance(latitude, longitude, curr.lat, curr.lng);
-          return currDist < prevDist ? curr : prev;
-        });
-        setNearestId(nearest.id);
-        setLocationStatus('success');
-        document
-          .getElementById(`location-${nearest.id}`)
-          ?.scrollIntoView({ behavior: "smooth", block: "center" });
-      },
-      () => {
-        setLocationStatus('error');
-      },
-      { timeout: 10000 }
-    );
-  };
+  const copyResetTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
-    // Don't auto-request on mount - wait for user action
+    return () => {
+      if (copyResetTimeoutRef.current !== null) {
+        window.clearTimeout(copyResetTimeoutRef.current);
+      }
+    };
   }, []);
+
+  const requestLocation = () => {
+    setLocationStatus('loading');
+    setHasRequestedLocation(true);
+    requestUserLocation({ timeout: 10000 })
+      .then((coords) => {
+        setUserCoords(coords);
+        const nearest = findNearestLocation(coords, locations);
+        if (nearest) {
+          setNearestId(nearest.id);
+          document
+            .getElementById(`location-${nearest.id}`)
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+        setLocationStatus('success');
+      })
+      .catch(() => {
+        setLocationStatus('error');
+      });
+  };
 
   const retryLocation = () => {
     requestLocation();
@@ -175,7 +118,13 @@ const Locations = () => {
     try {
       await navigator.clipboard.writeText(address);
       setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
+      if (copyResetTimeoutRef.current !== null) {
+        window.clearTimeout(copyResetTimeoutRef.current);
+      }
+      copyResetTimeoutRef.current = window.setTimeout(() => {
+        setCopiedId(null);
+        copyResetTimeoutRef.current = null;
+      }, 2000);
     } catch (err) {
       console.error('Failed to copy:', err);
     }
@@ -265,6 +214,9 @@ const Locations = () => {
           {locations.map((location) => {
             const isNearest = nearestId === location.id;
             const isOpen = openMaps[location.id];
+            const distanceKm = userCoords
+              ? getDistanceKm(userCoords.lat, userCoords.lng, location.lat, location.lng)
+              : null;
 
             return (
               <div
@@ -298,7 +250,7 @@ const Locations = () => {
 
                 {userCoords && (
                   <div className="text-xs text-muted-foreground mb-2">
-                    {getDistance(userCoords.lat, userCoords.lng, location.lat, location.lng).toFixed(1)} km away • ~{getTravelTime(getDistance(userCoords.lat, userCoords.lng, location.lat, location.lng))} min drive
+                    {distanceKm?.toFixed(1)} km away • ~{getTravelTimeMinutes(distanceKm ?? 0)} min drive
                   </div>
                 )}
 
