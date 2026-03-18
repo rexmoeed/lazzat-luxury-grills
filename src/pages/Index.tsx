@@ -3,7 +3,7 @@ import { Layout } from "@/components/layout/Layout";
 import { RouteLoader } from "@/components/shared/RouteLoader";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { AboutSection } from "@/components/home/AboutSection";
-
+import { CulturalRespect } from "@/components/home/CulturalRespect";
 import { HowItWorks } from "@/components/home/HowItWorks";
 import CustomerFavourite from "@/components/home/CustomerFavourite";
 
@@ -42,6 +42,8 @@ const Index = () => {
       </Suspense>
 
       <AboutSection />
+
+      <CulturalRespect />
 
       <HowItWorks />
       <CustomerFavourite />
