@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import Blog from "./pages/Blog";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/flavours" element={<Flavours />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/blog" element={<Blog />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
 

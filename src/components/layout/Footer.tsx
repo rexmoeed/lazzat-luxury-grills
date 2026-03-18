@@ -59,6 +59,9 @@ export const Footer = () => {
             <Link to="/locations" className="text-muted-foreground font-sans text-xs hover:text-primary transition-colors duration-300 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 hover:border-primary/40 hover:bg-primary/10">
               Locations
             </Link>
+            <Link to="/blog" className="text-muted-foreground font-sans text-xs hover:text-primary transition-colors duration-300 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 hover:border-primary/40 hover:bg-primary/10">
+              Blog
+            </Link>
             <a href="tel:+12125550100" className="flex items-center gap-1 px-3 py-1.5 rounded-full border border-primary/20 bg-primary/5 hover:border-primary/40 hover:bg-primary/10 text-xs text-muted-foreground hover:text-primary transition-all">
               <Phone size={12} className="text-primary" />
               Call
