@@ -56,10 +56,10 @@ export const FeaturedItems = () => {
             Made in Canada, <span className="text-primary">Made for Everyone</span>
           </h2>
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto mb-2">
-            We chose the name Lazzat because it means taste, delight and richness - a word shared across Arabic, Urdu, Hindi, Persian and Turkish.
+            We chose the name Lazzat because it means taste, delight and richness a word shared across multiple cultures and countries.
           </p>
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-            Just like our name, our menu doesn’t belong to one culture - it belongs to everyone. That’s what makes it Canadian at heart.
+            Just like our name, our menu doesn't belong to one culture it belongs to everyone. That's what makes it Canadian at heart.
           </p>
         </div>
 
