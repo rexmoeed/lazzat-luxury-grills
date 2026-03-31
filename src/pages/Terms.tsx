@@ -62,8 +62,7 @@ const Terms = () => {
                 13.2 Menu Offerings
               </p>
               <p className="text-sm md:text-base text-black/80 leading-relaxed mb-2">
-                Lazzat offers a wide variety of halal-certified grilled dishes, including but not
-                limited to:
+                Lazzat offers a wide variety of grilled dishes, including but not limited to:
               </p>
               <ul className="list-disc list-inside text-sm md:text-base text-black/80 leading-relaxed space-y-1 mb-3">
                 <li>Grilled Chicken, Beef, and Lamb Dishes — marinated and grilled in-house</li>
@@ -75,17 +74,9 @@ const Terms = () => {
                 <li>Family Deals and Group Platters</li>
                 <li>Catering Packages for events of all sizes</li>
               </ul>
-              <p className="text-sm md:text-base text-black/80 leading-relaxed mb-4">
+              <p className="text-sm md:text-base text-black/80 leading-relaxed">
                 Menu items, prices, and availability are subject to change without notice. We make
                 every effort to keep our online menu current, but in-store availability may differ.
-              </p>
-              <p className="text-sm md:text-base text-black/80 leading-relaxed font-semibold mb-1">
-                13.3 Halal Certification
-              </p>
-              <p className="text-sm md:text-base text-black/80 leading-relaxed">
-                All meat and poultry served at Lazzat is certified Halal. We take our Halal
-                commitment seriously and work exclusively with certified Halal suppliers. Customers
-                with specific Halal compliance questions are encouraged to contact us directly.
               </p>
             </div>
 
@@ -223,7 +214,7 @@ const Terms = () => {
             </div>
 
             <div>
-              <h2 className="font-serif text-2xl text-black mb-3">17. Allergen & Halal Disclaimer</h2>
+              <h2 className="font-serif text-2xl text-black mb-3">17. Allergen Disclaimer</h2>
               <div className="rounded-lg border border-black/20 bg-black/5 p-4 mb-4">
                 <p className="text-sm md:text-base text-black/80 leading-relaxed">
                   <span className="font-semibold">IMPORTANT ALLERGEN NOTICE:</span> Our kitchen
@@ -233,12 +224,6 @@ const Terms = () => {
                   caution.
                 </p>
               </div>
-              <p className="text-sm md:text-base text-black/80 leading-relaxed mb-3">
-                All meat and poultry products used at Lazzat are sourced from certified Halal
-                suppliers. However, cross-contact with non-Halal items is possible in shared cooking
-                environments or during transportation. Customers with strict Halal compliance
-                requirements should discuss their needs with our staff prior to ordering.
-              </p>
               <p className="text-sm md:text-base text-black/80 leading-relaxed mb-3">
                 Lazzat's menu descriptions aim to identify major allergens. However, recipes,
                 suppliers, and ingredients may change without notice. The allergen information
