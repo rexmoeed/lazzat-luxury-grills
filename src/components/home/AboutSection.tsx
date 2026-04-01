@@ -36,16 +36,21 @@ export const AboutSection = () => {
         It all started with a simple question: why does fresh, flavorful food take so long, and fast food often tastes bland?
       </p>
       <p>
-        After years of running kitchens across <span className="text-primary">Canada</span>, we saw the same problem everywhere. Quick food lacked depth, and flavorful dishes were often greasy or slow.
+        After years of running kitchens across <span className="text-primary">Canada</span>, we saw the same problem everywhere.
       </p>
       <p>
-        That vision gave birth to <span className="text-primary">Lazzat</span> (a name also spelled 'Lezzat' in some countries), a restaurant designed not just to serve food but to celebrate culture, community, and connection. Inspired by global traditions, it brings people and flavors together under one roof.
+        This challenge gave birth to <span className="text-primary">Lazzat</span> (a name also spelled 'Lezzat' in some countries), a brand inspired by
+global traditions and built to bring people together under one roof. 
       </p>
       <p>
-        Our goal is to create a space where diversity is celebrated, connections are made, and experiences are shared.
+        Our goal is to create a
+welcoming space where we celebrate diversity, make connections, and share memorable
+experiences.
       </p>
       <p>
-        At <span className="text-primary">Lazzat</span>, we make sure every meal is fresh, flavourful, and served fast. Order in seconds, enjoy freshly cooked dishes, and savor signature sauces and spices inspired by cuisines from around the world.
+        At <span className="text-primary">Lazzat</span> every meal is made fresh and served quickly. Guests can order in seconds, enjoy
+freshly cooked dishes, and experience signature sauces and spices inspired by cuisines from
+around the world.
       </p>
     </div>
   </div>
@@ -61,14 +66,11 @@ export const AboutSection = () => {
 
             <div className="space-y-2 text-muted-foreground font-sans leading-relaxed">
               <p>
-                At <span className="text-primary">Lazzat</span>, we bring flavors from across the globe to your plate. <span className="text-primary">One world, different cultures.</span>
+                At <span className="text-primary">Lazzat</span>, we believe food can unite cultures. While most restaurants focus on only a few items, we offer a
+variety of thoughtfully prepared dishes that respect different dietary traditions, giving you
+inclusive options without compromising on taste or experience.
               </p>
-              <p>
-                While most restaurants focus on a few items, we <span className="text-primary">celebrate variety.</span>
-              </p>
-              <p>
-                Every dish is thoughtfully prepared to respect diverse dietary traditions, offering <span className="text-primary">inclusive options</span> without compromising on taste or experience.
-              </p>
+              
               <p className="pt-2">
                 Because you shouldn't have to choose between:
               </p>
