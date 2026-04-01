@@ -239,7 +239,7 @@ const About = () => {
               href="/locations"
               className="btn-outline-white pulse-gold w-full sm:w-auto text-center"
             >
-              Find a Location
+              Find Nearest Location
             </a>
           </div>
         </div>
