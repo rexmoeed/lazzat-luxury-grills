@@ -14,7 +14,7 @@ const Blog = () => {
               Lazzat <span className="text-primary">Blog</span>
             </h1>
             <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-              Stories, recipes, cooking tips, and culinary insights from the Lazzat kitchen.
+              Where stories meet flavors. Explore recipes, tips, and insights from the <span className="text-primary">Lazzat</span> kitchen.
             </p>
           </div>
         </div>
