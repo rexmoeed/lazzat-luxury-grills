@@ -347,7 +347,7 @@ const Contact = () => {
           className="btn-gold inline-block w-full max-w-xs mx-auto px-4 py-3 sm:px-6 sm:py-3 text-base md:text-lg font-semibold rounded-full shadow hover:scale-105 transition-transform"
           style={{ minWidth: '0' }}
         >
-          View Menu
+          Explore Menu
         </a>
       </section>
     </Layout>
