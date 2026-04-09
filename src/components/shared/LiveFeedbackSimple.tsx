@@ -31,8 +31,24 @@ export const LiveFeedbackSimple = () => {
     }
 
     setIsSubmitting(true);
-    
-    setTimeout(() => {
+
+    const submitFeedback = async () => {
+      try {
+        await fetch("/api/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: name.trim(),
+            message: feedback.trim(),
+            rating,
+          }),
+        });
+      } catch {
+        // Keep local flow even when API request fails.
+      }
+
       addFeedback(
         name,
         "General Feedback",
@@ -47,6 +63,10 @@ export const LiveFeedbackSimple = () => {
       setSubmitSuccess(true);
       
       setTimeout(() => setSubmitSuccess(false), 3000);
+    };
+
+    setTimeout(() => {
+      void submitFeedback();
     }, 300);
   };
 

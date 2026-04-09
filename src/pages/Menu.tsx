@@ -28,6 +28,31 @@ import {
   hasSelectedDietaryFilter,
 } from "@/lib/menu-filter-engine";
 
+type MenuApiResponse = {
+  ok?: boolean;
+  data?: unknown;
+  count?: unknown;
+};
+
+const isMenuItemArray = (value: unknown): value is MenuItem[] => {
+  if (!Array.isArray(value)) return false;
+
+  return value.every((item) => {
+    if (!item || typeof item !== "object") return false;
+    const candidate = item as Partial<MenuItem>;
+
+    return (
+      typeof candidate.id === "number" &&
+      typeof candidate.name === "string" &&
+      typeof candidate.category === "string" &&
+      typeof candidate.description === "string" &&
+      typeof candidate.image === "string" &&
+      Array.isArray(candidate.saucePairings) &&
+      Array.isArray(candidate.customizations)
+    );
+  });
+};
+
 
 
 // Type guard helpers
@@ -252,6 +277,7 @@ export default function MenuPage() {
   const navigate = useNavigate();
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
+  const [runtimeMenuItems, setRuntimeMenuItems] = useState<MenuItem[] | null>(null);
   // State declarations
     const [activeSidesTab, setActiveSidesTab] = useState<"carb" | "green">(() => parseInitialSideTab(location.search));
     const [activeCategory, setActiveCategory] = useState<string>(() => parseInitialCategory(location.search));
@@ -264,6 +290,43 @@ export default function MenuPage() {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState<Set<FilterId>>(() => parseInitialSelectedFilters(location.search));
   // ...removed sauceFilter state
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadMenuFromApi = async () => {
+      try {
+        const response = await fetch("/api/menu", {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+          },
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const payload = (await response.json()) as MenuApiResponse;
+        if (!isMenuItemArray(payload.data)) {
+          return;
+        }
+
+        setRuntimeMenuItems(payload.data);
+      } catch {
+        // Keep local bundled data when API fetch fails.
+      }
+    };
+
+    void loadMenuFromApi();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
+
+  const effectiveMenuItems = useMemo(() => runtimeMenuItems ?? menuItemsFlat, [runtimeMenuItems]);
 
   // Helper to clear filters
   const clearFilters = () => setSelectedFilters(new Set());
@@ -295,7 +358,7 @@ export default function MenuPage() {
   };
 
   // Side catalog pulled from existing menu items
-  const sidesCatalog = menuItemsFlat.filter((item) => item.category === "Sides");
+  const sidesCatalog = effectiveMenuItems.filter((item) => item.category === "Sides");
 
   // Find side details by name (case-insensitive)
   const findSide = (name: string) =>
@@ -379,8 +442,8 @@ export default function MenuPage() {
   const filterCounts = useMemo(() => {
     const categoryItems =
       activeCategory === "All"
-        ? menuItemsFlat
-        : menuItemsFlat.filter((item) => item.category === activeCategory);
+        ? effectiveMenuItems
+        : effectiveMenuItems.filter((item) => item.category === activeCategory);
 
     const counts: Partial<Record<FilterId, number>> = {};
     for (const id of allFilterIds) {
@@ -394,16 +457,16 @@ export default function MenuPage() {
       }).length;
     }
     return counts;
-  }, [activeCategory, selectedFilters]);
+  }, [activeCategory, selectedFilters, effectiveMenuItems]);
 
 
   const filteredItems = useMemo(() => {
     return filterMenuItems({
-      items: menuItemsFlat,
+      items: effectiveMenuItems,
       activeCategory,
       selectedFilters,
     });
-  }, [activeCategory, selectedFilters]);
+  }, [activeCategory, selectedFilters, effectiveMenuItems]);
 
 
   return (
