@@ -119,12 +119,12 @@ export const Header = () => {
               ))}
             </div>
 
-            {/* Order Button */}
+            {/* Catering Button */}
             <Link
-              to="/order"
+              to="/catering"
               className="hidden md:block btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-6"
             >
-              Order Now
+              Catering
             </Link>
 
             {/* Mobile Toggle */}
@@ -155,10 +155,10 @@ export const Header = () => {
                 </Link>
               ))}
               <Link
-                to="/order"
+                to="/catering"
                 className="btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-8 mt-2"
               >
-                Order Now
+                Catering
               </Link>
             </div>
           </div>
