@@ -63,16 +63,16 @@ const Blog = () => {
                   {/* Date and CTA */}
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">{post.date}</span>
-                    <button
-                      disabled
-                      className="inline-flex items-center gap-1 text-muted-foreground cursor-not-allowed text-sm font-sans group/link"
+                    <a
+                      href={`/blog/${post.id}`}
+                      className="inline-flex items-center gap-1 text-primary hover:underline text-sm font-sans group/link transition-colors"
                     >
                       Read More
                       <ArrowRight
                         size={16}
                         className="group-hover/link:translate-x-1 transition-transform"
                       />
-                    </button>
+                    </a>
                   </div>
                 </div>
               </article>
