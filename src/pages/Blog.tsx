@@ -30,17 +30,17 @@ const Blog = () => {
                 className="group rounded-lg overflow-hidden border border-primary/20 bg-black/40 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Image */}
-                <div className="relative h-48 overflow-hidden">
+                <a href={`/blog/${post.id}`} className="block relative h-48 overflow-hidden group/image">
                   <img
                     src={post.image}
                     alt={post.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover/image:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <span className="absolute bottom-3 left-3 inline-block px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-xs text-primary font-sans">
                     {post.category}
                   </span>
-                </div>
+                </a>
 
                 {/* Content */}
                 <div className="p-5 md:p-6">
