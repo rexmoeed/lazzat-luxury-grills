@@ -21,6 +21,7 @@ const BlogDetail = () => {
   }
 
   // Extract FAQ section from content
+  //FAQ
   const content = post.content;
   const faqIndex = content.indexOf('FAQs');
   let mainContent = content;
