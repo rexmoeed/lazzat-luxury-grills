@@ -20,6 +20,6 @@ export const blogPosts: BlogPost[] = [
     date: "April 20, 2026",
     category: "Lazzat Story",
     readTime: "8 min",
-    image: "/src/assets/Lazzat-Lavastone-Cooking.jpeg",
+    image: "/Lazzat-Lavastone-Cooking.jpeg",
   },
 ];
