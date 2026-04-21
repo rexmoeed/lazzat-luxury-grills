@@ -1,3 +1,4 @@
+import { next } from '@vercel/functions';
 type RateLimitEntry = {
   count: number;
   resetAt: number;
@@ -93,12 +94,6 @@ export default function middleware(request: Request) {
     }
   }
 
-  return new Response(null, {
-    status: 200,
-    headers: isApiRoute
-      ? {
-          "Cache-Control": "no-store, max-age=0",
-        }
-      : undefined,
-  });
+  // Use next() to continue the request chain for all non-blocked/rate-limited requests
+  return next();
 }
