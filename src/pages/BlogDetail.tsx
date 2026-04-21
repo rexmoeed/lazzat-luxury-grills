@@ -60,8 +60,33 @@ const BlogDetail = () => {
             <span>{post.category}</span>
             <span>{post.readTime}</span>
           </div>
-          <article className="prose prose-lg prose-invert max-w-none whitespace-pre-line mb-12">
-            {mainContent}
+          <article className="prose prose-lg prose-invert max-w-none mb-12">
+            {mainContent.split(/\n+/).map((line, idx) => {
+              const goldenHeadings = [
+                "Why We Chose Lavastone Cooking?",
+                "Reasons for Choosing the Lavastone Method Over Charcoal One?",
+                "How We Grill: Open Flame and Live Kitchen",
+                "A Table for Every Diet and Culture",
+                "Lazzat Delivers Speed and Freshness",
+                "Provides Fresh and Customizable Sauces",
+                "Takeaway and Delivery for Your Ease",
+                "Premium Taste and Suitable Prices",
+                "Built by a Team With Years of Experience"
+              ];
+              if (goldenHeadings.includes(line.trim())) {
+                return (
+                  <h2 key={idx} className="text-gradient-gold font-serif my-6 text-2xl md:text-3xl">
+                    {line.trim()}
+                  </h2>
+                );
+              }
+              if (line.trim() === "") return null;
+              return (
+                <p key={idx} className="mb-4">
+                  {line}
+                </p>
+              );
+            })}
           </article>
           {faqs.length > 0 && (
             <div className="mb-12">
