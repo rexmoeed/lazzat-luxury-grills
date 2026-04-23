@@ -113,6 +113,6 @@ export const blogPosts: BlogPost[] = [
     date: "April 23, 2026",
     category: "Lava Stone Grilling",
     readTime: "7 min",
-    image: "/src/assets/Lava-Stone-Grilling.jpeg",
+    image: "/Lava-Stone-Grilling.jpeg",
   },
 ];
