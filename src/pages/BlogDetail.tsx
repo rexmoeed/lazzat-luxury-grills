@@ -67,6 +67,7 @@ const BlogDetail = () => {
           <article className="prose prose-lg prose-invert max-w-none mb-12">
             {mainContent.split(/\n+/).map((line, idx) => {
               const goldenHeadings = [
+                // Blog 1 Headings
                 "Why We Chose Lavastone Cooking?",
                 "Reasons for Choosing the Lavastone Method Over Charcoal One?",
                 "How We Grill: Open Flame and Live Kitchen",
@@ -75,7 +76,16 @@ const BlogDetail = () => {
                 "Provides Fresh and Customizable Sauces",
                 "Takeaway and Delivery for Your Ease",
                 "Premium Taste and Suitable Prices",
-                "Built by a Team With Years of Experience"
+                "Built by a Team With Years of Experience",
+                // Blog 2 Headings
+                "Why Does Lazzat Use Lava Stone Over Charcoal Cooking?",
+                "Why Charcoal Cooking Means Unsteady Heat?",
+                "Lava Stone Grilling as a Steadier Cooking Surface",
+                "What Makes Lava Stone Different in Practice",
+                "Why Lava Stone Grilling Has Been Gaining Attention?",
+                "A Different Way of Thinking About Fire",
+                "Lava Stone Grilling and Why Lazzat Works With It",
+                "Conclusion"
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (

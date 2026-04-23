@@ -22,4 +22,97 @@ export const blogPosts: BlogPost[] = [
     readTime: "8 min",
     image: "/Lazzat-Lavastone-Cooking.jpeg",
   },
+  {
+    id: "2",
+    title: "Why Does Lazzat Use Lava Stone Over Charcoal Cooking?",
+    excerpt: "From flame to surface, Lazzat’s lava stone grills bring steadier heat, smoother timing, and a more consistent way to serve grilled dishes.",
+    content: `How Lava Stone Grilling Replaces Traditional Charcoal Cooking
+
+  Why Does Lazzat Use Lava Stone Over Charcoal Cooking?
+
+  Fire has always been at the center of cooking, but the way we use it has never stayed the same. Charcoal grilling built its reputation on raw heat and instinct. Lava stone grilling, on the other hand, shifts that same idea into something steadier, less about chasing flames, more about working with a surface that holds heat in place. This is exactly why Lazzat chose to go for lava stone instead of charcoal grilling.
+  Though both can’t really replace each other, lavastone is more subtle. But it changes how things run in the kitchen by making results steadier during service.
+
+  Why Charcoal Cooking Means Unsteady Heat?
+
+  Charcoal cooking has a kind of unpredictability built into it. Heat doesn’t stay the same across the grill. But it changes as the coals burn, with some spots running hotter than others. This heat changes its level depending mainly on airflow and coal placement.
+  That’s part of its identity, but it also means the cooking process is always slightly in motion.
+
+  What this usually looks like in practice:
+  Heat zones change as charcoal burns down
+  Food placement constantly affects the outcome
+  Timing relies heavily on experience and instinct
+  Smoke becomes part of the flavor environment
+  The fire needs frequent attention and adjustment
+  It’s a method that rewards intuition. But it also leaves very little room for repeatability unless the setup is tightly managed.
+
+  Lava Stone Grilling as a Steadier Cooking Surface
+
+  But if we talk about lava stone grilling, it works differently. Volcanic stones are heated first until they reach a steady, high heat, and the food is then cooked over them instead of directly on burning charcoal.
+  Once they’re fully heated, they don’t behave like fire. They behave like stored energy, steady, contained, and slow to change.
+  That shift alone changes how cooking feels in a kitchen.
+
+  What Makes Lava Stone Different in Practice
+
+  1. Heat behaves more predictably
+  Unlike charcoal, where heat is constantly shifting, lava stones hold temperature for longer periods. Once stabilized, they don’t fluctuate as aggressively, which makes cooking more controlled.
+
+  2. The cooking surface becomes the focus
+  With charcoal, the fire is the main actor. With lava stone, the surface becomes the tool. Food is placed directly on a heated base that doesn’t need constant adjustment.
+  This changes the rhythm of cooking from reactive to structured.
+
+  3. Less dependence on fire management
+  There’s still fire involved in heating the stones, but during cooking itself, the fire is no longer the variable being managed. That responsibility shifts away from the chef mid-process.
+
+  4. More consistent kitchen flow
+  In a busy kitchen, this matters a lot because the way heat behaves directly affects how smoothly service runs when multiple orders are coming in at the same time, and everything needs to stay aligned without constant stopping and readjusting.
+  You’re not stopping again and again to fix or adjust the heat
+  It’s easier to keep up when several orders are going out together
+  Dishes come out more similar instead of slightly different each time
+  The timing between items makes it easier to stay on track
+  less last-minute fixing during service
+
+  Why Lava Stone Grilling Has Been Gaining Attention?
+
+  The appeal of lava stone grilling is in its ability to have more control over food preparation. 
+  Charcoal cooking has always been valued for its character. But lava stone grilling is valued for its structure. Both are valid, but they serve different needs in a kitchen that’s trying to balance quick service, consistency, and technique at the same time.
+  In practice, lava stone tends to fit better where:
+  Multiple dishes are prepared at once
+  Timing consistency matters across orders
+  Kitchens want controlled heat behavior
+  Chefs prefer surface-based cooking stability
+
+  A Different Way of Thinking About Fire
+
+  What makes this comparison interesting is that both methods start from the same idea: cooking through heat. But they treat that heat differently.
+  Charcoal cooking treats fire as something you manage directly. Whereas Lava stone grilling treats fire as something you prepare in advance and then work with indirectly.
+  That shift might sound small, but in a kitchen environment, it changes how decisions are made second by second.
+
+  Lava Stone Grilling and Why Lazzat Works With It
+
+  At Lazzat, cooking has always been treated as something that sits between method and instinct. Not rushed, not overly engineered either. That balance is one of the reasons lava stone grilling became part of the kitchen setup in the first place; it gives enough steady heat to cook food properly, but it still keeps the grilled taste and feel intact.
+  Fire still sits at the center of it all. The difference is how it’s held, shaped, and used once the cooking begins.
+
+  Conclusion
+
+  Lava stone grilling doesn’t erase what charcoal cooking represents. It reframes it. Instead of working directly with shifting fire, it introduces a surface that holds heat in a more controlled way.
+  What changes most is not the idea of grilling itself, but the relationship between the cook and the heat. One is responsive and constantly moving. The other is steady and pre-conditioned.
+  Both belong in modern kitchens. They just answer different kinds of needs.
+
+  FAQs
+  Is lava stone grilling the same as charcoal grilling?
+  No. Both use heat, but charcoal grilling cooks directly over burning fuel, while lava stone grilling uses pre-heated volcanic stones as the cooking surface. The heat source is indirect during cooking in lava stone setups.
+  Does lava stone grilling completely remove smoke or flame?
+  Not entirely. Fire heats the stones first, then the stones do the cooking. During cooking, everything stays more contained and steady. So, flame doesn’t interact that much. 
+  Why would a kitchen prefer lava stone over charcoal?
+  It usually comes down to consistency and control. Lava stones hold heat more evenly, which helps reduce variation between dishes, especially when you have to maintain a quick service.
+  Does lava stone grilling change how food is cooked?
+  Yes, in terms of heat behavior. Since the surface stays more stable, cooking tends to be more uniform. However, the technique still depends on timing, placement, and ingredient handling.
+  `,
+    author: "Lazzat Team",
+    date: "April 23, 2026",
+    category: "Lava Stone Grilling",
+    readTime: "7 min",
+    image: "/src/assets/Lava-Stone-Grilling.jpeg",
+  },
 ];
