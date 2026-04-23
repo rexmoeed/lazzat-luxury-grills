@@ -3,10 +3,17 @@ import { useState, useMemo } from "react";
 import { X, Check, ChevronRight, Sparkles, Milk, Droplets } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+// ─── Asset imports (Vite glob) ─────────────────────────────────────────────────
+const imageModules = import.meta.glob("@/assets/*.{jpeg,jpg,png,webp}", { eager: true, query: '?url', import: 'default' });
+const img = (name: string): string => {
+  const key = Object.keys(imageModules).find(k => k.includes(`/${name}`));
+  return key ? (imageModules[key] as string) : "";
+};
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 type Base = { id: string; label: string; description: string; basePrice: number; dietary: string[] };
-type Fruit = { id: string; name: string; emoji: string; vitamins: string; calories: number; goesWith: string[]; notes?: string };
-type Flavor = { id: string; name: string; emoji: string; amount: string; calories: number; allergens: string[]; dietary: string[]; addPrice: number };
+type Fruit = { id: string; name: string; img: string; vitamins: string; calories: number; goesWith: string[]; notes?: string };
+type Flavor = { id: string; name: string; img: string; amount: string; calories: number; allergens: string[]; dietary: string[]; addPrice: number };
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 const BASES: Base[] = [
@@ -15,33 +22,35 @@ const BASES: Base[] = [
 ];
 
 const FRUITS: Fruit[] = [
-  { id: "mango",        name: "Mango",         emoji: "🥭", vitamins: "Vitamin A, C",             calories: 100, goesWith: ["Pineapple", "Coconut", "Peach"] },
-  { id: "strawberry",   name: "Strawberry",    emoji: "🍓", vitamins: "Vitamin C",                calories: 50,  goesWith: ["Banana", "Mango", "Chocolate"] },
-  { id: "banana",       name: "Banana",        emoji: "🍌", vitamins: "Potassium, B6",            calories: 70,  goesWith: ["PB", "Chocolate", "Dates"], notes: "Adds creaminess" },
-  { id: "pineapple",    name: "Pineapple",     emoji: "🍍", vitamins: "Vitamin C, Manganese",     calories: 80,  goesWith: ["Mango", "Coconut"] },
-  { id: "coconut",      name: "Coconut",       emoji: "🥥", vitamins: "Iron, Fiber",              calories: 80,  goesWith: ["Mango", "Pineapple"] },
-  { id: "mixed-berry",  name: "Mixed Berries", emoji: "🫐", vitamins: "Vitamin C, Antioxidants",  calories: 60,  goesWith: ["Banana", "Strawberry"] },
-  { id: "dragon-fruit", name: "Dragon Fruit",  emoji: "🐲", vitamins: "Vitamin C, Iron",          calories: 70,  goesWith: ["Mango", "Pineapple"] },
-  { id: "dark-cherry",  name: "Dark Cherry",   emoji: "🍒", vitamins: "Vitamin A, C, Melatonin",  calories: 70,  goesWith: ["Chocolate", "Banana"] },
-  { id: "watermelon",   name: "Watermelon",    emoji: "🍉", vitamins: "Vitamin A, C, Lycopene",   calories: 45,  goesWith: ["Mint", "Lime"] },
-  { id: "peach",        name: "Peach",         emoji: "🍑", vitamins: "Vitamin A, B3",            calories: 60,  goesWith: ["Mango", "Pineapple"] },
-  { id: "ginger",       name: "Ginger",        emoji: "🫚", vitamins: "Vitamin B6, Gingerol",     calories: 5,   goesWith: ["Mango", "Lemon"], notes: "Wellness boost" },
-  { id: "carrot",       name: "Carrot",        emoji: "🥕", vitamins: "Vitamin A (beta-carotene)",calories: 40,  goesWith: ["Ginger", "Mango"] },
-  { id: "spinach",      name: "Spinach",       emoji: "🥬", vitamins: "Iron, Vitamin K, Folate",  calories: 25,  goesWith: ["Mango", "Pineapple", "Banana"], notes: "Shake only" },
-  { id: "kale",         name: "Kale",          emoji: "🥦", vitamins: "Vitamin K, C, Calcium",    calories: 25,  goesWith: ["Ginger", "Carrot", "Banana"], notes: "Shake only" },
+  { id: "mango",        name: "Mango",         img: img("mango.jpeg"),        vitamins: "Vitamin A, C",             calories: 100, goesWith: ["Pineapple", "Coconut", "Peach"] },
+  { id: "strawberry",   name: "Strawberry",    img: img("strawberry.jpeg"),   vitamins: "Vitamin C",                calories: 50,  goesWith: ["Banana", "Mango", "Chocolate"] },
+  { id: "banana",       name: "Banana",        img: img("banana.jpeg"),       vitamins: "Potassium, B6",            calories: 70,  goesWith: ["PB", "Chocolate", "Dates"], notes: "Adds creaminess" },
+  { id: "pineapple",    name: "Pineapple",     img: img("pineapple.jpeg"),    vitamins: "Vitamin C, Manganese",     calories: 80,  goesWith: ["Mango", "Coconut"] },
+  { id: "coconut",      name: "Coconut",       img: img("coconut.jpeg"),      vitamins: "Iron, Fiber",              calories: 80,  goesWith: ["Mango", "Pineapple"] },
+  { id: "mixed-berry",  name: "Mixed Berries", img: img("mixed-berries.jpeg"),vitamins: "Vitamin C, Antioxidants",  calories: 60,  goesWith: ["Banana", "Strawberry"] },
+  { id: "dragon-fruit", name: "Dragon Fruit",  img: img("dragon-fruit.jpeg"), vitamins: "Vitamin C, Iron",          calories: 70,  goesWith: ["Mango", "Pineapple"] },
+  { id: "dark-cherry",  name: "Dark Cherry",   img: img("dark-cherry.jpeg"),  vitamins: "Vitamin A, C, Melatonin",  calories: 70,  goesWith: ["Chocolate", "Banana"] },
+  { id: "watermelon",   name: "Watermelon",    img: img("watermelon.jpeg"),   vitamins: "Vitamin A, C, Lycopene",   calories: 45,  goesWith: ["Mint", "Lime"] },
+  { id: "peach",        name: "Peach",         img: img("peach.jpeg"),        vitamins: "Vitamin A, B3",            calories: 60,  goesWith: ["Mango", "Pineapple"] },
+  { id: "lychee",       name: "Lychee",        img: img("lychee.jpeg"),       vitamins: "Vitamin C, B6, Copper",    calories: 65,  goesWith: ["Coconut", "Mango", "Pineapple"] },
+  { id: "ginger",       name: "Ginger",        img: img("ginger.jpeg"),       vitamins: "Vitamin B6, Gingerol",     calories: 5,   goesWith: ["Mango", "Lemon"], notes: "Wellness boost" },
+  { id: "carrot",       name: "Carrot",        img: img("carrot.jpeg"),       vitamins: "Vitamin A (beta-carotene)",calories: 40,  goesWith: ["Ginger", "Mango"] },
+  { id: "spinach",      name: "Spinach",       img: img("spinach.jpeg"),      vitamins: "Iron, Vitamin K, Folate",  calories: 25,  goesWith: ["Mango", "Pineapple", "Banana"], notes: "Shake only" },
+  { id: "kale",         name: "Kale",          img: img("kale.jpeg"),         vitamins: "Vitamin K, C, Calcium",    calories: 25,  goesWith: ["Ginger", "Carrot", "Banana"], notes: "Shake only" },
 ];
 
 const FLAVORS: Flavor[] = [
-  { id: "chocolate",    name: "Chocolate",     emoji: "🍫", amount: "40ml", calories: 120, allergens: ["Soy"],       dietary: ["Veg", "GF"],   addPrice: 0.99 },
-  { id: "biscoff",      name: "Biscoff",       emoji: "🍪", amount: "30g",  calories: 150, allergens: ["Wheat"],     dietary: ["Veg"],          addPrice: 1.49 },
-  { id: "hazelnut",     name: "Hazelnut",      emoji: "🌰", amount: "35g",  calories: 180, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 1.29 },
-  { id: "pistachio",    name: "Pistachio",     emoji: "🫘", amount: "35g",  calories: 175, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 1.49 },
-  { id: "dates",        name: "Dates",         emoji: "🌴", amount: "30g",  calories: 130, allergens: [],            dietary: ["Veg", "GF"],   addPrice: 0.79 },
-  { id: "almond",       name: "Almond",        emoji: "🥜", amount: "20g",  calories: 140, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 0.99 },
-  { id: "peanut-butter",name: "Peanut Butter", emoji: "🥜", amount: "30g",  calories: 190, allergens: ["Peanuts"],   dietary: ["Veg", "GF"],   addPrice: 0.99 },
-  { id: "rose",         name: "Rose",          emoji: "🌹", amount: "15g",  calories: 40,  allergens: [],            dietary: ["Vegan", "GF"], addPrice: 0.79 },
-  { id: "espresso",     name: "Espresso",      emoji: "☕", amount: "60ml", calories: 10,  allergens: [],            dietary: ["Vegan", "GF"], addPrice: 0.99 },
-  { id: "blue-spirulina",name:"Blue Spirulina",emoji: "💙", amount: "1.5g", calories: 5,   allergens: [],            dietary: ["Vegan", "GF"], addPrice: 1.29 },
+  { id: "chocolate",    name: "Chocolate",     img: img("chocolate.jpeg"),      amount: "40ml", calories: 120, allergens: ["Soy"],       dietary: ["Veg", "GF"],   addPrice: 0.99 },
+  { id: "biscoff",      name: "Biscoff",       img: img("biscoff.jpeg"),        amount: "30g",  calories: 150, allergens: ["Wheat"],     dietary: ["Veg"],          addPrice: 1.49 },
+  { id: "hazelnut",     name: "Hazelnut",      img: img("nutella.jpeg"),        amount: "35g",  calories: 180, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 1.29 },
+  { id: "pistachio",    name: "Pistachio",     img: img("pistachios.jpeg"),     amount: "35g",  calories: 175, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 1.49 },
+  { id: "dates",        name: "Dates",         img: img("dates.jpeg"),          amount: "30g",  calories: 130, allergens: [],            dietary: ["Veg", "GF"],   addPrice: 0.79 },
+  { id: "almond",       name: "Almond",        img: img("almonds.jpeg"),        amount: "20g",  calories: 140, allergens: ["Tree-Nuts"], dietary: ["Veg", "GF"],   addPrice: 0.99 },
+  { id: "peanut-butter",name: "Peanut Butter", img: img("peanut-butter.jpeg"),  amount: "30g",  calories: 190, allergens: ["Peanuts"],   dietary: ["Veg", "GF"],   addPrice: 0.99 },
+  { id: "honey",        name: "Honey",         img: img("honey.jpeg"),          amount: "15g",  calories: 60,  allergens: [],            dietary: ["Veg", "GF"],   addPrice: 0.79 },
+  { id: "rose",         name: "Rose",          img: img("rose.jpeg"),           amount: "25ml", calories: 40,  allergens: [],            dietary: ["Vegan", "GF"], addPrice: 0.79 },
+  { id: "espresso",     name: "Espresso",      img: img("espresso.jpeg"),       amount: "60ml", calories: 10,  allergens: [],            dietary: ["Vegan", "GF"], addPrice: 0.99 },
+  { id: "blue-spirulina",name:"Blue Spirulina",img: img("blue-spirulina.jpeg"), amount: "1.5g", calories: 5,   allergens: [],            dietary: ["Vegan", "GF"], addPrice: 1.29 },
 ];
 
 const MAX_FRUITS = 3;
@@ -71,6 +80,17 @@ function DietaryBadge({ label }: { label: string }) {
 
 function AllergenBadge({ label }: { label: string }) {
   return <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20 uppercase tracking-wide">{label}</span>;
+}
+
+function ItemImage({ src, alt, className }: { src: string; alt: string; className?: string }) {
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={cn("object-cover rounded-lg shrink-0", className)}
+      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+    />
+  );
 }
 
 // ─── Main Export ──────────────────────────────────────────────────────────────
@@ -227,12 +247,12 @@ export function BuildYourShake() {
                           onClick={() => !disabled && toggleFruit(f.id)}
                           disabled={disabled}
                           className={cn(
-                            cardBase, "p-4 w-full",
+                            cardBase, "p-4 w-full text-center",
                             active ? cardActive : disabled ? "border-primary/10 bg-secondary/20 opacity-40 cursor-not-allowed" : cardInactive
                           )}
                         >
-                          <div className="flex items-start justify-between mb-2">
-                            <span className="text-2xl">{f.emoji}</span>
+                          <div className="flex flex-col items-center text-center mb-3">
+                            <ItemImage src={f.img} alt={f.name} className="w-24 h-24" />
                             {active && (
                               <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center shrink-0">
                                 <Check size={11} className="text-primary-foreground" />
@@ -277,7 +297,9 @@ export function BuildYourShake() {
                         className={cn(cardBase, "p-4 w-full", selectedFlavor === null ? cardActive : cardInactive)}
                       >
                         <div className="flex items-center gap-3">
-                          <span className="text-2xl">🚫</span>
+                          <div className="w-24 h-24 rounded-lg bg-secondary/60 border border-primary/15 flex items-center justify-center shrink-0">
+                            <X size={18} className="text-muted-foreground" />
+                          </div>
                           <div>
                             <p className="font-semibold text-sm text-foreground">No Extra Flavor</p>
                             <p className="text-[11px] text-muted-foreground">Keep it pure fruit</p>
@@ -299,7 +321,7 @@ export function BuildYourShake() {
                           >
                             <div className="flex items-start justify-between mb-2">
                               <div className="flex items-center gap-2">
-                                <span className="text-xl">{fl.emoji}</span>
+                                <ItemImage src={fl.img} alt={fl.name} className="w-24 h-24" />
                                 <div>
                                   <p className="font-semibold text-sm text-foreground">{fl.name}</p>
                                   <p className="text-[11px] text-muted-foreground">{fl.amount} · {fl.calories} cal</p>
@@ -350,7 +372,7 @@ export function BuildYourShake() {
                           <div className="flex flex-wrap gap-2">
                             {fruits.map(f => (
                               <span key={f.id} className="flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-full bg-secondary border border-primary/20">
-                                <span>{f.emoji}</span>
+                                <ItemImage src={f.img} alt={f.name} className="w-5 h-5 rounded-full" />
                                 <span className="text-foreground">{f.name}</span>
                                 <span className="text-muted-foreground text-xs">{f.calories}cal</span>
                               </span>
@@ -363,7 +385,7 @@ export function BuildYourShake() {
                         <div>
                           <p className="text-xs uppercase tracking-wider text-muted-foreground mb-1.5">Indulgent Flavor</p>
                           <div className="flex items-center gap-2">
-                            <span>{flavor.emoji}</span>
+                            <ItemImage src={flavor.img} alt={flavor.name} className="w-6 h-6 rounded-md" />
                             <span className="text-sm font-semibold text-foreground">{flavor.name}</span>
                             <span className="text-xs text-muted-foreground">({flavor.amount})</span>
                             <span className="text-xs text-primary ml-auto">+${flavor.addPrice.toFixed(2)}</span>
