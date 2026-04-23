@@ -620,13 +620,93 @@ export default function MenuPage() {
                     )}
                     {/* ...removed Sauces Filter Dropdown */}
                     {/* Grid for Sides or other single category */}
-                    <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
-                      {(activeCategory === "Sides"
-                        ? hasDietarySelection
-                          ? filteredItems
-                          : filteredItems.filter((item) => item.sideType === activeSidesTab)
-                        : filteredItems
-                      ).map((item) => (
+{activeCategory === "Shakes & Juices" ? (
+  (() => {
+    const subCategories = ["Signature Shakes", "Popular Fruit Blends"];
+    return (
+      <div className="space-y-12">
+        {subCategories.map((sub) => {
+          const subItems = filteredItems.filter(
+            (item) => item.subCategory === sub
+          );
+          if (subItems.length === 0) return null;
+          return (
+            <div key={sub}>
+              <div className="mb-6">
+                <h3 className="font-serif text-2xl text-foreground">{sub}</h3>
+                <div className="gold-divider w-10 mt-2" />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {subItems.map((item) => (
+                  <div
+                    key={item.id}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View details for ${item.name}`}
+                    onClick={() => setModalStack([item])}
+                    onKeyDown={(e) =>
+                      (e.key === "Enter" || e.key === " ") &&
+                      setModalStack([item])
+                    }
+                    className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    {item.image && (
+                      <div className="relative aspect-[4/3] overflow-hidden">
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                        <div className="absolute top-4 left-4 flex gap-2">
+                          {item.isNew && (
+                            <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">
+                              New
+                            </span>
+                          )}
+                          {item.isPopular && (
+                            <span className="bg-foreground text-background text-xs px-3 py-1 rounded">
+                              Popular
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                    <div className="p-6">
+                      <div className="flex items-start justify-between gap-2">
+                        <h3 className="font-serif text-xl group-hover:text-primary transition-colors">
+                          {item.name}
+                        </h3>
+                        {typeof item.price === "number" && (
+                          <span className="text-primary font-semibold text-sm shrink-0 mt-1">
+                            ${item.price.toFixed(2)}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                        {item.description}
+                      </p>
+                      <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+                        {item.subCategory}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  })()
+) : (
+<div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
+  {(activeCategory === "Sides"
+    ? hasDietarySelection
+      ? filteredItems
+      : filteredItems.filter((item) => item.sideType === activeSidesTab)
+    : filteredItems
+  ).map((item) => (
                         <div
                           key={item.id}
                           tabIndex={0}
@@ -655,7 +735,14 @@ export default function MenuPage() {
                             </div>
                           )}
                           <div className="p-6">
-                            <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                            <div className="flex items-start justify-between gap-2">
+                              <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                              {typeof item.price === "number" && (
+                                <span className="text-primary font-semibold text-sm shrink-0 mt-1">
+                                  ${item.price.toFixed(2)}
+                                </span>
+                              )}
+                            </div>
                             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                             <div className="mt-3 text-xs text-primary uppercase tracking-wider">
                               {item.category}
@@ -665,6 +752,7 @@ export default function MenuPage() {
                         </div>
                       ))}
                     </div>
+                    )}
                     {/* No items found */}
                     {filteredItems.length === 0 && (
                       <div className="text-center py-16">
@@ -711,7 +799,14 @@ export default function MenuPage() {
                                   </div>
                                 </div>
                                 <div className="p-6">
-                                  <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                                  <div className="flex items-start justify-between gap-2">
+                                    <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+                                    {typeof item.price === "number" && (
+                                      <span className="text-primary font-semibold text-sm shrink-0 mt-1">
+                                        ${item.price.toFixed(2)}
+                                      </span>
+                                    )}
+                                  </div>
                                   <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                                   <div className="mt-3 text-xs text-primary uppercase tracking-wider">
                                     {item.category}

@@ -1,8 +1,10 @@
 
+
 import { useParams, useNavigate } from "react-router-dom";
 import { blogPosts } from "@/lib/blog-data";
 import { Layout } from "@/components/layout/Layout";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
+
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -19,6 +21,8 @@ const BlogDetail = () => {
       </Layout>
     );
   }
+
+
 
   // Extract FAQ section from content
   //FAQ
