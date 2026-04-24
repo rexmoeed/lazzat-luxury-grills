@@ -646,9 +646,7 @@ export default function MenuPage() {
         <div className="p-6">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-            {typeof item.price === "number" && (
-              <span className="text-primary font-semibold text-sm shrink-0 mt-1">${item.price.toFixed(2)}</span>
-            )}
+            {/* Price hidden */}
           </div>
           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
           <div className="mt-3 text-xs text-primary uppercase tracking-wider">{item.subCategory}</div>
@@ -730,11 +728,7 @@ export default function MenuPage() {
                           <div className="p-6">
                             <div className="flex items-start justify-between gap-2">
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                              {typeof item.price === "number" && (
-                                <span className="text-primary font-semibold text-sm shrink-0 mt-1">
-                                  ${item.price.toFixed(2)}
-                                </span>
-                              )}
+                              {/* Price hidden */}
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                             <div className="mt-3 text-xs text-primary uppercase tracking-wider">
@@ -794,11 +788,7 @@ export default function MenuPage() {
                                 <div className="p-6">
                                   <div className="flex items-start justify-between gap-2">
                                     <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                                    {typeof item.price === "number" && (
-                                      <span className="text-primary font-semibold text-sm shrink-0 mt-1">
-                                        ${item.price.toFixed(2)}
-                                      </span>
-                                    )}
+                                    {/* Price hidden */}
                                   </div>
                                   <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                                   <div className="mt-3 text-xs text-primary uppercase tracking-wider">
@@ -989,11 +979,7 @@ export default function MenuPage() {
                                             <div className="flex-1 min-w-0">
                                               <div className="flex items-center justify-between gap-2 mb-1">
                                                 <span className="text-sm font-semibold truncate">{side.name}</span>
-                                                {typeof side.price === "number" && (
-                                                  <span className="text-xs font-semibold text-primary">
-                                                    ${side.price.toFixed(2)}
-                                                  </span>
-                                                )}
+                                                {/* Price hidden */}
                                               </div>
                                               <p className="text-xs text-muted-foreground line-clamp-2">
                                                 {side.description}

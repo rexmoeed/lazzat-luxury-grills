@@ -217,7 +217,7 @@ export function BuildYourShake() {
                               <p className="text-xs text-muted-foreground">{b.description}</p>
                             </div>
                           </div>
-                          <span className="text-primary font-bold text-lg shrink-0">${b.basePrice.toFixed(2)}</span>
+                          {/* Price hidden */}
                         </div>
                         <div className="flex flex-wrap gap-1.5">
                           {b.dietary.map(d => <DietaryBadge key={d} label={d} />)}
@@ -327,7 +327,7 @@ export function BuildYourShake() {
                                   <p className="text-[11px] text-muted-foreground">{fl.amount} · {fl.calories} cal</p>
                                 </div>
                               </div>
-                              <span className="text-primary text-xs font-semibold shrink-0">+${fl.addPrice.toFixed(2)}</span>
+                              {/* Price hidden */}
                             </div>
                             <div className="flex flex-wrap gap-1">
                               {fl.allergens.map(a => <AllergenBadge key={a} label={a} />)}
@@ -353,7 +353,7 @@ export function BuildYourShake() {
                   <div className="rounded-2xl border border-primary/25 bg-secondary/40 overflow-hidden mb-6">
                     <div className="bg-primary/10 border-b border-primary/20 px-5 py-3 flex items-center justify-between">
                       <span className="text-xs uppercase tracking-widest text-primary">Total Price</span>
-                      <span className="font-serif text-2xl text-primary">${totalPrice.toFixed(2)}</span>
+                      {/* Price hidden */}
                     </div>
                     <div className="p-5 space-y-4">
                       {/* Base */}
@@ -362,7 +362,7 @@ export function BuildYourShake() {
                         <div className="flex items-center gap-2">
                           {base?.id === "milk" ? <Milk size={16} className="text-primary" /> : <Droplets size={16} className="text-primary" />}
                           <span className="text-sm font-semibold text-foreground">{base?.label}</span>
-                          <span className="text-xs text-primary ml-auto">${base?.basePrice.toFixed(2)}</span>
+                          {/* Price hidden */}
                         </div>
                       </div>
                       {/* Fruits */}
@@ -388,7 +388,7 @@ export function BuildYourShake() {
                             <ItemImage src={flavor.img} alt={flavor.name} className="w-6 h-6 rounded-md" />
                             <span className="text-sm font-semibold text-foreground">{flavor.name}</span>
                             <span className="text-xs text-muted-foreground">({flavor.amount})</span>
-                            <span className="text-xs text-primary ml-auto">+${flavor.addPrice.toFixed(2)}</span>
+                            {/* Price hidden */}
                           </div>
                         </div>
                       )}
@@ -444,9 +444,7 @@ export function BuildYourShake() {
                   Cancel
                 </button>
               )}
-              {selectedBase && (
-                <span className="text-sm text-primary font-semibold ml-auto mr-2">${totalPrice.toFixed(2)}</span>
-              )}
+              {/* Price hidden */}
               {step < 4 ? (
                 <button
                   onClick={() => setStep(s => s + 1)}
