@@ -35,7 +35,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       saucePairings: ["BBQ sauce", "Spicy tomato sauce", "Sweet and spicy"],
       customizations: ["Extra Herb", "Half Portion"],
       allergens: ["milk"],
-      dietary: ["gluten-free", "dairy-free", "nut-free"],
+      dietary: ["gluten-free", "nut-free"],
       sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
@@ -49,7 +49,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       saucePairings: ["Mint sauce", "BBQ sauce", "Sweet and spicy"],
       customizations: ["Extra Herb", "Boneless"],
       allergens: ["milk"],
-      dietary: ["gluten-free", "dairy-free", "nut-free"],
+      dietary: ["gluten-free", "nut-free"],
       sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
