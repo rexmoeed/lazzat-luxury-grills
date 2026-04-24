@@ -14,7 +14,7 @@ import AllergenInfo from "@/components/shared/AllergenInfo";
 import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";
 import { Layout } from "@/components/layout/Layout";
-import { Flame, X, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Flame, X, Filter, ChevronLeft, ChevronRight, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   menuItemsFlat,
@@ -66,9 +66,9 @@ function isSauceItem(item: unknown): item is SauceItem {
 
 // Category headings data (needed by CategoryHeading component)
 const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
-  "Grills & Skewers": {
-    title: "Grills & Skewers",
-    subtitle: "Charcoal grilled meats and skewers."
+  "Protein Cube Skewer Platter": {
+    title: "Protein Cube Skewer Platter",
+    subtitle: "Charcoal grilled protein cubes served with rice and salad."
   },
   "Döner": {
     title: "Döner",
@@ -367,7 +367,7 @@ export default function MenuPage() {
 
   // Fallback side pairings by category when an item does not define its own
   const defaultSidePairingsByCategory: Record<string, string[]> = {
-    "Grills & Skewers": [
+    "Protein Cube Skewer Platter": [
       "Crispy Fries",
       "Side Salad",
       "Classic Butter Naan",
@@ -390,11 +390,7 @@ export default function MenuPage() {
 
   const categories = [
     "All",
-    "Grills & Skewers",
-    "Döner",
-    "Wraps",
-    "Biryani",
-    "Sajji",
+    "Protein Cube Skewer Platter",
     "Desserts",
     "Salads",
     "Shakes & Juices",
@@ -581,6 +577,15 @@ export default function MenuPage() {
                       <Filter size={16} className="text-primary" />
                       Open Panel
                     </button>
+                    <a
+                      href="/allergenguide"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 bg-secondary/80 backdrop-blur px-5 py-2.5 text-sm font-medium rounded-full border border-primary/30 hover:border-primary hover:bg-primary/10 transition-all"
+                    >
+                      <Info size={16} className="text-primary" />
+                      Allergen Guide
+                    </a>
                   </div>
                 </div>
               </div>
@@ -915,7 +920,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Side Pairings Section */}
-                                {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
+                                {sideRecommendations.length > 0 && ["Protein Cube Skewer Platter"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Salads
@@ -964,7 +969,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Sauce Pairings Section */}
-                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
+                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Protein Cube Skewer Platter"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Sauces
@@ -1013,7 +1018,7 @@ export default function MenuPage() {
                                 )}
                                 {/* Seasonings Section */}
                                 {spices && spices.length > 0 && selectedItem && (() => {
-                                  // Show for Sides (not rice/naan), Grills & Skewers, Döner, Wraps
+                                  // Show for Sides (not rice/naan), Protein Cube Skewer Platter
                                   const cat = selectedItem.category;
                                   const name = selectedItem.name.toLowerCase();
                                   const isRice = name.includes("rice");
@@ -1040,7 +1045,7 @@ export default function MenuPage() {
                                           : name.includes("salad") || name.includes("vegetable")
                                             ? spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name))
                                             : spices.filter(s => s.level <= 3).slice(0, 3)
-                                      : cat === "Grills & Skewers"
+                                      : cat === "Protein Cube Skewer Platter"
                                         ? spices.filter(s => [
                                             "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
                                           ].includes(s.name))

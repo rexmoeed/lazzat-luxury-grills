@@ -7,7 +7,7 @@ export type Allergen =
   | "peanuts"
   | "soy"
   | "sesame"
-  | "shellfish"
+  // | "shellfish"
   | "fish"
   | "mustard";
 

@@ -9,7 +9,7 @@ const allergenDescriptions: Record<string, string> = {
   peanuts: "Contains peanuts or peanut products.",
   soy: "Contains soy or soy products.",
   sesame: "Contains sesame seeds or oil.",
-  shellfish: "Contains shellfish (shrimp, crab, etc.).",
+  // shellfish: "Contains shellfish (shrimp, crab, etc.).",
   fish: "Contains fish or fish products.",
   mustard: "Contains mustard or mustard products."
 };

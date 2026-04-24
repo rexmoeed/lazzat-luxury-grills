@@ -3,46 +3,27 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { menuItemsFlat } from "@/lib/menu-data";
-import { sauces } from "@/lib/sauces-data";
+// import { sauces } from "@/lib/sauces-data";
+
 
 export const FeaturedItems = () => {
-  // Get first available from each category
-  const grillsBiryaniSajji = menuItemsFlat.find((item) => ["Grills & Skewers", "Biryani", "Sajji"].includes(item.category));
-  const wrap = menuItemsFlat.find((item) => item.category === "Wraps");
-  const seekhKebab = menuItemsFlat.find((item) => item.name.toLowerCase().includes("seekh"));
-  const dessert = menuItemsFlat.find((item) => item.category === "Desserts");
-  const sauce = sauces[0];
-
-  const cards = [
-    grillsBiryaniSajji && {
-      title: "Grills · Biryani · Sajji",
-      name: grillsBiryaniSajji.name,
-      image: grillsBiryaniSajji.image,
-      accent: grillsBiryaniSajji.category,
-      description: grillsBiryaniSajji.description,
-    },
-    wrap && {
-      title: "Wraps",
-      name: wrap.name,
-      image: wrap.image,
-      accent: wrap.category,
-      description: wrap.description,
-    },
-    seekhKebab && {
-      title: "Seekh Kebab",
-      name: seekhKebab.name,
-      image: seekhKebab.image,
-      accent: seekhKebab.category,
-      description: seekhKebab.description,
-    },
-    sauce && {
-      title: "Signature Sauces",
-      name: sauce.name,
-      image: sauce.image,
-      accent: `Level ${sauce.level}`,
-      description: sauce.description,
-    },
-  ].filter(Boolean);
+  // Only show updated menu items (Protein Cube Skewer Platter, Desserts, Salads, Shakes & Juices)
+  const categoriesToShow = [
+    "Protein Cube Skewer Platter",
+    "Desserts",
+    "Salads",
+    "Shakes & Juices"
+  ];
+  const cards = menuItemsFlat
+    .filter(item => categoriesToShow.includes(item.category))
+    .slice(0, 4)
+    .map(item => ({
+      title: item.category,
+      name: item.name,
+      image: item.image,
+      accent: item.category,
+      description: item.description,
+    }));
 
   const navigate = useNavigate();
 

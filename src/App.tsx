@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import Blog from "./pages/Blog";
 import { Toaster } from "@/components/ui/toaster";
@@ -7,6 +8,7 @@ import { RouteLoader } from "@/components/shared/RouteLoader";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+const AllergenGuide = lazy(() => import("./pages/AllergenGuide"));
 const Index = lazy(() => import("./pages/Index"));
 const Menu = lazy(() => import("./pages/Menu"));
 const About = lazy(() => import("./pages/About"));
@@ -49,6 +51,7 @@ const App = () => (
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
 
+            <Route path="/allergenguide" element={<AllergenGuide />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

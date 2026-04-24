@@ -21,15 +21,14 @@ export const deriveDietary = (item: MenuItem): DietaryFlag[] => {
     if (
       itemHasAllergen(item, "milk") ||
       itemHasAllergen(item, "eggs") ||
-      itemHasAllergen(item, "fish") ||
-      itemHasAllergen(item, "shellfish")
+      itemHasAllergen(item, "fish")
     ) {
       flags.delete("vegan");
     }
   }
 
   if (flags.has("vegetarian")) {
-    if (itemHasAllergen(item, "fish") || itemHasAllergen(item, "shellfish")) {
+    if (itemHasAllergen(item, "fish")) {
       flags.delete("vegetarian");
     }
   }

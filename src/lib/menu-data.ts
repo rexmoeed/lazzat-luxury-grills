@@ -11,12 +11,8 @@ import { donerItems } from "./doner-data";
 import { wrapsItems } from "./wraps-data";
 
 /* Grouped Menu data */
-export const menuItemsGrouped: Record<string, Record<string, MenuItem[]>> = {
-  "Grills & Skewers": grillsAndSkewers,
-  "Wraps": wrapsItems,
-  "Biryani": biryaniItems,
-  "Sajji": sajjiItems,
-  "Döner": donerItems,
+export const menuItemsGrouped: Record<string, Record<string, MenuItem[]> | MenuItem[]> = {
+  "Protein Cube Skewer Platter": grillsAndSkewers,
   "Desserts": desserts,
   "Shakes & Juices": shakesAndJuices,
   "Sides": sidesItems,
