@@ -896,7 +896,7 @@ export default function MenuPage() {
                                 {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
                                   <div className="mb-6 pb-6 border-b border-primary/10">
                                     <div
-                                      className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
+                                      className="flex flex-col gap-1 rounded-xl border border-[#3a2a1a] px-3 py-2 shadow-inner"
                                       style={{
                                         background: 'rgba(35, 24, 15, 0.35)',
                                         width: '260px',
@@ -904,18 +904,53 @@ export default function MenuPage() {
                                         maxWidth: '260px',
                                       }}
                                     >
-                                      <span className="text-xs font-semibold text-white mr-2">
-                                        {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
+                                      <span className="text-xs font-semibold text-white mb-1">
+                                        {selectedItem.allergens.length === 1 ? 'This menu item contains:' : 'This menu item contains:'}
                                       </span>
-                                      {selectedItem.allergens.map((a) => {
-                                        const Icon = allergenIconMap[a]?.icon;
-                                        if (!Icon) return null;
-                                        return (
-                                          <span key={a} className="flex items-center text-xs">
-                                            <Icon size={18} className="text-red-500" />
-                                          </span>
-                                        );
-                                      })}
+                                      <div className="flex flex-wrap gap-2">
+                                        {selectedItem.allergens.map((a) => {
+                                          const Icon = allergenIconMap[a]?.icon;
+                                          if (!Icon) return null;
+                                          return (
+                                            <span key={a} className="flex items-center text-xs gap-1">
+                                              <Icon size={18} className="text-red-500" />
+                                              <span>{allergenIconMap[a]?.label}</span>
+                                            </span>
+                                          );
+                                        })}
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
+
+                                {/* Dietary flags for menu item */}
+                                {Array.isArray(selectedItem.dietary) && selectedItem.dietary.length > 0 && (
+                                  <div className="mb-6 pb-6 border-b border-primary/10">
+                                    <div
+                                      className="flex flex-col gap-1 rounded-xl border border-[#1a3a1a] px-3 py-2 shadow-inner"
+                                      style={{
+                                        background: 'rgba(24, 35, 15, 0.25)',
+                                        width: '260px',
+                                        minWidth: '260px',
+                                        maxWidth: '260px',
+                                      }}
+                                    >
+                                      <span className="text-xs font-semibold text-white mb-1">
+                                        Dietary:
+                                      </span>
+                                      <div className="flex flex-wrap gap-2">
+                                        {selectedItem.dietary.map((d) => {
+                                          const filter = dietaryFilters.find(f => f.id === d);
+                                          if (!filter) return null;
+                                          let iconColor = "text-primary";
+                                          if (d === "vegan" || d === "vegetarian") iconColor = "text-green-500";
+                                          return (
+                                            <span key={d} className="flex items-center text-xs gap-1">
+                                              <span className={iconColor + " font-bold"}>{filter.label}</span>
+                                            </span>
+                                          );
+                                        })}
+                                      </div>
                                     </div>
                                   </div>
                                 )}
@@ -956,7 +991,6 @@ export default function MenuPage() {
                                             <div className="flex-1 min-w-0">
                                               <div className="flex items-center justify-between gap-2 mb-1">
                                                 <span className="text-sm font-semibold truncate">{side.name}</span>
-                                                {/* Price hidden */}
                                               </div>
                                               <p className="text-xs text-muted-foreground line-clamp-2">
                                                 {side.description}
