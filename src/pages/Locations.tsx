@@ -19,9 +19,11 @@ const locations = branchLocations;
    Helpers
 ===================== */
 const isLocationOpen = (hours: typeof locations[0]['hours']) => {
+  // Always use Canada Eastern Time (Toronto)
   const now = new Date();
-  const day = now.getDay(); // 0 = Sunday
-  const currentTime = now.getHours() * 60 + now.getMinutes();
+  const torontoNow = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
+  const day = torontoNow.getDay(); // 0 = Sunday
+  const currentTime = torontoNow.getHours() * 60 + torontoNow.getMinutes();
 
   const hoursString =
     day === 0
