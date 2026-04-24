@@ -32,6 +32,7 @@ export const sajjiItems: Record<string, MenuItem[]> = {
 
       allergens: ["milk"], // possible butter / raita pairing /ghee
       dietary: ["gluten-free", "nut-free"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
 };

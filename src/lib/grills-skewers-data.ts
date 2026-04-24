@@ -32,6 +32,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       customizations: ["Extra Char", "Boneless"],
       allergens: ["milk"], // yogurt / cream-based marinade
       dietary: ["gluten-free", "nut-free"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 4,
@@ -52,6 +53,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       customizations: ["Add Cheese", "Boneless"],
       allergens: ["milk"], // dairy binding / optional cheese
       dietary: ["gluten-free", "nut-free"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
 
@@ -75,6 +77,7 @@ export const grillsAndSkewers: Record<string, MenuItem[]> = {
       customizations: ["Extra Herb", "Half Portion"],
       allergens: [], // no major allergens in base preparation
       dietary: ["gluten-free", "dairy-free", "nut-free"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 5,

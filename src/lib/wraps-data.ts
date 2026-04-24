@@ -22,7 +22,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Sauce", "No Onions"],
       allergens: ["gluten"],
       dietary: ["dairy-free", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 402,
@@ -40,7 +40,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       customizations: ["No Cheese", "Extra Veggies"],
       allergens: ["gluten", "milk"],
       dietary: ["vegetarian", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 403,
@@ -58,7 +58,7 @@ export const wrapsItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Sauce", "No Tomato"],
       allergens: ["gluten"],
       dietary: ["dairy-free", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
 };

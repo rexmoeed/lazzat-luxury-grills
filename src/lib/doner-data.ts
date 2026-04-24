@@ -22,7 +22,7 @@ export const donerItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Sauce", "No Onions", "Add Cheese"],
       allergens: ["gluten"],
       dietary: ["dairy-free", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 302,
@@ -40,7 +40,7 @@ export const donerItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Spicy", "No Tomato", "Add Cheese"],
       allergens: ["gluten"],
       dietary: ["dairy-free", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
     {
       id: 303,
@@ -58,7 +58,7 @@ export const donerItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Sauce", "No Cucumber", "Add Cheese"],
       allergens: ["gluten"],
       dietary: ["dairy-free", "nut-free"],
-      sidePairings: ["Crispy Fries", "Garlic Bread", "Side Salad", "Sweet Potato Fries"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
 };

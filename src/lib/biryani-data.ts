@@ -28,6 +28,7 @@ export const biryaniItems: Record<string, MenuItem[]> = {
       customizations: ["Extra Rice", "Extra Meat", "Boneless"],
       allergens: ["milk"], // ghee / yogurt-based preparation
       dietary: ["gluten-free", "nut-free"],
+      sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
 };

@@ -90,9 +90,9 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
     title: "Sajji",
     subtitle: "Traditional Sajji specialties."
   },
-  "Sides": {
-    title: "Sides",
-    subtitle: "Perfect accompaniments for your meal."
+  "Salads": {
+    title: "Salads",
+    subtitle: "Fresh, vibrant salads for every meal."
   },
   "Shakes & Juices": {
     title: "Shakes & Juices",
@@ -280,7 +280,7 @@ export default function MenuPage() {
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
   const [runtimeMenuItems, setRuntimeMenuItems] = useState<MenuItem[] | null>(null);
   // State declarations
-    const [activeSidesTab, setActiveSidesTab] = useState<"carb" | "green">(() => parseInitialSideTab(location.search));
+    // No tabs for salads
     const [activeCategory, setActiveCategory] = useState<string>(() => parseInitialCategory(location.search));
   // Modal stack: allows back navigation
   const [modalStack, setModalStack] = useState<(MenuItem | SauceItem | null)[]>([]);
@@ -359,7 +359,7 @@ export default function MenuPage() {
   };
 
   // Side catalog pulled from existing menu items
-  const sidesCatalog = effectiveMenuItems.filter((item) => item.category === "Sides");
+  const sidesCatalog = effectiveMenuItems.filter((item) => item.category === "Salads");
 
   // Find side details by name (case-insensitive)
   const findSide = (name: string) =>
@@ -396,7 +396,7 @@ export default function MenuPage() {
     "Biryani",
     "Sajji",
     "Desserts",
-    "Sides",
+    "Salads",
     "Shakes & Juices",
   ];
 
@@ -421,11 +421,7 @@ export default function MenuPage() {
       params.delete("category");
     }
 
-    if (activeCategory === "Sides") {
-      params.set("side", activeSidesTab);
-    } else {
-      params.delete("side");
-    }
+    // No side tab param for salads
 
     const nextSearch = params.toString();
     const currentSearch = location.search.replace(/^\?/, "");
@@ -438,7 +434,7 @@ export default function MenuPage() {
         { replace: true }
       );
     }
-  }, [selectedFilters, activeCategory, activeSidesTab, location.pathname, location.search, navigate]);
+  }, [selectedFilters, activeCategory, location.pathname, location.search, navigate]);
 
   const filterCounts = useMemo(() => {
     const categoryItems =
@@ -599,26 +595,7 @@ export default function MenuPage() {
                   <>
                     <CategoryHeading category={activeCategory} />
                     {/* Sides Tabs and Filtering */}
-                    {activeCategory === "Sides" && (
-                      <div className="flex gap-2 mb-6">
-                        {sidesTabs.map((tab) => (
-                          <button
-                            key={tab.id}
-                            onClick={() => {
-                              if (isSideTab(tab.id)) setActiveSidesTab(tab.id);
-                            }}
-                            className={cn(
-                              "px-4 py-2 rounded-full text-sm font-semibold transition",
-                              activeSidesTab === tab.id
-                                ? "bg-primary text-primary-foreground shadow"
-                                : "bg-secondary/80 text-muted-foreground hover:bg-secondary/60"
-                            )}
-                          >
-                            {tab.label}
-                          </button>
-                        ))}
-                      </div>
-                    )}
+                    {/* No tabs for salads */}
                     {/* ...removed Sauces Filter Dropdown */}
                     {/* Grid for Sides or other single category */}
 {activeCategory === "Shakes & Juices" ? (
@@ -692,12 +669,7 @@ export default function MenuPage() {
   })()
 ) : (
 <div className={"grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
-  {(activeCategory === "Sides"
-    ? hasDietarySelection
-      ? filteredItems
-      : filteredItems.filter((item) => item.sideType === activeSidesTab)
-    : filteredItems
-  ).map((item) => (
+  {(filteredItems).map((item) => (
                         <div
                           key={item.id}
                           tabIndex={0}
@@ -946,7 +918,7 @@ export default function MenuPage() {
                                 {sideRecommendations.length > 0 && ["Grills & Skewers", "Döner", "Wraps", "Biryani", "Sajji"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                      Recommended Sides
+                                      Recommended Salads
                                     </h4>
                                     <div className="space-y-3">
                                       {sideRecommendations.map((name) => {
@@ -1085,7 +1057,7 @@ export default function MenuPage() {
                                   return (
                                     <div className="mb-6">
                                       <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                        Seasonings
+                                        Optional Seasonings
                                       </h4>
                                       <div className="space-y-3">
                                         {selectedSeasonings.map((seasoning) => (
