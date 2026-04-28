@@ -98,6 +98,10 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
     title: "Salads",
     subtitle: "Fresh, vibrant salads for every meal."
   },
+  "Combos": {
+    title: "Combos",
+    subtitle: "Great value meal combinations."
+  },
   "Kids Menu": {
     title: "Kids Menu",
     subtitle: "Tasty, kid-friendly meals and snacks."
@@ -400,6 +404,7 @@ export default function MenuPage() {
     "All",
     "Protein Cube Skewer Platter",
     "Family Platters",
+    "Combos",
     "Kids Menu",
     "Salads",
     "Desserts",

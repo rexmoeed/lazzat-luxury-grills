@@ -11,6 +11,7 @@ import { sidesItems } from "./sides-data";
 import { donerItems } from "./doner-data";
 import { wrapsItems } from "./wraps-data";
 import { kidsMenu } from "./kids-menu-data";
+import { combosMenu } from "./combos-menu-data";
 
 /* Grouped Menu data */
 export const menuItemsGrouped: Record<string, MenuItem[]> = {
@@ -18,6 +19,7 @@ export const menuItemsGrouped: Record<string, MenuItem[]> = {
   "Family Platters": familyPlatters,
   "Biryani": Object.values(biryaniItems).flat(),
   "Sajji": Object.values(sajjiItems).flat(),
+  "Combos": combosMenu,
   "Kids Menu": kidsMenu,
   "Desserts": Object.values(desserts).flat(),
   "Shakes & Juices": Object.values(shakesAndJuices).flat(),
