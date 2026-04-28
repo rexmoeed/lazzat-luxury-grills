@@ -3,7 +3,7 @@ import { MenuItem } from "./menu-types";
 
 /* IMAGE IMPORTS */
 import imgCucumberTomato from "@/assets/cucumber-tomato.jpeg";
-import imgRedCabbageSlaw from "@/assets/red-cabbage-slaw.jpeg";
+
 import imgPickledOnion from "@/assets/pickled-onion.jpeg";
 import imgSweetCorn from "@/assets/sweet-corn.jpeg";
 import imgLazzatBeanSalad from "@/assets/lazzat-bean-salad.jpeg";
@@ -18,24 +18,13 @@ export const sidesItems: Record<string, MenuItem[]> = {
       category: "Salads",
       subCategory: "Salads",
       heatLevel: 0,
+      price: 5.99,
       saucePairings: [],
       customizations: [],
       allergens: [],
       dietary: ["vegan", "vegetarian", "gluten-free"],
     },
-    {
-      id: 302,
-      name: "Red Cabbage Slaw",
-      description: "Shredded red cabbage & carrot, lime-cumin vinaigrette with toasted cumin seeds",
-      image: imgRedCabbageSlaw,
-      category: "Salads",
-      subCategory: "Salads",
-      heatLevel: 0,
-      saucePairings: [],
-      customizations: [],
-      allergens: [],
-      dietary: ["vegan", "vegetarian", "gluten-free"],
-    },
+    
     {
       id: 303,
       name: "Pickled Onion",
@@ -44,6 +33,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       category: "Salads",
       subCategory: "Salads",
       heatLevel: 0,
+      price: 5.99,
       saucePairings: [],
       customizations: [],
       allergens: [],
@@ -57,6 +47,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       category: "Salads",
       subCategory: "Salads",
       heatLevel: 0,
+      price: 5.99,
       saucePairings: [],
       customizations: [],
       allergens: [],
@@ -71,6 +62,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
       category: "Salads",
       subCategory: "Salads",
       heatLevel: 0,
+      price: 5.99,
       saucePairings: [],
       customizations: [],
       allergens: [],

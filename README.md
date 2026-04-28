@@ -65,7 +65,7 @@ menu-types.ts – Global MenuItem type
 
 menu-data.ts – Central menu aggregator
 
-grills-skewers-data.ts
+protein-cube-skewer-platter-data.ts
 
 biryani-data.ts
 

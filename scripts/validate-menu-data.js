@@ -3,7 +3,7 @@ import path from "path";
 
 const DATA_DIR = path.resolve("src/lib");
 const TARGET_FILES = [
-  "grills-skewers-data.ts",
+  "protein-cube-skewer-platter-data.ts",
   "biryani-data.ts",
   "sajji-data.ts",
   "desserts-data.ts",

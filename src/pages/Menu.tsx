@@ -70,6 +70,10 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
     title: "Protein Cube Skewer Platter",
     subtitle: "Charcoal grilled protein cubes served with rice and salad."
   },
+  "Family Platters": {
+    title: "Family Platters",
+    subtitle: "Whole and cut chicken platters for sharing."
+  },
   "Döner": {
     title: "Döner",
     subtitle: "Classic döner kebabs and wraps."
@@ -93,6 +97,10 @@ const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
   "Salads": {
     title: "Salads",
     subtitle: "Fresh, vibrant salads for every meal."
+  },
+  "Kids Menu": {
+    title: "Kids Menu",
+    subtitle: "Tasty, kid-friendly meals and snacks."
   },
   "Shakes & Juices": {
     title: "Shakes & Juices",
@@ -391,8 +399,10 @@ export default function MenuPage() {
   const categories = [
     "All",
     "Protein Cube Skewer Platter",
-    "Desserts",
+    "Family Platters",
+    "Kids Menu",
     "Salads",
+    "Desserts",
     "Shakes & Juices",
   ];
 
@@ -705,7 +715,9 @@ export default function MenuPage() {
                           <div className="p-6">
                             <div className="flex items-start justify-between gap-2">
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                              {/* Price hidden */}
+                              {typeof item.price === 'number' && (
+                                <span className="font-semibold text-lg text-primary ml-2">${item.price.toFixed(2)}</span>
+                              )}
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                             <div className="mt-3 text-xs text-primary uppercase tracking-wider">
@@ -1059,7 +1071,20 @@ export default function MenuPage() {
                                   const isNaan = name.includes("naan");
                                   const isColeslaw = name.includes("coleslaw");
                                   // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
-                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji"];
+                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji", "Family Platters", "Protein Cube Skewer Platter"];
+                                                                  {/* Recommended Sauces for Family Platters */}
+                                                                  {selectedItem.category === "Family Platters" && (
+                                                                    <div className="mb-6">
+                                                                      <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
+                                                                        Recommended Sauces
+                                                                      </h4>
+                                                                      <div className="flex flex-wrap gap-2">
+                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Mint Chutney</span>
+                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Tamarind Sauce</span>
+                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Garlic Mayo</span>
+                                                                      </div>
+                                                                    </div>
+                                                                  )}
                                   const showSeasonings =
                                     !excludedCategories.includes(cat) &&
                                     !isRice &&

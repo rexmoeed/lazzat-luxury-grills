@@ -15,7 +15,7 @@ export const desserts: Record<string, MenuItem[]> = {
       name: "Oreo Cheesecake",
       description:
         "Creamy cheesecake mixed with Oreo crumbs on a chocolate crust.",
-      price: 7.99,
+      price: 5.99,
       image: imgCheesecakeOreo,
       category: "Desserts",
       subCategory: "Cheesecakes",
@@ -30,7 +30,7 @@ export const desserts: Record<string, MenuItem[]> = {
       name: "Mango Cheesecake",
       description:
         "Smooth cheesecake layered with luscious mango purée.",
-      price: 6.99,
+      price: 5.99,
       image: imgCheesecakeMango,
       category: "Desserts",
       subCategory: "Cheesecakes",
@@ -45,7 +45,7 @@ export const desserts: Record<string, MenuItem[]> = {
       name: "Pistachio Cheesecake",
       description:
         "Rich cheesecake with pistachio flavor and a nutty crust.",
-      price: 8.49,
+      price: 5.99,
       image: imgPistachioCheesecake,
       category: "Desserts",
       subCategory: "Cheesecakes",
@@ -61,7 +61,7 @@ export const desserts: Record<string, MenuItem[]> = {
       id: 50,
       name: "Mango Tiramisu",
       description: "Mascarpone layered with mango-soaked ladyfingers.",
-      price: 7.99,
+      price: 9.99,
       image: imgTiramisuMango,
       category: "Desserts",
       subCategory: "Tiramisu",
@@ -76,7 +76,7 @@ export const desserts: Record<string, MenuItem[]> = {
       name: "Pistachio Tiramisu",
       description:
         "Decadent dark chocolate brownie layered with pistachio.",
-      price: 8.99,
+      price: 9.99,
       image: imgBrowniePistachio,
       category: "Desserts",
       subCategory: "Tiramisu",
@@ -90,7 +90,7 @@ export const desserts: Record<string, MenuItem[]> = {
       id: 52,
       name: "Biscoff Tiramisu",
       description: "Classic tiramisu with a Biscoff twist.",
-      price: 8.99,
+      price: 9.99,
       image: imgBiscoffTiramisu,
       category: "Desserts",
       subCategory: "Tiramisu",

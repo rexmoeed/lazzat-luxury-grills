@@ -574,7 +574,7 @@ const matchesFoodType = (item: MenuItem, type: string) => {
 
 ## 5. DATA INTEGRITY CHECKS
 
-### grills-skewers-data.ts ✅
+### protein-cube-skewer-platter-data.ts ✅
 - ✅ Chicken items with milk: NOT tagged dairy-free
 - ✅ Lamb items without milk: Tagged dairy-free
 - ✅ All items: Tagged gluten-free (no bread)

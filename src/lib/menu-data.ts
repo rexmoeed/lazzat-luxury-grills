@@ -1,7 +1,8 @@
 // src/lib/menu-data.ts
 import { MenuItem } from "./menu-types";
 
-import { grillsAndSkewers } from "./grills-skewers-data";
+import { proteinCubeSkewerPlatters } from "./protein-cube-skewer-platter-data.ts";
+import { familyPlatters } from "./family-platters-data";
 import { biryaniItems } from "./biryani-data";
 import { sajjiItems } from "./sajji-data";
 import { desserts } from "./desserts-data";
@@ -9,20 +10,24 @@ import { shakesAndJuices } from "./shakes-juices-data";
 import { sidesItems } from "./sides-data";
 import { donerItems } from "./doner-data";
 import { wrapsItems } from "./wraps-data";
+import { kidsMenu } from "./kids-menu-data";
 
 /* Grouped Menu data */
-export const menuItemsGrouped: Record<string, Record<string, MenuItem[]> | MenuItem[]> = {
-  "Protein Cube Skewer Platter": grillsAndSkewers,
-  "Desserts": desserts,
-  "Shakes & Juices": shakesAndJuices,
-  "Sides": sidesItems,
+export const menuItemsGrouped: Record<string, MenuItem[]> = {
+  "Protein Cube Skewer Platter": proteinCubeSkewerPlatters,
+  "Family Platters": familyPlatters,
+  "Biryani": Object.values(biryaniItems).flat(),
+  "Sajji": Object.values(sajjiItems).flat(),
+  "Kids Menu": kidsMenu,
+  "Desserts": Object.values(desserts).flat(),
+  "Shakes & Juices": Object.values(shakesAndJuices).flat(),
+  "Sides": Object.values(sidesItems).flat(),
+  "Döner": Object.values(donerItems).flat(),
+  "Wraps": Object.values(wrapsItems).flat(),
 };
 
 /* Flat Export for Filter sort */
-export const menuItemsFlat: MenuItem[] = Object.values(menuItemsGrouped)
-  .flatMap((category) =>
-    Object.values(category).flat()
-  );
+export const menuItemsFlat: MenuItem[] = Object.values(menuItemsGrouped).flat();
 
 type MenuCacheEntry = {
   data: MenuItem[];
