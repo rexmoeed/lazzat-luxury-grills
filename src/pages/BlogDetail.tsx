@@ -1,5 +1,3 @@
-
-
 import { useParams, useNavigate } from "react-router-dom";
 import { blogPosts } from "@/lib/blog-data";
 import { Layout } from "@/components/layout/Layout";
@@ -22,10 +20,7 @@ const BlogDetail = () => {
     );
   }
 
-
-
   // Extract FAQ section from content
-  //FAQ
   const content = post.content;
   const faqIndex = content.indexOf('FAQs');
   let mainContent = content;
@@ -85,7 +80,19 @@ const BlogDetail = () => {
                 "Why Lava Stone Grilling Has Been Gaining Attention?",
                 "A Different Way of Thinking About Fire",
                 "Lava Stone Grilling and Why Lazzat Works With It",
-                "Conclusion"
+                "Conclusion",
+                // Blog 3 Headings
+                "The Real Difference Between Grilling and Frying",
+                "How Does Grilled Food Vary in Flavour",
+                "The Maillard Reaction: And Why Grilling Triggers It Better",
+                "What Happens to Fat on a Grill vs. in a Pan",
+                "Why Marinades Land Differently on a Grill",
+                "How Does Grilling Affect the Food Texture?",
+                "How is it Different for Vegetables?",
+                "The cooking method you choose changes the Whole Meal",
+                "Grilled Food Keeps the Plate Balanced",
+                "Grilling Is More Versatile",
+                "Lazzat in Brampton; Grilling Over Lava Stone",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (

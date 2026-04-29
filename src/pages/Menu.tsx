@@ -644,7 +644,7 @@ export default function MenuPage() {
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
             {typeof item.price === 'number' && (
-              <span className="ml-2 text-lg font-semibold text-primary">${item.price.toFixed(2)}</span>
+              <span className="ml-2 text-lg font-semibold text-primary">{item.price.toFixed(2)}</span>
             )}
           </div>
           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
@@ -723,7 +723,7 @@ export default function MenuPage() {
                             <div className="flex items-start justify-between gap-2">
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
                               {typeof item.price === 'number' && (
-                                <span className="font-semibold text-lg text-primary ml-2">${item.price.toFixed(2)}</span>
+                                <span className="font-semibold text-lg text-primary ml-2">{item.price.toFixed(2)}</span>
                               )}
                             </div>
                             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
@@ -1172,7 +1172,7 @@ export default function MenuPage() {
                                           key={c}
                                           className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium"
                                         >
-                                          {c}
+                                          {c.replace(/\$/g, "")}
                                         </span>
                                       ))}
                                     </div>

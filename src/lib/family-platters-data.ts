@@ -8,7 +8,7 @@ export const familyPlatters: MenuItem[] = [
     id: 101,
     name: "Whole Chicken",
     description: "Whole Chicken served with seasoned rice. Serves 3-4 people.",
-    price: 30.99,
+    price: 34.99,
     image: imgWholeChicken,
     category: "Family Platters",
     heatLevel: 1,
