@@ -7,6 +7,7 @@ import imgCucumberTomato from "@/assets/cucumber-tomato.jpeg";
 import imgPickledOnion from "@/assets/pickled-onion.jpeg";
 import imgSweetCorn from "@/assets/sweet-corn.jpeg";
 import imgLazzatBeanSalad from "@/assets/lazzat-bean-salad.jpeg";
+import imgSpicedChickPea from "@/assets/spiced-chickpea.jpeg";
 
 export const sidesItems: Record<string, MenuItem[]> = {
   Salads: [
@@ -68,6 +69,20 @@ export const sidesItems: Record<string, MenuItem[]> = {
       allergens: [],
       dietary: ["vegan", "vegetarian", "gluten-free"],
       isPopular: true,
+    },
+    {
+      id: 307,
+      name: "Spiced Chickpea",
+      description: "⭐ SIGNATURE — Chickpeas tossed in warm Cumin-Paprika spice with Lemon-Honey dressing",
+      image: imgSpicedChickPea,
+      category: "Salads",
+      subCategory: "Salads",  
+      heatLevel: 2,
+      price: 5.99,
+      saucePairings: [],  
+      customizations: [],
+      allergens: [],
+      dietary: ["vegan", "vegetarian", "gluten-free"],
     },
   ],
 };
