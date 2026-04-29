@@ -784,7 +784,9 @@ export default function MenuPage() {
                                 <div className="p-6">
                                   <div className="flex items-start justify-between gap-2">
                                     <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                                    {/* Price hidden */}
+                                    {typeof item.price === 'number' && (
+                                      <span className="font-semibold text-lg text-primary ml-2">{item.price.toFixed(2)}</span>
+                                    )}
                                   </div>
                                   <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                                   <div className="mt-3 text-xs text-primary uppercase tracking-wider">
