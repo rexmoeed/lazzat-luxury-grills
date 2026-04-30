@@ -738,7 +738,7 @@ export default function MenuPage() {
                                 </div>
                               ) : (
                                 typeof item.price === 'number' && (
-                                  <div className="font-semibold text-primary text-left text-sm mt-1">{item.price.toFixed(2)}</div>
+                                  <div className="font-semibold text-primary text-left text-xs mt-1">Price: {item.price.toFixed(2)}</div>
                                 )
                               )}
                             </div>
