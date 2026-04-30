@@ -54,7 +54,7 @@ export const kidsMenu: MenuItem[] = [
     id: 404,
     name: "Kids Combo",
     description: "Kids Bowl (Chicken or Paneer Tikka)+10 Oz Drink (Any Flavor/ Shake/ Blend /Og)",
-    price: 26.99,
+    price: 9.99,
     image: imgKidsCombo,
     category: "Kids Menu",
     heatLevel: 0,
