@@ -54,7 +54,7 @@ export const familyPlatters: MenuItem[] = [
   },
   {
     id: 103,
-    name: "Whole Salmon",
+    name: "Salmon Fish",
     description: "Whole Salmon served with seasoned rice. Serves 3-4 people.",
     price: 29.99,
     image: imgWholeSalmon,

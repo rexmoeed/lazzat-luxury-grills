@@ -720,13 +720,22 @@ export default function MenuPage() {
                             </div>
                           )}
                           <div className="p-6">
-                            <div className="flex items-start justify-between gap-2">
+                            <div>
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                              {typeof item.price === 'number' && (
-                                <span className="font-semibold text-lg text-primary ml-2">{item.price.toFixed(2)}</span>
+                              {item.category === "Protein Cube Skewer Platter" ? (
+                                <div className="font-semibold text-gold text-right text-sm mt-1 whitespace-nowrap">
+                                  {(() => {
+                                    const match = item.description.match(/(1-Skewer[^/]+\/ 2-Skewers[^/]+\/ 3 Skewers[^\n]+)/);
+                                    return match ? match[1] : null;
+                                  })()}
+                                </div>
+                              ) : (
+                                typeof item.price === 'number' && (
+                                  <div className="font-semibold text-lg text-primary text-right mt-1">{item.price.toFixed(2)}</div>
+                                )
                               )}
                             </div>
-                            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+                            {/* Hide description from card, only show in modal */}
                             <div className="mt-3 text-xs text-primary uppercase tracking-wider">
                               {item.category}
                               {item.subCategory ? ` • ${item.subCategory}` : ""}

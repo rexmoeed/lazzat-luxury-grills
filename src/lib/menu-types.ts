@@ -59,10 +59,13 @@ export interface MenuItem {
   isPopular?: boolean;
 
   /** Pairings & options */
-  saucePairings: string[];
+  saucePairings?: string[];
   /** Side recommendations to suggest with this item */
   sidePairings?: string[];
-  customizations: string[];
+  /** Add-ons for the item (replaces customizations for some items) */
+  addOns?: string[];
+  /** Legacy customizations (optional for backward compatibility) */
+  customizations?: string[];
 
   /* Enriched Meta Data */
 
