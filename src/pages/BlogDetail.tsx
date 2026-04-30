@@ -93,6 +93,16 @@ const BlogDetail = () => {
                 "Grilled Food Keeps the Plate Balanced",
                 "Grilling Is More Versatile",
                 "Lazzat in Brampton; Grilling Over Lava Stone",
+                // Blog 4 Headings
+                "How Does Steam Cooking Help Retain the Flavour and Nutrition of Meat",
+                "What Makes the Steam Cooking Method Different?",
+                "How Does Steam Cooking Make Meat Flavourful?",
+                "Why Marinades Enhance with Steam",
+                "How Steam Affects the Texture of Meat",
+                "Why Steam Cooking Chicken Works So Well",
+                "How Does Steam Cooking Preserve Nutrition?",
+                "Why Bland Meat Is Almost Always a Cooking Problem",
+                "How Lazzat Uses Steam Cooking",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (
