@@ -729,6 +729,13 @@ export default function MenuPage() {
                                     return match ? match[1] : null;
                                   })()}
                                 </div>
+                              ) : item.category === "Salads" ? (
+                                <div className="font-semibold text-gold text-left text-sm mt-1">
+                                  {(() => {
+                                    const match = item.description.match(/(70G per Scoop 5\.99)/);
+                                    return match ? match[1] : null;
+                                  })()}
+                                </div>
                               ) : (
                                 typeof item.price === 'number' && (
                                   <div className="font-semibold text-lg text-primary text-right mt-1">{item.price.toFixed(2)}</div>

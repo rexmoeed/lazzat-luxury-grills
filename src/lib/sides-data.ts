@@ -14,7 +14,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 301,
       name: "Cucumber Tomato",
-      description: "Fresh diced cucumber & tomato with red onion, cilantro, lime-cumin dressing",
+      description: "Fresh Cucumber, Ripe Tomato, Lime, Olive Oil\n70G per Scoop 5.99",
       image: imgCucumberTomato,
       category: "Salads",
       subCategory: "Salads",
@@ -25,11 +25,10 @@ export const sidesItems: Record<string, MenuItem[]> = {
       allergens: [],
       dietary: ["vegan", "vegetarian", "gluten-free"],
     },
-    
     {
       id: 303,
       name: "Pickled Onion",
-      description: "Tangy pickled red onion with peppercorns and bay (Bouchon brine)",
+      description: "Quick-Pickled Red Onion, Mustard Seed\n70G per Scoop 5.99",
       image: imgPickledOnion,
       category: "Salads",
       subCategory: "Salads",
@@ -43,7 +42,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 304,
       name: "Sweet Corn & Pepper",
-      description: "⭐ SIGNATURE — Sweet corn, red pepper, tamarind-lime glaze with smoky paprika",
+      description: "Sweet Corn, Bell Pepper, Tamarind-Hint\n70G per Scoop 5.99",
       image: imgSweetCorn,
       category: "Salads",
       subCategory: "Salads",
@@ -58,7 +57,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 306,
       name: "Lazzat Bean Salad",
-      description: "4-bean blend (kidney + black + navy + chickpea), apple, raisins, cranberries, citrus-maple dressing",
+      description: "Kidney Bean, Raisin, Mild Spice\n70G per Scoop 5.99",
       image: imgLazzatBeanSalad,
       category: "Salads",
       subCategory: "Salads",
@@ -72,14 +71,14 @@ export const sidesItems: Record<string, MenuItem[]> = {
     },
     {
       id: 307,
-      name: "Spiced Chickpea",
-      description: "⭐ SIGNATURE — Chickpeas tossed in warm Cumin-Paprika spice with Lemon-Honey dressing",
+      name: "Spiced ChickPea",
+      description: "Chickpea, Lemon, Mild Spice\nHoney Based Dressing\n70G per Scoop 5.99",
       image: imgSpicedChickPea,
       category: "Salads",
-      subCategory: "Salads",  
+      subCategory: "Salads",
       heatLevel: 2,
       price: 5.99,
-      saucePairings: [],  
+      saucePairings: [],
       customizations: [],
       allergens: [],
       dietary: ["vegan", "vegetarian", "gluten-free"],
