@@ -732,7 +732,7 @@ export default function MenuPage() {
                               ) : item.category === "Salads" ? (
                                 <div className="font-semibold text-gold text-left text-xs mt-1">
                                   {(() => {
-                                    const match = item.description.match(/(70G per Scoop 5\.99)/);
+                                    const match = item.description.match(/(70G per Scoop Price:\s*5\.99)/);
                                     return match ? match[1] : null;
                                   })()}
                                 </div>
