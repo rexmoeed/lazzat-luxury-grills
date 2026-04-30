@@ -1,39 +1,68 @@
 import { MenuItem } from "./menu-types";
-import imgKidsMiniBowl from "@/assets/kids-mini-bowl.jpeg";
-import imgFrenchFries from "@/assets/french-fries.jpeg";
+import imgKidsDrink from "@/assets/kids-drink.jpeg";
+import imgKidsBowlPaneer from "@/assets/kids-bowl-paneer.jpeg";
+import imgKidsBowlChicken from "@/assets/kids-bowl-chicken.jpeg";
+import imgKidsCombo from "@/assets/kids-combo.jpeg";
 
 export const kidsMenu: MenuItem[] = [
   {
-    id: 301,
-    name: "Kids Mini Bowl",
-    description: "100gm chicken + rice + sides + drink",
-    price: 13.99,
-    image: imgKidsMiniBowl,
+    id: 401,
+    name: "Kids Drink (10 Oz)",
+    description: "Real-Fruit Shake. Real Fruit Blend / Fresh Orange Juice.",
+    price: 3.49,
+    image: imgKidsDrink,
     category: "Kids Menu",
     heatLevel: 0,
     isPopular: false,
     saucePairings: [],
     customizations: [],
     allergens: [],
-    dietary: ["gluten-free", "nut-free"],
+    dietary: [],
     sidePairings: [],
   },
   {
-    id: 302,
-    name: "French Fries",
-    description: "Crispy golden fries. Available in regular or large size.",
-    price: 3.99,
-    image: imgFrenchFries,
+    id: 402,
+    name: "Kids Bowl Paneer",
+    description: "80G Paneer Cubes (Tikka)+ Base+1 Sauce",
+    price: 5.99,
+    image: imgKidsBowlPaneer,
     category: "Kids Menu",
     heatLevel: 0,
     isPopular: false,
     saucePairings: [],
-    customizations: [
-      "Regular: $3.99",
-      "Large: $4.99"
-    ],
+    customizations: [],
     allergens: [],
-    dietary: ["vegan", "gluten-free", "nut-free"],
+    dietary: [],
+    sidePairings: [],
+  },
+  {
+    id: 403,
+    name: "Kids Bowl Chicken",
+    description: "80G Chicken Breast Cubes(Tikka)+1 Base +1 Sauce",
+    price: 6.99,
+    image: imgKidsBowlChicken,
+    category: "Kids Menu",
+    heatLevel: 0,
+    isPopular: false,
+    saucePairings: [],
+    customizations: [],
+    allergens: [],
+    dietary: [],
+    sidePairings: [],
+  },
+  {
+    id: 404,
+    name: "Kids Combo",
+    description: "Kids Bowl (Chicken or Paneer Tikka)+10 Oz Drink (Any Flavor/ Shake/ Blend /Og)",
+    price: 26.99,
+    image: imgKidsCombo,
+    category: "Kids Menu",
+    heatLevel: 0,
+    isPopular: false,
+    saucePairings: [],
+    customizations: [],
+    allergens: [],
+    dietary: [],
     sidePairings: [],
   },
 ];
