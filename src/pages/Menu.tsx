@@ -723,14 +723,14 @@ export default function MenuPage() {
                             <div>
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
                               {item.category === "Protein Cube Skewer Platter" ? (
-                                <div className="font-semibold text-gold text-right text-sm mt-1 whitespace-nowrap">
+                                <div className="font-semibold text-gold text-left text-xs mt-1 whitespace-nowrap">
                                   {(() => {
                                     const match = item.description.match(/(1-Skewer[^/]+\/ 2-Skewers[^/]+\/ 3 Skewers[^\n]+)/);
                                     return match ? match[1] : null;
                                   })()}
                                 </div>
                               ) : item.category === "Salads" ? (
-                                <div className="font-semibold text-gold text-left text-sm mt-1">
+                                <div className="font-semibold text-gold text-left text-xs mt-1">
                                   {(() => {
                                     const match = item.description.match(/(70G per Scoop 5\.99)/);
                                     return match ? match[1] : null;
@@ -738,11 +738,19 @@ export default function MenuPage() {
                                 </div>
                               ) : (
                                 typeof item.price === 'number' && (
-                                  <div className="font-semibold text-lg text-primary text-right mt-1">{item.price.toFixed(2)}</div>
+                                  <div className="font-semibold text-primary text-left text-sm mt-1">{item.price.toFixed(2)}</div>
                                 )
                               )}
                             </div>
-                            {/* Hide description from card, only show in modal */}
+                            {/* Show a short description for all menu items */}
+                            <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                              {(() => {
+                                // Show only the first line or up to 80 chars
+                                const desc = item.description || "";
+                                const firstLine = desc.split(/\r?\n/)[0];
+                                return firstLine.length > 80 ? firstLine.slice(0, 77) + "..." : firstLine;
+                              })()}
+                            </p>
                             <div className="mt-3 text-xs text-primary uppercase tracking-wider">
                               {item.category}
                               {item.subCategory ? ` • ${item.subCategory}` : ""}

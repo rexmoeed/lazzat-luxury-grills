@@ -7,7 +7,7 @@ export const familyPlatters: MenuItem[] = [
   {
     id: 101,
     name: "Whole Chicken",
-    description: "Whole Chicken served with seasoned rice. Serves 3-4 people.",
+    description: "Full Chicken Tray served with seasoned rice. Serves 3-4 people.",
     price: 34.99,
     image: imgWholeChicken,
     category: "Family Platters",
@@ -31,8 +31,8 @@ export const familyPlatters: MenuItem[] = [
   {
     id: 102,
     name: "Cut Chicken",
-    description: "Cut Chicken served with seasoned rice. Serves 3-4 people.",
-    price: 30.99,
+    description: "Whole Cut Chicken Tray served with seasoned rice. Serves 3-4 people.",
+    price: 34.99,
     image: imgCutChicken,
     category: "Family Platters",
     heatLevel: 1,
@@ -55,7 +55,7 @@ export const familyPlatters: MenuItem[] = [
   {
     id: 103,
     name: "Salmon Fish",
-    description: "Whole Salmon served with seasoned rice. Serves 3-4 people.",
+    description: "Whole Fish Tray served with seasoned rice. Serves 3-4 people.",
     price: 29.99,
     image: imgWholeSalmon,
     category: "Family Platters",
