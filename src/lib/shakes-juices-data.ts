@@ -21,7 +21,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 202,
       name: "Strawberry Shake",
-      description: "Real strawberry + milk + cream.",
+      description: "Real Strawberry + Milk + Cream\nStandard Price 6.99\n500 ml Combo Price 7.99",
       price: 6.99,
       image: imgShakeStrawberry,
       category: "Shakes & Juices",
@@ -35,7 +35,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 201,
       name: "Golden Mango",
-      description: "Real mango + milk + cream.",
+      description: "Real Alphonso Mango + Milk + Cream\nStandard Price 6.99\n500 ml Combo Price 7.99",
       price: 6.99,
       image: imgShakeMango,
       category: "Shakes & Juices",
@@ -49,7 +49,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 204,
       name: "All Berry Shake",
-      description: "4 real berries + milk + cream.",
+      description: "Strawberry + Blueberry + Raspberry + Blackberry\nStandard Price 7.99\n500 ml Combo Price 8.99",
       price: 7.99,
       image: imgShakeAllBerry,
       category: "Shakes & Juices",
@@ -66,7 +66,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 302,
       name: "Tropical Bliss",
-      description: "Mango + Pineapple + Coconut (Water Base)",
+      description: "Mango + Pineapple + Coconut\nStandard Price 7.49\n500 ml Combo Price 8.49",
       price: 7.49,
       image: imgBlendTropical,
       category: "Shakes & Juices",
@@ -80,7 +80,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 303,
       name: "Berry Burst",
-      description: "Strawberry + Blueberry + Raspberry (Water Base)",
+      description: "Strawberry + Blueberry + Raspberry\nStandard Price 7.49\n500 ml Combo Price 8.49",
       price: 7.49,
       image: imgBlendBerryBurst,
       category: "Shakes & Juices",
@@ -94,7 +94,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 304,
       name: "Sunrise Breeze",
-      description: "Mango + Peach + Pineapple (Water Base)",
+      description: "Mango + peach + pineapple\nStandard Price 7.49\n500 ml Combo Price 8.49",
       price: 7.49,
       image: imgBlendSunrise,
       category: "Shakes & Juices",
@@ -108,7 +108,7 @@ export const shakesAndJuices: Record<string, MenuItem[]> = {
     {
       id: 305,
       name: "Watermelon Cooler",
-      description: "Watermelon + Mint + Lime juice (Water Base)",
+      description: "Watermelon + mint + lime · seasonal\nStandard Price 7.49\n500 ml Combo Price 8.49",
       price: 7.49,
       image: imgBlendWatermelon,
       category: "Shakes & Juices",
