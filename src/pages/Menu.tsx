@@ -620,52 +620,38 @@ export default function MenuPage() {
                     {/* Grid for Sides or other single category */}
 {activeCategory === "Shakes & Juices" ? (
   (() => {
-    const shakeCard = (item: MenuItem) => {
-      const isSpecial = item.subCategory === "Signature Shakes" || item.subCategory === "Popular Fruit Blends";
-      // Extract gold price line if special
-      let goldPriceLine: string | null = null;
-      if (isSpecial) {
-        const match = item.description.match(/Standard Price [0-9.]+\s*500 ml Combo Price [0-9.]+/);
-        goldPriceLine = match ? match[0] : null;
-      }
-      return (
-        <div
-          key={item.id}
-          tabIndex={0}
-          role="button"
-          aria-label={`View details for ${item.name}`}
-          onClick={() => setModalStack([item])}
-          onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setModalStack([item])}
-          className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
-        >
-          {item.image && (
-            <div className="relative aspect-[4/3] overflow-hidden">
-              <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
-              <div className="absolute top-4 left-4 flex gap-2">
-                {item.isNew && <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>}
-                {item.isPopular && <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>}
-              </div>
+    const shakeCard = (item: MenuItem) => (
+      <div
+        key={item.id}
+        tabIndex={0}
+        role="button"
+        aria-label={`View details for ${item.name}`}
+        onClick={() => setModalStack([item])}
+        onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && setModalStack([item])}
+        className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
+      >
+        {item.image && (
+          <div className="relative aspect-[4/3] overflow-hidden">
+            <img src={item.image} alt={item.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+            <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+            <div className="absolute top-4 left-4 flex gap-2">
+              {item.isNew && <span className="bg-primary text-primary-foreground text-xs px-3 py-1 rounded">New</span>}
+              {item.isPopular && <span className="bg-foreground text-background text-xs px-3 py-1 rounded">Popular</span>}
             </div>
-          )}
-          <div className="p-6">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-              {/* Only show default price if not special */}
-              {!isSpecial && typeof item.price === 'number' && (
-                <span className="ml-2 text-lg font-semibold text-primary">{item.price.toFixed(2)}</span>
-              )}
-            </div>
-            {/* Show gold price line for special shakes/blends */}
-            {isSpecial && goldPriceLine && (
-              <div className="font-semibold text-gold text-left text-xs mt-1 whitespace-pre-line">{goldPriceLine}</div>
-            )}
-            <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
-            <div className="mt-3 text-xs text-primary uppercase tracking-wider">{item.subCategory}</div>
           </div>
+        )}
+        <div className="p-6">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
+            {typeof item.price === 'number' && (
+              <span className="ml-2 text-lg font-semibold text-primary">{item.price.toFixed(2)}</span>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
+          <div className="mt-3 text-xs text-primary uppercase tracking-wider">{item.subCategory}</div>
         </div>
-      );
-    };
+      </div>
+    );
 
     const signatureItems = filteredItems.filter(item => item.subCategory === "Signature Shakes");
     const blendItems = filteredItems.filter(item => item.subCategory === "Popular Fruit Blends");

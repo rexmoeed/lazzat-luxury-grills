@@ -1,3 +1,4 @@
+import imgRoastedPotato from "@/assets/roasted-potato.jpg";
 // src/lib/sides-data.ts
 import { MenuItem } from "./menu-types";
 
@@ -77,6 +78,20 @@ export const sidesItems: Record<string, MenuItem[]> = {
       category: "Salads",
       subCategory: "Salads",
       heatLevel: 2,
+      price: 5.99,
+      saucePairings: [],
+      customizations: [],
+      allergens: [],
+      dietary: ["vegan", "vegetarian", "gluten-free"],
+    },
+    {
+      id: 308,
+      name: "Roasted Sweet Potato",
+      description: "Roasted Cubed Sweet Potato, Herbs\n70G per Scoop 5.99",
+      image: imgRoastedPotato,
+      category: "Salads",
+      subCategory: "Salads",
+      heatLevel: 0,
       price: 5.99,
       saucePairings: [],
       customizations: [],
