@@ -349,6 +349,15 @@ const Locations = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center text-primary hover:scale-110 transition"
+                    onClick={() => {
+                      if (typeof window !== 'undefined' && window.gtag) {
+                        window.gtag('event', 'conversion', {
+                          send_to: 'AW-18126803392/bewoCN_B4qUcEMCjxMND',
+                          value: 5.0,
+                          currency: 'CAD',
+                        });
+                      }
+                    }}
                   >
                     <Navigation className="w-6 h-6 drop-shadow-[0_0_10px_rgba(212,175,55,0.9)]" />
                     <span className="text-[11px] mt-1">Get Directions</span>
