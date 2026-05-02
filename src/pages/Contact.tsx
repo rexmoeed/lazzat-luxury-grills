@@ -93,6 +93,14 @@ const Contact = () => {
       window.clearTimeout(submitTimeoutRef.current);
     }
     submitTimeoutRef.current = window.setTimeout(() => {
+      // Fire Google Ads Contact conversion event
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'conversion', {
+          send_to: 'AW-18126803392/ha9ACJidwKYcEMCjxMND',
+          value: 1.0,
+          currency: 'CAD',
+        });
+      }
       toast({
         title: "Message Sent!",
         description: "We'll get back to you within 24 hours.",
