@@ -103,6 +103,13 @@ const BlogDetail = () => {
                 "How Does Steam Cooking Preserve Nutrition?",
                 "Why Bland Meat Is Almost Always a Cooking Problem",
                 "How Lazzat Uses Steam Cooking",
+                // Blog 5 Headings
+                "A Guide on How to Make the Best Grilled Skewers: What Techniques and Grilling Methods to Use",
+                "Why Grilling Technique Matters for the Best Grilled Skewers",
+                "Comparing Grilling Methods: Which One Delivers the Best Grilled Skewers?",
+                "Mastering Restaurant-Style Grilled Skewers at Home",
+                "How Lazzat Uses the Lava Stone Grill Method for Unbeatable Skewers",
+                "Pro Tips for the Juiciest Charred Skewers Every Time",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (
