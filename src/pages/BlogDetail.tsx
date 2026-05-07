@@ -5,9 +5,9 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/
 
 
 const BlogDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
-  const post = blogPosts.find((b) => b.id === id);
+  const post = blogPosts.find((b) => b.slug === slug);
 
   if (!post) {
     return (

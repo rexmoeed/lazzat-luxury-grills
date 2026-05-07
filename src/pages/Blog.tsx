@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { Clock, ArrowRight } from "lucide-react";
 import { blogPosts } from "@/lib/blog-data";
+import { Link } from "react-router-dom";
 
 const Blog = () => {
   return (
@@ -30,7 +31,7 @@ const Blog = () => {
                 className="group rounded-lg overflow-hidden border border-primary/20 bg-black/40 hover:border-primary/50 transition-all duration-300 hover:-translate-y-1"
               >
                 {/* Image */}
-                <a href={`/blog/${post.id}`} className="block relative h-48 overflow-hidden group/image">
+                <Link to={`/blog/${post.slug}`} className="block relative h-48 overflow-hidden group/image">
                   <img
                     src={post.image}
                     alt={post.title}
@@ -40,7 +41,7 @@ const Blog = () => {
                   <span className="absolute bottom-3 left-3 inline-block px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-xs text-primary font-sans">
                     {post.category}
                   </span>
-                </a>
+                </Link>
 
                 {/* Content */}
                 <div className="p-5 md:p-6">
@@ -63,8 +64,8 @@ const Blog = () => {
                   {/* Date and CTA */}
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted-foreground">{post.date}</span>
-                    <a
-                      href={`/blog/${post.id}`}
+                    <Link
+                      to={`/blog/${post.slug}`}
                       className="inline-flex items-center gap-1 text-primary hover:underline text-sm font-sans group/link transition-colors"
                     >
                       Read More
@@ -72,7 +73,7 @@ const Blog = () => {
                         size={16}
                         className="group-hover/link:translate-x-1 transition-transform"
                       />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </article>
