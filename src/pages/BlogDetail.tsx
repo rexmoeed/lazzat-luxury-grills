@@ -110,6 +110,15 @@ const BlogDetail = () => {
                 "Mastering Restaurant-Style Grilled Skewers at Home",
                 "How Lazzat Uses the Lava Stone Grill Method for Unbeatable Skewers",
                 "Pro Tips for the Juiciest Charred Skewers Every Time",
+                // Blog 6 Headings
+                "Looking for Refreshing Shakes in Brampton? Find Your Favourite Blend at Lazzat",
+                "What Is Lazzat and What Do They Offer?",
+                "How Lazzat Makes Their Shakes",
+                "The Shakes in Brampton You Will Find on the Lazzat Menu",
+                "Strawberry Shake",
+                "Golden Mango",
+                "All Berry Shake",
+                "Build Your Own Shake",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (
