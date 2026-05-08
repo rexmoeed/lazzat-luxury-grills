@@ -1,6 +1,8 @@
 import heroRestaurant from "@/assets/hero-restaurant.jpg";
 import heroGrill from "@/assets/hero-grill.jpg";
 import lazzatWall from "@/assets/Lazzat-wall-Design.jpg";
+import saltCounter from "@/assets/salt-counter.jpeg";
+import lazzatLoc from "@/assets/Lazzat loc.jpeg";
 
 export const AboutSection = () => {
   const images = [
@@ -23,6 +25,24 @@ export const AboutSection = () => {
         className="w-full rounded-lg gold-border relative z-10"
       />
     </div>
+
+    {/* New images row */}
+    <div className="flex flex-col sm:flex-row gap-6 mt-8">
+      <div className="flex-1 flex justify-center">
+        <img
+          src={saltCounter}
+          alt="Himalayan salt counter at Lazzat"
+          className="w-full max-w-xs rounded-lg gold-border shadow-lg"
+        />
+      </div>
+      <div className="flex-1 flex justify-center">
+        <img
+          src={lazzatLoc}
+          alt="Lazzat restaurant location in Brampton"
+          className="w-full max-w-xs rounded-lg gold-border shadow-lg"
+        />
+      </div>
+    </div>
   </div>
 
   <div>
@@ -31,26 +51,31 @@ export const AboutSection = () => {
       What is <span className="text-primary">Lazzat?</span>
     </h2>
 
+
     <div className="space-y-5 text-muted-foreground font-sans leading-relaxed">
       <p>
-        It all started with a simple question: why does fresh, flavorful food take so long, and fast food often tastes bland?
+        <span className="text-primary">Lazzat</span> is what happens when a team of chefs with decades in Canadian<br />
+        kitchens decides to stop taking shortcuts.
       </p>
       <p>
-        After years of running kitchens across <span className="text-primary">Canada</span>, we saw the same problem everywhere.
+        The menu is fire-grilled skewers, chef-built salads over basmati or fresh<br />
+        greens, and shakes blended from whole fruit the moment you order — no<br />
+        syrups, no powders, no pre-mixed bases. Every recipe is signed off by a chef<br />
+        currently teaching at George Brown and Sheridan.
       </p>
       <p>
-        This challenge gave birth to <span className="text-primary">Lazzat</span> (a name also spelled 'Lezzat' in some countries), a brand inspired by
-global traditions and built to bring people together under one roof. 
+        The counter is carved from real <span className="text-primary">Himalayan Pink Salt</span> — eight hundred million<br />
+        years old, mined in Pakistan for twenty-five centuries, eighty-four natural<br />
+        minerals in every brick. The pendants above it are the same salt, lit from<br />
+        within. <span className="text-primary">Touch the counter when you order. It's real.</span>
       </p>
       <p>
-        Our goal is to create a
-welcoming space where we celebrate diversity, make connections, and share memorable
-experiences.
+        One menu welcomes every appetite, with dairy-free, gluten-free, nut-free, and<br />
+        egg-free paths on every page. The kitchen is open. The blender runs when<br />
+        you order. The fire is always lit.
       </p>
       <p>
-        At <span className="text-primary">Lazzat</span> every meal is made fresh and served quickly. Guests can order in seconds, enjoy
-freshly cooked dishes, and experience signature sauces and spices inspired by cuisines from
-around the world.
+        <span className="text-primary">McVean Drive, Brampton. Pull up a chair.</span>
       </p>
     </div>
   </div>
