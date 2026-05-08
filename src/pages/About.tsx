@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import lazzatFoodBox from "@/assets/lazzat-food-item-box.jpeg";
+import lazzatLoc from "@/assets/Lazzat loc.jpeg";
 import lazzatFoodBoxes from "@/assets/lazzat-food-boxes.jpeg";
 import saltCounter from "@/assets/salt-counter.jpeg";
 import lazzatMulticulture from "@/assets/lazzat-multiculture.jpeg";
@@ -31,8 +32,8 @@ const About = () => {
             <div>
               <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
                 <img
-                  src={lazzatFoodBox}
-                  alt="Lazzat food item box"
+                  src={lazzatLoc}
+                  alt="Lazzat restaurant location in Brampton"
                   className="w-full rounded-lg gold-border relative z-10"
                 />
               </div>
