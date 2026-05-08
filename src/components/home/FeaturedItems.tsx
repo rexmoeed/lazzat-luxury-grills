@@ -38,7 +38,12 @@ export const FeaturedItems = () => {
           </h2>
           
           <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-            Just like our name, our menu doesn't belong to one culture it belongs to everyone. That's what makes it <span className="text-primary">Canadian</span> at heart.
+            Lunch shouldn't make you choose. Fast or real. Charred or clean. Something<br />
+            for you, or something for everyone at the table. So we built a bowl that doesn't<br />
+            ask. Four skewers over open flame. Six salads built by hand. Shakes blended<br />
+            from whole fruit the second you order — nothing powdered, nothing poured<br />
+            from a bottle. One menu. Every appetite.<br />
+            Pull up a chair.
           </p>
         </div>
 

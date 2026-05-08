@@ -38,12 +38,12 @@ const About = () => {
             </div>
             <div>
               <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
-                It All Started with a <span className="text-primary">Question</span>
+                The Lazzat <span className="text-primary">Story</span>
               </h2>
               <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
                 <p>
-                  “Why does fresh, flavorful food take so long? And why does fast food feel flavorless?”<br/>
-                  From years of running kitchens across Canada, our team saw firsthand how speed often meant blandness and flavor often meant greasy or slow. Lazzat was born to answer that question and redefine what fast casual could be: fresh, fast and packed with global taste.
+                  Lazzat is what happens when a team of chefs with decades in Canadian<br />
+                  kitchens decides to stop taking shortcuts.
                 </p>
               </div>
             </div>
@@ -56,14 +56,17 @@ const About = () => {
         <div className="container-luxury px-4">
           <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
             <div className="order-2 lg:order-1">
-              <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
-                Our <span className="text-primary">Journey of Refinement</span>
-              </h2>
-              <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
-                <p>
-                  This wasn't an overnight idea - it was four years of testing, failing, refining and rebuilding. We reverse-engineered customer behavior, built streamlined processes and crafted a menu where signature peri peri meets creamy garlic, South Asian richness meets Mediterranean balance and every dish is cooked fresh and served fast.
-                </p>
-              </div>
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6">
+                  The <span className="text-primary">Menu</span>
+                </h2>
+                <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
+                  <p>
+                    The menu is fire-grilled skewers, chef-built salads over basmati or fresh<br />
+                    greens, and shakes blended from whole fruit the moment you order — no<br />
+                    syrups, no powders, no pre-mixed bases. Every recipe is signed off by a chef<br />
+                    currently teaching at George Brown and Sheridan.
+                  </p>
+                </div>
             </div>
             <div className="order-1 lg:order-2">
               <div className="story-glow-image p-2 md:p-3 max-w-sm md:max-w-md mx-auto">
@@ -93,21 +96,12 @@ const About = () => {
             </div>
             <div className="order-2 lg:order-2">
               <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
-                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">What is <span className="text-primary">Lazzat?</span></h2>
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">The <span className="text-primary">Counter</span></h2>
                 <p className="text-left">
-                  It all started with a simple question: why does fresh, flavorful food take so long, and fast food often tastes bland?
-                </p>
-                <p className="text-left">
-                  After years of running kitchens across Canada, we saw the same problem everywhere. Quick food lacked depth, and flavorful dishes were often greasy or slow.
-                </p>
-                <p className="text-left">
-                  That vision gave birth to <span className="text-primary">Lazzat</span> (a name also spelled 'Lezzat' in some countries), a restaurant designed not just to serve food but to celebrate culture, community, and connection. Inspired by global traditions, it brings people and flavors together under one roof.
-                </p>
-                <p className="text-left">
-                  Our goal is to create a space where diversity is celebrated, connections are made, and experiences are shared.
-                </p>
-                <p className="text-left">
-                  At <span className="text-primary">Lazzat</span>, we make sure every meal is fresh, flavourful, and served fast. Order in seconds, enjoy freshly cooked dishes, and savor signature sauces and spices inspired by cuisines from around the world.
+                  The counter is carved from real Himalayan pink salt — eight hundred million<br />
+                  years old, mined in Pakistan for twenty-five centuries, eighty-four natural<br />
+                  minerals in every brick. The pendants above it are the same salt, lit from<br />
+                  within. Touch the counter when you order. It's real.
                 </p>
               </div>
             </div>
@@ -121,15 +115,14 @@ const About = () => {
           <div className="story-ambient grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12 gap-y-10 items-center">
             <div className="order-1 lg:order-1">
               <div className="space-y-3 md:space-y-5 text-muted-foreground font-sans text-sm md:text-base leading-relaxed">
-                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">Built by <span className="text-primary">Experience</span>, Not Guesswork</h2>
+                <h2 className="font-serif text-2xl md:text-4xl text-foreground mb-4 md:mb-6 text-left">The <span className="text-primary">Menu for All</span></h2>
                 <p className="text-left">
-                  We designed <span className="text-primary">Lazzat</span> to deliver quality and flavor in every bite, using the <span className="text-primary">freshest, healthiest ingredients.</span> Our dishes are cooked over <span className="text-primary">open flames without oil,</span> and our professional chefs have crafted a menu inspired by <span className="text-primary">global cuisines.</span>
+                  One menu welcomes every appetite, with dairy-free, gluten-free, nut-free, and<br />
+                  egg-free paths on every page. The kitchen is open. The blender runs when<br />
+                  you order. The fire is always lit.
                 </p>
                 <p className="text-left">
-                  <span className="text-primary">Lazzat</span> brings global flavors together while keeping every meal <span className="text-primary">wholesome, fresh, and authentic.</span>
-                </p>
-                <p className="text-left">
-                  Every ingredient is carefully selected, every recipe tested, and every dish prepared with precision and care. From sourcing to serving, quality is never compromised.
+                  McVean Drive, Brampton. Pull up a chair.
                 </p>
               </div>
             </div>
