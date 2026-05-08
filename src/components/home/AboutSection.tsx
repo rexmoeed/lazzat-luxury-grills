@@ -1,13 +1,13 @@
-import heroRestaurant from "@/assets/hero-restaurant.jpg";
-import heroGrill from "@/assets/hero-grill.jpg";
+// import saltCounter from "@/assets/salt-counter.jpeg";
+// import lazzatLoc from "@/assets/Lazzat loc.jpeg";
 import lazzatWall from "@/assets/Lazzat-wall-Design.jpg";
 import saltCounter from "@/assets/salt-counter.jpeg";
 import lazzatLoc from "@/assets/Lazzat loc.jpeg";
 
 export const AboutSection = () => {
   const images = [
-    { src: heroRestaurant, alt: "Lazzat Restaurant Interior" },
-    { src: heroGrill, alt: "Grilling Action" },
+    { src: saltCounter, alt: "Himalayan salt counter at Lazzat" },
+    { src: lazzatLoc, alt: "Lazzat restaurant location in Brampton" },
   ];
 
   return (
@@ -26,23 +26,7 @@ export const AboutSection = () => {
       />
     </div>
 
-    {/* New images row */}
-    <div className="flex flex-col sm:flex-row gap-6 mt-8">
-      <div className="flex-1 flex justify-center">
-        <img
-          src={saltCounter}
-          alt="Himalayan salt counter at Lazzat"
-          className="w-full max-w-xs rounded-lg gold-border shadow-lg"
-        />
-      </div>
-      <div className="flex-1 flex justify-center">
-        <img
-          src={lazzatLoc}
-          alt="Lazzat restaurant location in Brampton"
-          className="w-full max-w-xs rounded-lg gold-border shadow-lg"
-        />
-      </div>
-    </div>
+    {/* Removed salt-counter and lazzatLoc images from About section as requested */}
   </div>
 
   <div>
