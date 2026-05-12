@@ -3,10 +3,11 @@ import { Layout } from "@/components/layout/Layout";
 import { useNavigate } from "react-router-dom";
 import { menuItemsFlat } from "@/lib/menu-data";
 
-// Declare window.dataLayer for TypeScript
+// Declare window.dataLayer and gtag for TypeScript
 declare global {
   interface Window {
     dataLayer?: Array<any>;
+    gtag?: (...args: any[]) => void;
   }
 }
 

@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 
-// Declare window.dataLayer for TypeScript
+// Declare window.dataLayer and gtag for TypeScript
 declare global {
   interface Window {
     dataLayer?: Array<any>;
+    gtag?: (...args: any[]) => void;
   }
 }
 import { Layout } from "@/components/layout/Layout";
@@ -102,7 +103,7 @@ const Contact = () => {
     submitTimeoutRef.current = window.setTimeout(() => {
       // Fire Google Ads Contact Conversion event
       if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
-        window.gtag('event', 'conversion', {
+        (window.gtag as (...args: any[]) => void)('event', 'conversion', {
           'send_to': 'AW-18126803392/ha9ACJidwKYcEMCjxMND',
           'value': 1.0,
           'currency': 'CAD'
