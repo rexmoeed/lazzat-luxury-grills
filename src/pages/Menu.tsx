@@ -1286,7 +1286,17 @@ export default function MenuPage() {
                           </div>
                           {/* Footer with CTA */}
                           <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
-                            <button className="btn-gold w-full py-3 text-base font-semibold">
+                            <button
+                              className="btn-gold w-full py-3 text-base font-semibold"
+                              onClick={() => {
+                                if (isMenuItem(selectedItem)) {
+                                  // Navigate to /order with menu item pre-selected
+                                  navigate(`/order?item=menu-${selectedItem.id}`);
+                                } else {
+                                  navigate('/order');
+                                }
+                              }}
+                            >
                               Order Now
                             </button>
                           </div>

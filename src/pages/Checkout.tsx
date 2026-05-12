@@ -14,7 +14,16 @@ declare global {
 const Checkout = () => {
   const navigate = useNavigate();
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.dataLayer) {
+    // Google Ads Begin Checkout Conversion
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-18126803392/I4NqCJWdwKYcEMCjxMND',
+        'value': 1.0,
+        'currency': 'CAD'
+      });
+    }
+    // (Optional) Still push to dataLayer for GTM if needed
+    if (window.dataLayer) {
       window.dataLayer.push({ event: 'begin_checkout' });
     }
   }, []);

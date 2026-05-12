@@ -22,7 +22,7 @@ import { sauces } from "@/lib/sauces-data";
 import type { MenuItem } from "@/lib/menu-types";
 import { toast } from "sonner";
 
-interface CateringFormData {
+interface OrderFormData {
   // Step 1
   name: string;
   email: string;
@@ -37,7 +37,7 @@ interface CateringFormData {
   pickupLocation: string;
 }
 
-interface SelectableCateringItem {
+interface SelectableOrderItem {
   key: string;
   name: string;
   category: string;
@@ -72,12 +72,16 @@ const isMenuItemArray = (value: unknown): value is MenuItem[] => {
   });
 };
 
-const Catering = () => {
+
+import { useLocation } from "react-router-dom";
+
+const Order = () => {
+  const location = useLocation();
   const [runtimeMenuItems, setRuntimeMenuItems] = useState<MenuItem[] | null>(null);
   const effectiveMenuItems = useMemo(() => runtimeMenuItems ?? menuItemsFlat, [runtimeMenuItems]);
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [formData, setFormData] = useState<CateringFormData>({
+  const [formData, setFormData] = useState<OrderFormData>({
     name: "",
     email: "",
     phone: "",
@@ -91,6 +95,19 @@ const Catering = () => {
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+
+  // Pre-select menu item if passed in query param
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const itemKey = params.get("item");
+    if (itemKey && !formData.selectedItems.includes(itemKey)) {
+      setFormData((prev) => ({
+        ...prev,
+        selectedItems: [itemKey],
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -130,7 +147,7 @@ const Catering = () => {
   const getSauceKey = (name: string) => `sauce-${name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
 
   const categorizedSelectionItems = useMemo(() => {
-    const grouped: Record<string, SelectableCateringItem[]> = {};
+    const grouped: Record<string, SelectableOrderItem[]> = {};
 
     effectiveMenuItems.forEach((item) => {
       if (!grouped[item.category]) {
@@ -240,8 +257,8 @@ const Catering = () => {
   const handleSubmit = () => {
     if (!isStep3Valid()) return;
 
-    // Log the catering request
-    console.log("Catering Request Submitted:", formData);
+    // Log the order request
+    console.log("Order Request Submitted:", formData);
     
     // Get selected items details
     const selectedMenuItems = effectiveMenuItems.filter((item) =>
@@ -261,7 +278,7 @@ const Catering = () => {
     console.log("Pickup Location:", location);
 
     toast.success(
-      `Catering request submitted! We'll contact you at ${formData.email} to confirm.`
+      `Order request submitted! We'll contact you at ${formData.email} to confirm.`
     );
 
     // Reset form
@@ -296,20 +313,10 @@ const Catering = () => {
           <div className="text-center">
             <div className="gold-divider w-16 mx-auto mb-4 md:mb-6" />
             <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-foreground mb-3 md:mb-4">
-              We bring <span className="text-primary">Lazzat</span> to you
+              Place Your <span className="text-primary">Order</span>
             </h1>
             <p className="font-sans text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2">
-              Let us cater your next event. From intimate gatherings to large
-              celebrations, we've got you covered.
-            </p>
-            <p className="font-sans text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto px-2 mt-2">
-              For urgent catering orders, contact us directly at{" "}
-              <a
-                href="tel:+16471234567"
-                className="text-primary font-semibold hover:underline"
-              >
-                +1 (647) 123-4567
-              </a>
+              Enjoy Lazzat at home, work, or your next event. Select your items and details below.
             </p>
           </div>
         </div>
@@ -381,12 +388,12 @@ const Catering = () => {
               </div>
             )}
 
-            {/* STEP 2: Event Details */}
+            {/* STEP 2: Order Details */}
             {currentStep === 2 && (
               <div className="space-y-4 sm:space-y-6 animate-fade-in">
                 <div>
                   <h2 className="font-serif text-xl sm:text-2xl text-foreground mb-4 sm:mb-6">
-                    Event Details
+                    Order Details
                   </h2>
                 </div>
 
@@ -674,7 +681,7 @@ const Catering = () => {
                       Order Summary
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                      Review your catering request before submitting
+                      Review your order before submitting
                     </p>
                   </div>
 
@@ -682,7 +689,7 @@ const Catering = () => {
                   <div className="border border-primary/30 rounded-lg overflow-hidden bg-card max-h-[20rem] sm:max-h-[26rem] md:max-h-[30rem] overflow-y-auto scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent">
                     {/* Receipt Header */}
                     <div className="bg-primary/10 border-b border-primary/30 px-3 sm:px-4 py-2.5 sm:py-3 flex items-center justify-between sticky top-0 z-10">
-                      <span className="font-serif text-primary font-semibold text-sm sm:text-base">Lazzat Catering</span>
+                      <span className="font-serif text-primary font-semibold text-sm sm:text-base">Lazzat Order</span>
                       <span className="text-[10px] sm:text-xs text-muted-foreground font-mono">
                         {new Date().toLocaleDateString("en-CA")}
                       </span>
@@ -709,7 +716,7 @@ const Catering = () => {
 
                     {/* Event Details */}
                     <div className="px-3 sm:px-4 py-2.5 sm:py-3 border-b border-primary/10">
-                      <p className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold mb-2">Event Details</p>
+                      <p className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold mb-2">Order Details</p>
                       <div className="space-y-1">
                         <div className="flex justify-between gap-2 sm:gap-4 text-xs sm:text-sm">
                           <span className="text-muted-foreground flex-shrink-0">Date</span>
@@ -738,8 +745,8 @@ const Catering = () => {
                     {/* Selected Items */}
                     <div className="px-3 sm:px-4 py-2.5 sm:py-3 border-b border-primary/10">
                       <p className="text-[10px] uppercase tracking-widest text-primary/70 font-semibold mb-2 sm:mb-3">
-                        Selected Items ({formData.selectedItems.length})
-                      </p>
+                          Selected Items ({formData.selectedItems.length})
+                        </p>
                       <div className="space-y-2">
                         {selectedMenuItems.map((item) => (
                           <div key={item.id} className="flex items-center gap-2 sm:gap-3">
@@ -799,7 +806,7 @@ const Catering = () => {
                     </div>
                   </div>
 
-                  <p className="text-xs text-muted-foreground text-center">
+                    <p className="text-xs text-muted-foreground text-center">
                     By submitting, you agree to be contacted by our team to confirm your order.
                   </p>
                 </div>
@@ -841,12 +848,12 @@ const Catering = () => {
           {/* Step Indicator */}
           <div className="mt-6 px-2">
             <div className="flex items-center justify-between gap-2">
-              {[
-                { step: 1, label: "Contact Info" },
-                { step: 2, label: "Event Details" },
-                { step: 3, label: "Menu & Location" },
-                { step: 4, label: "Review" },
-              ].map((item, idx) => (
+                {[
+                  { step: 1, label: "Contact Info" },
+                  { step: 2, label: "Order Details" },
+                  { step: 3, label: "Menu & Location" },
+                  { step: 4, label: "Review" },
+                ].map((item, idx) => (
                 <div key={item.step} className="flex-1 flex items-center">
                   {/* Step Circle */}
                   <div className="flex flex-col items-center relative z-10">
@@ -957,4 +964,4 @@ const Catering = () => {
   );
 };
 
-export default Catering;
+export default Order;

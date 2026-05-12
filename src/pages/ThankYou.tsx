@@ -10,7 +10,17 @@ declare global {
 
 const ThankYou = () => {
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.dataLayer) {
+    // Google Ads Purchase Conversion
+    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+      window.gtag('event', 'conversion', {
+        'send_to': 'AW-18126803392/B4w6CJKdwKYcEMCjxMND',
+        'value': 1.0,
+        'currency': 'CAD',
+        'transaction_id': '' // Replace with dynamic order ID if available
+      });
+    }
+    // (Optional) Still push to dataLayer for GTM if needed
+    if (window.dataLayer) {
       window.dataLayer.push({ event: 'purchase' });
     }
   }, []);

@@ -100,8 +100,16 @@ const Contact = () => {
       window.clearTimeout(submitTimeoutRef.current);
     }
     submitTimeoutRef.current = window.setTimeout(() => {
-      // Fire Google Tag Manager Contact Conversion event
-      if (typeof window !== 'undefined' && window.dataLayer) {
+      // Fire Google Ads Contact Conversion event
+      if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+        window.gtag('event', 'conversion', {
+          'send_to': 'AW-18126803392/ha9ACJidwKYcEMCjxMND',
+          'value': 1.0,
+          'currency': 'CAD'
+        });
+      }
+      // (Optional) Still push to dataLayer for GTM if needed
+      if (window.dataLayer) {
         window.dataLayer.push({ event: 'contact_submit' });
       }
       toast({
