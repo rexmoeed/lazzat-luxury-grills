@@ -120,14 +120,14 @@ const BlogDetail = () => {
                 "All Berry Shake",
                 "Build Your Own Shake",
                 // Blog 7 Headings
-"Why Food Transparency Is Changing How Restaurants Build Trust",
-"What Food Transparency Actually Means for a Restaurant",
-"The Reasons Customers Are Asking More Questions",
-"Allergies Are the Starting Point",
-"Health Goals and Eating Habits",
-"Where the Food is Sourced From",
-"How to Start Applying Food Transparency in Your Own Kitchen",
-"How Lazzat Ensures Food Transparency",
+                   "Why Food Transparency Is Changing How Restaurants Build Trust",
+                   "What Food Transparency Actually Means for a Restaurant",
+                   "The Reasons Customers Are Asking More Questions",
+                   "Allergies Are the Starting Point",
+                   "Health Goals and Eating Habits",
+                   "Where the Food is Sourced From",
+                   "How to Start Applying Food Transparency in Your Own Kitchen",
+                  "How Lazzat Ensures Food Transparency",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (
