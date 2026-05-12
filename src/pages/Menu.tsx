@@ -288,6 +288,13 @@ const FilterDrawer = ({
 export default function MenuPage() {
   const location = useLocation();
   const navigate = useNavigate();
+
+  // Google Tag Manager: Menu Page View Conversion
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.dataLayer) {
+      window.dataLayer.push({ event: 'menu_view' });
+    }
+  }, []);
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
     const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
   const [runtimeMenuItems, setRuntimeMenuItems] = useState<MenuItem[] | null>(null);

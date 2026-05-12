@@ -1,8 +1,12 @@
 import { Layout } from "@/components/layout/Layout";
 import { ShoppingBag, Clock } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Order = () => {
+  const navigate = useNavigate();
+  const handleOrderNow = () => {
+    navigate("/checkout");
+  };
   return (
     <Layout>
       {/* Hero */}
@@ -45,7 +49,7 @@ const Order = () => {
                 <span>30–45 min delivery</span>
               </div>
 
-              <button className="btn-gold w-full">Order Now</button>
+              <button className="btn-gold w-full" onClick={handleOrderNow}>Order Now</button>
             </div>
           </div>
 

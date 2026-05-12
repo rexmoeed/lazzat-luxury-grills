@@ -1,4 +1,11 @@
 import { useState, useEffect, useRef } from "react";
+
+// Declare window.dataLayer for TypeScript
+declare global {
+  interface Window {
+    dataLayer?: Array<any>;
+  }
+}
 import { Layout } from "@/components/layout/Layout";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -93,13 +100,9 @@ const Contact = () => {
       window.clearTimeout(submitTimeoutRef.current);
     }
     submitTimeoutRef.current = window.setTimeout(() => {
-      // Fire Google Ads Contact conversion event
-      if (typeof window !== 'undefined' && window.gtag) {
-        window.gtag('event', 'conversion', {
-          send_to: 'AW-18126803392/ha9ACJidwKYcEMCjxMND',
-          value: 1.0,
-          currency: 'CAD',
-        });
+      // Fire Google Tag Manager Contact Conversion event
+      if (typeof window !== 'undefined' && window.dataLayer) {
+        window.dataLayer.push({ event: 'contact_submit' });
       }
       toast({
         title: "Message Sent!",
