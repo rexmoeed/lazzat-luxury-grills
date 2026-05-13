@@ -1,7 +1,7 @@
 import { MenuItem } from "./menu-types";
 import imgWholeChicken from "@/assets/whole-chicken.jpeg";
 import imgCutChicken from "@/assets/cut-chicken.jpeg";
-import imgWholeSalmon from "@/assets/whole-salmon.jpeg";
+// ...existing code...
 
 export const familyPlatters: MenuItem[] = [
   {
@@ -52,28 +52,5 @@ export const familyPlatters: MenuItem[] = [
       "Lazzat Bean Salad",
     ],
   },
-  {
-    id: 103,
-    name: "Salmon Fish",
-    description: "Whole Fish Tray served with seasoned rice. Serves 3-4 people.",
-    price: 29.99,
-    image: imgWholeSalmon,
-    category: "Family Platters",
-    heatLevel: 0,
-    isPopular: false,
-    saucePairings: [],
-    customizations: [
-      "Extra Sauce: $0.29",
-      "Water Bottle: $1.89"
-    ],
-    allergens: [],
-    dietary: ["gluten-free", "nut-free"],
-    sidePairings: [
-      "Cucumber Tomato",
-      "Red Cabbage Slaw",
-      "Pickled Onion",
-      "Sweet Corn & Pepper",
-      "Lazzat Bean Salad",
-    ],
-  },
+  // ...existing code...
 ];

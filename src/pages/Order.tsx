@@ -609,39 +609,43 @@ export default function Order() {
                                 <button
                                   type="button"
                                   key={item.key}
-                                  className={`w-full text-left rounded-lg p-2 sm:p-3 border transition-all duration-300 ${{
-                                    true: "bg-card border-primary/60 shadow-[0_0_20px_hsl(43_56%_52%_/_0.15)]",
-                                    false: "bg-card border-primary/20 hover:border-primary/50",
+                                  className={`w-full rounded-2xl border transition-all duration-300 flex flex-col items-center justify-between shadow-md focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2 bg-card p-0 ${{
+                                    true: "border-primary/60 shadow-[0_0_20px_hsl(43_56%_52%_/_0.15)]",
+                                    false: "border-primary/20 hover:border-primary/50",
                                   }[String(isChecked) as "true" | "false"]}`}
                                   onClick={() => toggleMenuItem(item.key)}
                                 >
-                                  <div className="flex items-start gap-3">
+                                  <div className="flex flex-col items-center gap-2 w-full p-3 pb-0">
                                     {item.image ? (
                                       <img
                                         src={item.image}
                                         alt={item.name}
-                                        className="w-12 h-12 sm:w-14 sm:h-14 rounded-md object-cover border border-primary/20 flex-shrink-0"
+                                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover border border-primary/20 flex-shrink-0 mb-1"
                                       />
                                     ) : (
-                                      <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-md bg-muted border border-primary/20 flex-shrink-0" />
+                                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-muted border border-primary/20 flex-shrink-0 mb-1" />
                                     )}
-                                    <div className="flex-1 min-w-0">
-                                      <div className="flex items-start justify-between gap-2">
-                                        <p className="font-semibold text-foreground leading-tight">{item.name}</p>
-                                        <Checkbox
-                                          id={item.key}
-                                          checked={isChecked}
-                                          onCheckedChange={() => toggleMenuItem(item.key)}
-                                          className="mt-0.5"
-                                        />
-                                      </div>
-                                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
+                                    <div className="flex flex-col items-center w-full">
+                                      <p className="font-semibold text-foreground leading-tight text-center text-base sm:text-lg">{item.name}</p>
+                                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2 text-center">
                                         {item.description || item.category}
                                       </p>
-                                      <p className="text-xs text-primary/90 mt-1 font-medium">
+                                      <p className="text-xs text-primary/90 mt-1 font-medium text-center">
                                         {item.category}
                                       </p>
                                     </div>
+                                  </div>
+                                  <div className="w-full px-3 pb-3 pt-2">
+                                    <button
+                                      type="button"
+                                      className="hide-mobile-select-btn w-full bg-primary text-primary-foreground font-semibold rounded-xl py-2 text-base shadow hover:bg-primary/90 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/60 focus:ring-offset-2"
+                                      onClick={e => {
+                                        e.stopPropagation();
+                                        toggleMenuItem(item.key);
+                                      }}
+                                    >
+                                      {isChecked ? "Selected" : "Select"}
+                                    </button>
                                   </div>
                                 </button>
                               );

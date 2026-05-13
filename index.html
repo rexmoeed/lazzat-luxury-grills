@@ -2,6 +2,14 @@
 <html lang="en">
 
   <head>
+        <!-- Force hide Select button on mobile -->
+        <style>
+          @media (max-width: 639px) {
+            .hide-mobile-select-btn {
+              display: none !important;
+            }
+          }
+        </style>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

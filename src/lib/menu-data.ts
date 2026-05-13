@@ -3,13 +3,9 @@ import { MenuItem } from "./menu-types";
 
 import { proteinCubeSkewerPlatters } from "./protein-cube-skewer-platter-data.ts";
 import { familyPlatters } from "./family-platters-data";
-import { biryaniItems } from "./biryani-data";
-import { sajjiItems } from "./sajji-data";
 import { desserts } from "./desserts-data";
 import { shakesAndJuices } from "./shakes-juices-data";
 import { sidesItems } from "./sides-data";
-import { donerItems } from "./doner-data";
-import { wrapsItems } from "./wraps-data";
 import { kidsMenu } from "./kids-menu-data";
 import { combosMenu } from "./combos-menu-data";
 
@@ -17,18 +13,12 @@ import { combosMenu } from "./combos-menu-data";
 export const menuItemsGrouped: Record<string, MenuItem[]> = {
   "Protein Cube Skewer Platter": proteinCubeSkewerPlatters,
   "Family Platters": familyPlatters,
-  "Biryani": Object.values(biryaniItems).flat(),
-  "Sajji": Object.values(sajjiItems).flat(),
   "Combos": combosMenu,
   "Kids Menu": kidsMenu,
   "Desserts": Object.values(desserts).flat(),
   "Shakes & Juices": Object.values(shakesAndJuices).flat(),
   "Sides": Object.values(sidesItems).flat(),
-  "Döner": Object.values(donerItems).flat(),
-  "Wraps": Object.values(wrapsItems).flat(),
 };
-
-/* Flat Export for Filter sort */
 export const menuItemsFlat: MenuItem[] = Object.values(menuItemsGrouped).flat();
 
 type MenuCacheEntry = {

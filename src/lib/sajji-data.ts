@@ -35,4 +35,4 @@ export const sajjiItems: Record<string, MenuItem[]> = {
       sidePairings: ["Cucumber Tomato", "Red Cabbage Slaw", "Pickled Onion", "Sweet Corn & Pepper", "Lazzat Bean Salad"],
     },
   ],
-};
+// File deleted
