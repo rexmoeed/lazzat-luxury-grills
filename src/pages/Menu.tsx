@@ -68,7 +68,7 @@ function isSauceItem(item: unknown): item is SauceItem {
 const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
   "Skewer Platter": {
     title: "Skewer Platter",
-    subtitle: "Charcoal grilled protein cubes served with rice and salad."
+    subtitle: "LavaStone Grilled protein cubes served with rice and salad."
   },
   "Family Platters": {
     title: "Family Platters",
