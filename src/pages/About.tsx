@@ -9,10 +9,27 @@ import lazzatExterior from "@/assets/lazzat-exterior.jpeg";
 import lazzatWallDesign from "@/assets/Lazzat-wall-Design.jpg";
 import { HealthyPromise } from "@/components/home/HealthyPromise";
 import { menuItemsFlat } from "@/lib/menu-data";
+import { Helmet } from "react-helmet";
 
 const About = () => {
+  const pageTitle = "About Us | Lazzat Grill & Shakes";
+  const pageDescription = "Learn about the story, mission, and values of Lazzat Grill & Shakes. Discover our passion for uniting cultures through food in Brampton.";
   return (
-    <Layout>
+    <>
+      <Helmet>
+        <title>{pageTitle}</title>
+        <meta name="description" content={pageDescription} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://lazzat.ca/about" />
+        <meta property="og:image" content="https://lazzat.ca/Lazzat%20logo%2002.png" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content="https://lazzat.ca/Lazzat%20logo%2002.png" />
+        <link rel="canonical" href="https://lazzat.ca/about" />
+      </Helmet>
       {/* Hero Section */}
       <section className="relative pt-28 pb-8 md:pt-40 md:pb-16 bg-background">
         <div className="container-luxury px-4">
@@ -239,7 +256,7 @@ const About = () => {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 };
 
