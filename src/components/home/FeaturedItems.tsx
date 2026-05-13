@@ -7,9 +7,9 @@ import { menuItemsFlat } from "@/lib/menu-data";
 
 
 export const FeaturedItems = () => {
-  // Only show updated menu items (Protein Cube Skewer Platter, Desserts, Salads, Shakes & Juices)
+  // Only show updated menu items (Skewer Platter, Desserts, Salads, Shakes & Juices)
   const categoriesToShow = [
-    "Protein Cube Skewer Platter",
+    "Skewer Platter",
     "Desserts",
     "Salads",
     "Shakes & Juices"

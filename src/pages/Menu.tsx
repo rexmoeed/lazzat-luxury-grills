@@ -66,8 +66,8 @@ function isSauceItem(item: unknown): item is SauceItem {
 
 // Category headings data (needed by CategoryHeading component)
 const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
-  "Protein Cube Skewer Platter": {
-    title: "Protein Cube Skewer Platter",
+  "Skewer Platter": {
+    title: "Skewer Platter",
     subtitle: "Charcoal grilled protein cubes served with rice and salad."
   },
   "Family Platters": {
@@ -386,7 +386,7 @@ export default function MenuPage() {
 
   // Fallback side pairings by category when an item does not define its own
   const defaultSidePairingsByCategory: Record<string, string[]> = {
-    "Protein Cube Skewer Platter": [
+    "Skewer Platter": [
       "Crispy Fries",
       "Side Salad",
       "Classic Butter Naan",
@@ -409,7 +409,7 @@ export default function MenuPage() {
 
   const categories = [
     "All",
-    "Protein Cube Skewer Platter",
+    "Skewer Platter",
     "Family Platters",
     "Combos",
     "Kids Menu",
@@ -729,7 +729,7 @@ export default function MenuPage() {
                           <div className="p-6">
                             <div>
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                              {item.category === "Protein Cube Skewer Platter" ? (
+                              {item.category === "Skewer Platter" ? (
                                 <div className="font-semibold text-gold text-left text-xs mt-1 whitespace-nowrap">
                                   {(() => {
                                     const match = item.description.match(/(1-Skewer[^/]+\/ 2-Skewers[^/]+\/ 3 Skewers[^\n]+)/);
@@ -1014,7 +1014,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Side Pairings Section */}
-                                {sideRecommendations.length > 0 && ["Protein Cube Skewer Platter"].includes(selectedItem.category) && (
+                                {sideRecommendations.length > 0 && ["Skewer Platter"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Salads
@@ -1062,7 +1062,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Sauce Pairings Section */}
-                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Protein Cube Skewer Platter"].includes(selectedItem.category) && (
+                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Skewer Platter"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Sauces
@@ -1111,14 +1111,14 @@ export default function MenuPage() {
                                 )}
                                 {/* Seasonings Section */}
                                 {spices && spices.length > 0 && selectedItem && (() => {
-                                  // Show for Sides (not rice/naan), Protein Cube Skewer Platter
+                                  // Show for Sides (not rice/naan), Skewer Platter
                                   const cat = selectedItem.category;
                                   const name = selectedItem.name.toLowerCase();
                                   const isRice = name.includes("rice");
                                   const isNaan = name.includes("naan");
                                   const isColeslaw = name.includes("coleslaw");
                                   // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
-                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji", "Family Platters", "Protein Cube Skewer Platter"];
+                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji", "Family Platters", "Skewer Platter"];
                                                                   {/* Recommended Sauces for Family Platters */}
                                                                   {selectedItem.category === "Family Platters" && (
                                                                     <div className="mb-6">
@@ -1151,7 +1151,7 @@ export default function MenuPage() {
                                           : name.includes("salad") || name.includes("vegetable")
                                             ? spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name))
                                             : spices.filter(s => s.level <= 3).slice(0, 3)
-                                      : cat === "Protein Cube Skewer Platter"
+                                      : cat === "Skewer Platter"
                                         ? spices.filter(s => [
                                             "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
                                           ].includes(s.name))

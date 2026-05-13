@@ -885,9 +885,9 @@ export default function Order() {
                     {/* --- Customizations & Build Your Own UI --- */}
                     {/* Show customizations for selected main item (parsed from description if needed) */}
                     {selectedMenuItemObj && (() => {
-                      // Skewer logic: parse from description if category is Protein Cube Skewer Platter
+                      // Skewer logic: parse from description if category is Skewer Platter
                       let skewerOptions: number[] = [];
-                      if (selectedMenuItemObj.category === "Protein Cube Skewer Platter" && selectedMenuItemObj.description) {
+                      if (selectedMenuItemObj.category === "Skewer Platter" && selectedMenuItemObj.description) {
                         // Look for "1-Skewer", "2-Skewers", "3 Skewers" in description
                         const regex = /(\d)[ -]?-?Skewer[s]?/gi;
                         let match;
