@@ -220,7 +220,7 @@ export default function MenuPage() {
     }
   }, []);
     const pageTitle = "Menu | Lazzat - Premium Grills, Biryani, Sajji & More";
-    const pageDescription = "Explore Lazzat's full menu: BBQ, Tikka, Kabab, Biryani, Sajji, desserts, sides, shakes, and more. Fresh, halal, and luxurious dining.";
+    const pageDescription = "A flame-grilled bowl and real-fruit shake restaurant on McVean Drive, Brampton — where one menu welcomes every appetite. Pull up a chair.";
   const [runtimeMenuItems, setRuntimeMenuItems] = useState<MenuItem[] | null>(null);
   // State declarations
     // No tabs for salads
@@ -449,8 +449,7 @@ export default function MenuPage() {
                 <span id="menu-hero-title">Our <span className="text-primary">Menu</span></span>
               </h1>
               <p className="font-sans text-muted-foreground max-w-2xl mx-auto">
-                Explore our premium selection of grills, sauces, desserts, shakes,
-                juices and biryani. All new menu.
+                Experience the art of lava stone grilling—no artificial flavors, no shortcuts. Our menu features real ingredients, house-made sauces, and desserts, all crafted without artificial colors or preservatives. Taste the difference in every bite.
               </p>
             </div>
           </section>
