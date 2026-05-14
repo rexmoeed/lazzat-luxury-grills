@@ -11,7 +11,7 @@ import { combosMenu } from "./combos-menu-data";
 
 /* Grouped Menu data */
 export const menuItemsGrouped: Record<string, MenuItem[]> = {
-  "Skewer Platter": proteinCubeSkewerPlatters,
+  "Signature Protein Platters": proteinCubeSkewerPlatters,
   "Family Platters": familyPlatters,
   "Combos": combosMenu,
   "Kids Menu": kidsMenu,

@@ -40,13 +40,13 @@ function parseInitialCategory(search: string): string {
   // categories is defined later, so hardcode here for initial parse
   const validCategories = [
     "All",
-    "Skewer Platter",
+    "Signature Protein Platters",
     "Family Platters",
     "Combos",
     "Kids Menu",
     "Salads",
     "Desserts",
-    "Shakes & Juices",
+    "Drinks",
   ];
   return validCategories.includes(value) ? value : "All";
 }
@@ -309,7 +309,7 @@ export default function MenuPage() {
 
   // Fallback side pairings by category when an item does not define its own
   const defaultSidePairingsByCategory: Record<string, string[]> = {
-    "Skewer Platter": [
+    "Signature Protein Platters": [
       "Crispy Fries",
       "Side Salad",
       "Classic Butter Naan",
@@ -332,13 +332,13 @@ export default function MenuPage() {
 
   const categories = [
     "All",
-    "Skewer Platter",
+    "Signature Protein Platters",
     "Family Platters",
     "Combos",
     "Kids Menu",
     "Salads",
     "Desserts",
-    "Shakes & Juices",
+    "Drinks",
   ];
 
   const clearAllFilters = () => {
@@ -548,7 +548,7 @@ export default function MenuPage() {
                     {/* No tabs for salads */}
                     {/* ...removed Sauces Filter Dropdown */}
                     {/* Grid for Sides or other single category */}
-{activeCategory === "Shakes & Juices" ? (
+{activeCategory === "Drinks" ? (
   (() => {
     const shakeCard = (item: MenuItem) => (
       <div
@@ -649,7 +649,7 @@ export default function MenuPage() {
                           <div className="p-6">
                             <div>
                               <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                              {item.category === "Skewer Platter" ? (
+                              {item.category === "Signature Protein Platters" ? (
                                 <div className="font-semibold text-gold text-left text-xs mt-1 whitespace-nowrap">
                                   {(() => {
                                     const match = item.description.match(/(1-Skewer[^/]+\/ 2-Skewers[^/]+\/ 3 Skewers[^\n]+)/);
@@ -663,7 +663,7 @@ export default function MenuPage() {
                                     return match ? match[1] : null;
                                   })()}
                                 </div>
-                              ) : ((item.category === "Shakes & Juices" && (item.subCategory === "Signature Shakes" || item.subCategory === "Popular Fruit Blends")) ? (
+                              ) : ((item.category === "Drinks" && (item.subCategory === "Signature Shakes" || item.subCategory === "Popular Fruit Blends")) ? (
                                 <div className="font-semibold text-gold text-left text-xs mt-1 whitespace-pre-line">
                                   {(() => {
                                     const match = item.description.match(/Standard Price [0-9.]+\s*500 ml Combo Price [0-9.]+/);
@@ -930,7 +930,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Side Pairings Section */}
-                                {sideRecommendations.length > 0 && ["Skewer Platter"].includes(selectedItem.category) && (
+                                {sideRecommendations.length > 0 && ["Signature Protein Platters"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Salads
@@ -978,7 +978,7 @@ export default function MenuPage() {
                                   </div>
                                 )}
                                 {/* Sauce Pairings Section */}
-                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Skewer Platter"].includes(selectedItem.category) && (
+                                {Array.isArray(selectedItem.saucePairings) && selectedItem.saucePairings.length > 0 && ["Signature Protein Platters"].includes(selectedItem.category) && (
                                   <div className="mb-6">
                                     <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
                                       Recommended Sauces
