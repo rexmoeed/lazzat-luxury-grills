@@ -99,6 +99,45 @@
       });
     </script>
 
+    <!-- Structured Data: Restaurant & Menu -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Lazzat",
+        "image": "https://lazzat.ca/Lazzat%20logo%2002.png",
+        "@id": "https://lazzat.ca",
+        "url": "https://lazzat.ca",
+        "telephone": "+1 289-401-0002",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "11685 McVean Dr ",
+          "addressLocality": "Brampton",
+          "addressRegion": "Ontario",
+          "postalCode": "L6P 4N5",
+          "addressCountry": "CA"
+        },
+        "servesCuisine": [
+          "Signature Protein Platters",
+          "Family Platters",
+          "Combos",
+          "Kids Menu",
+          "Desserts",
+          "Drinks",
+          "Salads"
+        ],
+        "menu": "https://lazzat.ca/menu",
+        "priceRange": "$$",
+        "openingHours": "Mo-Su 11:00-23:00",
+        "description": "Lava stone grilled protein platters, chef-built salads, and real-fruit shakes. No artificial flavors, colors, or preservatives."
+      }
+      </script>
+
+    <!-- Security Headers: These are best set at the server level, but here are meta tags for reference -->
+    <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' https://lazzat.ca data:; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com https://www.googletagmanager.com/gtag/js https://www.googleadservices.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://www.google-analytics.com https://www.googletagmanager.com; frame-src https://www.googletagmanager.com:">
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Lazzat Grill & Shakes in Brampton</title>
@@ -126,39 +165,6 @@
 
     <link rel="canonical" href="https://lazzat.ca" />
     <link rel="icon" type="image/png" href="/favicon.png" />
-
-      <!-- Structured Data: Restaurant & Menu -->
-      <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Restaurant",
-        "name": "Lazzat",
-        "image": "https://lazzat.ca/Lazzat%20logo%2002.png",
-        "@id": "https://lazzat.ca",
-        "url": "https://lazzat.ca",
-        "telephone": "+1 289-401-0002",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "11685 McVean Dr ",
-          "addressLocality": "Brampton",
-          "addressRegion": "Ontario",
-          "postalCode": "L6P 4N5",
-          "addressCountry": "CA"
-        },
-        "servesCuisine": [
-          "Skewer Platter",
-          "Family Platters",
-          "Combos",
-          "Kids Menu",
-          "Desserts",
-          "Shakes & Juices",
-          "Sides"
-        ],
-        "menu": "https://lazzat.ca/menu",
-        "priceRange": "$$",
-        "openingHours": "Mo-Su 11:00-23:00"
-      }
-      </script>
 
     <meta name="google-site-verification" content="6pMQpKs3Mg7eesR7acVV1cJOa6sgKpYhqVEfqElpRN8" />
   </head>
