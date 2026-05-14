@@ -8,7 +8,7 @@ import imgSoya from "@/assets/soya-chaap.jpeg";
 export const proteinCubeSkewerPlatters: MenuItem[] = [
   {
     id: 1,
-    name: "Chicken Breast Cubes",
+    name: "Signature Chicken Breast Platter",
     description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgChicken,
     category: "Skewer Platter",
@@ -24,7 +24,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   },
   {
     id: 2,
-    name: "Lamb Cubes",
+    name: "Signature Lamb Platter",
     description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgLamb,
     category: "Skewer Platter",
@@ -40,7 +40,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   },
   {
     id: 3,
-    name: "Goat Cubes",
+    name: "Signature Goat Platter",
     description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgGoat,
     category: "Skewer Platter",
@@ -72,7 +72,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   },
   {
     id: 5,
-    name: "Soya Cubes",
+    name: "Signature Soya Platter",
     description: "Plant-Based Cubes. Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgSoya,
     category: "Skewer Platter",
