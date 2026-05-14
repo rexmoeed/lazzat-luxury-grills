@@ -128,6 +128,19 @@ const BlogDetail = () => {
                    "Where the Food is Sourced From",
                    "How to Start Applying Food Transparency in Your Own Kitchen",
                   "How Lazzat Ensures Food Transparency",
+                  // Blog 8 Headings
+                "Who Benefits From Takeaway Food in Brampton",
+                "Families with Busy Schedules",
+                "Workers and Office Employees",
+                "Young People Exploring Different Cuisines",
+                "Gatherings and Group Orders",
+                "Why Takeaway Food Has Become a Good Alternative",
+                "What Lazzat Offers for Takeaway Food Brampton Residents Are Looking For",
+                "Platters",
+                "Grilled Food",
+                "Shakes and Beverages",
+                "Desserts",
+                "Food Delivery Brampton and Pickup",
               ];
               if (goldenHeadings.includes(line.trim())) {
                 return (
