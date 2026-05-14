@@ -12,10 +12,10 @@ export const mergeFlavours = ({
   spices,
 }: {
   sauces: SauceItem[];
-  spices: SauceItem[];
+  spices?: SauceItem[];
 }): FlavorEntry[] => [
-  ...sauces.map((item) => ({ ...item, source: "sauce" as const })),
-  ...spices.map((item) => ({ ...item, source: "spice" as const })),
+  ...(sauces ? sauces.map((item) => ({ ...item, source: "sauce" as const })) : []),
+  ...(spices ? spices.map((item) => ({ ...item, source: "spice" as const })) : []),
 ];
 
 export const filterFlavours = ({

@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 /* CENTRAL DATA */
 import { sauces } from "@/lib/sauces-data";
-import { spices } from "@/lib/spices-data";
 import {
   mergeFlavours,
   filterFlavours,
@@ -72,7 +71,6 @@ const heatFilters: { label: string; value: HeatFilter }[] = [
 const typeFilters: { label: string; value: TypeFilter }[] = [
   { label: "All", value: "all" },
   { label: "Sauces", value: "sauce" },
-  { label: "Spices", value: "spice" },
 ];
 
 const sortOptions: { label: string; value: FlavorSort }[] = [
@@ -104,7 +102,7 @@ const SignatureFlavors = () => {
   const [selectedFlavor, setSelectedFlavor] = useState<FlavorEntry | null>(null);
 
   const allFlavours = useMemo(
-    () => mergeFlavours({ sauces, spices }),
+    () => mergeFlavours({ sauces }),
     []
   );
 
@@ -352,9 +350,16 @@ const SignatureFlavors = () => {
                 <AllergenBadges allergens={selectedFlavor.allergens} />
               </div>
 
-              <button className="mt-6 w-full rounded-md bg-primary py-3 font-semibold text-black hover:opacity-90 transition">
+              <a
+                className="mt-6 w-full rounded-md bg-primary py-3 font-semibold text-black hover:opacity-90 transition text-center block"
+                href="https://order.toasttab.com/online/lazzat-mcvean?"
+                target="_blank"
+                rel="noopener noreferrer"
+                role="button"
+                aria-label="Order Twisted BBQ Sauce online"
+              >
                 Order Now
-              </button>
+              </a>
             </div>
 
             {/* CLOSE */}

@@ -1106,9 +1106,7 @@ export default function Order() {
                                       <img src={addon.image} alt={addon.name} className="w-16 h-16 rounded object-cover border border-primary/20 mb-1" />
                                     )}
                                     <div className="text-xs text-foreground text-center font-medium">You added: {addon.name}</div>
-                                    {addon.price !== undefined && (
-                                      <div className="text-xs text-primary text-center font-semibold">${addon.price.toFixed(2)}</div>
-                                    )}
+                                    {/* Price hidden intentionally */}
                                     {/* Show customizations if any */}
                                     {'custom' in addon && addon.custom && (
                                       <div className="text-[10px] text-muted-foreground mt-1 text-center">
@@ -1123,11 +1121,7 @@ export default function Order() {
                             </div>
                           )}
                           {/* Show total price if any item has a price */}
-                          {(mainItem?.price || allAddons.some(a => a.price)) && (
-                            <div className="mt-4 text-lg font-bold text-center text-primary">
-                              Total Price: ${totalPrice.toFixed(2)}
-                            </div>
-                          )}
+                          {/* Total price hidden intentionally */}
                         </>
                       );
                     })()}

@@ -15,7 +15,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 301,
       name: "Cucumber Tomato",
-      description: "Fresh Cucumber, Ripe Tomato, Lime, Olive Oil\n70G per Scoop Price: 5.99",
+      description: "Fresh Cucumber, Ripe Tomato, Lime, Olive Oil",
       image: imgCucumberTomato,
       category: "Salads",
       subCategory: "Salads",
@@ -29,7 +29,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 303,
       name: "Pickled Onion",
-      description: "Quick-Pickled Red Onion, Mustard Seed\n70G per Scoop Price: 5.99",
+      description: "Quick-Pickled Red Onion, Mustard Seed",
       image: imgPickledOnion,
       category: "Salads",
       subCategory: "Salads",
@@ -43,7 +43,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 304,
       name: "Sweet Corn & Pepper",
-      description: "Sweet Corn, Bell Pepper, Tamarind-Hint\n70G per Scoop Price: 5.99",
+      description: "Sweet Corn, Bell Pepper, Tamarind-Hint",
       image: imgSweetCorn,
       category: "Salads",
       subCategory: "Salads",
@@ -58,7 +58,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 306,
       name: "Lazzat Bean Salad",
-      description: "Kidney Bean, Raisin, Mild Spice\n70G per Scoop Price: 5.99",
+      description: "Kidney Bean, Raisin, Mild Spice",
       image: imgLazzatBeanSalad,
       category: "Salads",
       subCategory: "Salads",
@@ -73,7 +73,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 307,
       name: "Spiced ChickPea",
-      description: "Chickpea, Lemon, Mild Spice\nHoney Based Dressing\n70G per Scoop Price: 5.99",
+      description: "Chickpea, Lemon, Mild Spice\nHoney Based Dressing",
       image: imgSpicedChickPea,
       category: "Salads",
       subCategory: "Salads",
@@ -87,7 +87,7 @@ export const sidesItems: Record<string, MenuItem[]> = {
     {
       id: 308,
       name: "Roasted Sweet Potato",
-      description: "Roasted Cubed Sweet Potato, Herbs\n70G per Scoop Price:5.99",
+      description: "Roasted Cubed Sweet Potato, Herbs",
       image: imgRoastedPotato,
       category: "Salads",
       subCategory: "Salads",

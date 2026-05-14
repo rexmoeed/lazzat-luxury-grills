@@ -242,8 +242,10 @@ const About = () => {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4 mt-4">
             <a
-              href="/order"
+              href="https://order.toasttab.com/online/lazzat-mcvean?"
               className="btn-gold pulse-gold w-full sm:w-auto text-center"
+              target="_blank"
+              rel="noopener noreferrer"
             >
               Order Now
             </a>

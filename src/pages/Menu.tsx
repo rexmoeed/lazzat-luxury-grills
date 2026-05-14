@@ -11,7 +11,6 @@ import {
 import { useMemo, useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AllergenInfo from "@/components/shared/AllergenInfo";
-import type { SauceItem } from "../lib/menu-types";
 import { Helmet } from "react-helmet";
 import { Layout } from "@/components/layout/Layout";
 import { Flame, X, Filter, ChevronLeft, ChevronRight, Info } from "lucide-react";
@@ -22,115 +21,35 @@ import {
 // ...removed sauces import
 import type { MenuItem } from "@/lib/menu-types";
 import { findSauce } from "@/lib/find-sauce";
-import { spices } from "@/lib/spices-data";
+
 import {
   filterMenuItems,
   hasSelectedDietaryFilter,
 } from "@/lib/menu-filter-engine";
 import { BuildYourShake } from "@/components/menu/BuildYourShake";
-
-type MenuApiResponse = {
-  ok?: boolean;
-  data?: unknown;
-  count?: unknown;
-};
-
-const isMenuItemArray = (value: unknown): value is MenuItem[] => {
-  if (!Array.isArray(value)) return false;
-
-  return value.every((item) => {
-    if (!item || typeof item !== "object") return false;
-    const candidate = item as Partial<MenuItem>;
-
-    return (
-      typeof candidate.id === "number" &&
-      typeof candidate.name === "string" &&
-      typeof candidate.category === "string" &&
-      typeof candidate.description === "string" &&
-      typeof candidate.image === "string" &&
-      Array.isArray(candidate.saucePairings) &&
-      Array.isArray(candidate.customizations)
-    );
-  });
-};
-
-
-
-// Type guard helpers
-function isMenuItem(item: unknown): item is MenuItem {
-  return !!item && typeof item === "object" && "category" in item && "heatLevel" in item;
-}
-function isSauceItem(item: unknown): item is SauceItem {
-  return !!item && typeof item === "object" && "level" in item && !("category" in item);
-}
-
-// Category headings data (needed by CategoryHeading component)
-const categoryHeadings: Record<string, { title: string; subtitle: string }> = {
-  "Skewer Platter": {
-    title: "Skewer Platter",
-    subtitle: "LavaStone Grilled protein cubes served with rice and salad."
-  },
-  "Family Platters": {
-    title: "Family Platters",
-    subtitle: "Whole and cut chicken platters for sharing."
-  },
-  "Döner": {
-    title: "Döner",
-    subtitle: "Classic döner kebabs and wraps."
-  },
-  "Wraps": {
-    title: "Wraps",
-    subtitle: "Freshly made wraps with premium fillings."
-  },
-  "Biryani": {
-    title: "Biryani",
-    subtitle: "Aromatic rice dishes with spices."
-  },
-  "Desserts": {
-    title: "Desserts",
-    subtitle: "Sweet treats and indulgent delights."
-  },
-  "Sajji": {
-    title: "Sajji",
-    subtitle: "Traditional Sajji specialties."
-  },
-  "Salads": {
-    title: "Salads",
-    subtitle: "Fresh, vibrant salads for every meal."
-  },
-  "Combos": {
-    title: "Combos",
-    subtitle: "Great value meal combinations."
-  },
-  "Kids Menu": {
-    title: "Kids Menu",
-    subtitle: "Tasty, kid-friendly meals and snacks."
-  },
-  "Shakes & Juices": {
-    title: "Shakes & Juices",
-    subtitle: "Refreshing shakes and juices."
-  },
-};
-
-// Helper component moved outside to avoid recreation on every render
-function CategoryHeading({ category }: { category: string }) {
-  if (!categoryHeadings[category]) return null;
-  return (
-    <div className="mb-6">
-      <h2 className="font-serif text-3xl">{categoryHeadings[category].title}</h2>
-      <p className="text-sm text-muted-foreground">{categoryHeadings[category].subtitle}</p>
-    </div>
-  );
-}
+import { CategoryHeading } from "@/components/menu/CategoryHeading";
+// Optional Seasonings removed: no longer used
 
 const isSideTab = (value: string): value is "carb" | "green" =>
   value === "carb" || value === "green";
 
-const parseInitialCategory = (search: string): string => {
+// Helper to parse initial category from URL
+function parseInitialCategory(search: string): string {
   const value = new URLSearchParams(search).get("category");
   if (!value) return "All";
-  return value in categoryHeadings ? value : "All";
-};
+  // categories is defined later, so hardcode here for initial parse
+  const validCategories = [
+    "All",
+    "Skewer Platter",
+    "Family Platters",
+    "Combos",
+    "Kids Menu",
+    "Salads",
+    "Desserts",
+    "Shakes & Juices",
+  ];
+  return validCategories.includes(value) ? value : "All";
+}
 
 const parseInitialSideTab = (search: string): "carb" | "green" => {
   const value = new URLSearchParams(search).get("side");
@@ -285,6 +204,11 @@ const FilterDrawer = ({
   );
 };
 
+// Type guard for MenuItem
+function isMenuItem(item: any): item is MenuItem {
+  return item && typeof item === "object" && "name" in item && "category" in item;
+}
+
 export default function MenuPage() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -302,7 +226,7 @@ export default function MenuPage() {
     // No tabs for salads
     const [activeCategory, setActiveCategory] = useState<string>(() => parseInitialCategory(location.search));
   // Modal stack: allows back navigation
-  const [modalStack, setModalStack] = useState<(MenuItem | SauceItem | null)[]>([]);
+  const [modalStack, setModalStack] = useState<(MenuItem | null)[]>([]);
 
   const selectedItem = modalStack.length > 0 ? modalStack[modalStack.length - 1] : null;
   // Allergen Info modal state
@@ -328,11 +252,10 @@ export default function MenuPage() {
           return;
         }
 
-        const payload = (await response.json()) as MenuApiResponse;
-        if (!isMenuItemArray(payload.data)) {
+        const payload = await response.json();
+        if (!Array.isArray(payload.data)) {
           return;
         }
-
         setRuntimeMenuItems(payload.data);
       } catch {
         // Keep local bundled data when API fetch fails.
@@ -650,9 +573,7 @@ export default function MenuPage() {
         <div className="p-6">
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-            {typeof item.price === 'number' && (
-              <span className="ml-2 text-lg font-semibold text-primary">{item.price.toFixed(2)}</span>
-            )}
+            {/* Price hidden intentionally */}
           </div>
           <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
           <div className="mt-3 text-xs text-primary uppercase tracking-wider">{item.subCategory}</div>
@@ -678,8 +599,7 @@ export default function MenuPage() {
           </div>
         )}
 
-        {/* Build Your Own — between the two sections */}
-        <BuildYourShake />
+        {/* Build Your Own Shake/Blend popup disabled as requested */}
 
         {/* Popular Fruit Blends */}
         {blendItems.length > 0 && (
@@ -751,9 +671,7 @@ export default function MenuPage() {
                                   })()}
                                 </div>
                               ) : (
-                                typeof item.price === 'number' && (
-                                  <div className="font-semibold text-primary text-left text-xs mt-1">Price: {item.price.toFixed(2)}</div>
-                                )
+                                null // Price hidden intentionally
                               ))}
                             </div>
                             {/* Show a short description for all menu items */}
@@ -822,9 +740,7 @@ export default function MenuPage() {
                                 <div className="p-6">
                                   <div className="flex items-start justify-between gap-2">
                                     <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{item.name}</h3>
-                                    {typeof item.price === 'number' && (
-                                      <span className="font-semibold text-lg text-primary ml-2">{item.price.toFixed(2)}</span>
-                                    )}
+                                    {/* Price hidden intentionally */}
                                   </div>
                                   <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{item.description}</p>
                                   <div className="mt-3 text-xs text-primary uppercase tracking-wider">
@@ -1084,7 +1000,7 @@ export default function MenuPage() {
                                           <button
                                             key={name}
                                             className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors w-full text-left"
-                                            onClick={() => setModalStack((stack) => [...stack, sauce])}
+                                            // onClick removed: only MenuItem can be pushed to modalStack
                                           >
                                             {sauce.image && (
                                               <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
@@ -1109,97 +1025,7 @@ export default function MenuPage() {
                                     </div>
                                   </div>
                                 )}
-                                {/* Seasonings Section */}
-                                {spices && spices.length > 0 && selectedItem && (() => {
-                                  // Show for Sides (not rice/naan), Skewer Platter
-                                  const cat = selectedItem.category;
-                                  const name = selectedItem.name.toLowerCase();
-                                  const isRice = name.includes("rice");
-                                  const isNaan = name.includes("naan");
-                                  const isColeslaw = name.includes("coleslaw");
-                                  // Show for all menu items that can support spices (not rice, naan, desserts, shakes)
-                                  const excludedCategories = ["Desserts", "Shakes & Juices", "Biryani", "Sajji", "Family Platters", "Skewer Platter"];
-                                                                  {/* Recommended Sauces for Family Platters */}
-                                                                  {selectedItem.category === "Family Platters" && (
-                                                                    <div className="mb-6">
-                                                                      <h4 className="font-serif text-sm mb-3 uppercase tracking-wider text-muted-foreground">
-                                                                        Recommended Sauces
-                                                                      </h4>
-                                                                      <div className="flex flex-wrap gap-2">
-                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Mint Chutney</span>
-                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Tamarind Sauce</span>
-                                                                        <span className="text-xs bg-primary/10 text-primary px-3 py-2 rounded-lg border border-primary/30 font-medium">Garlic Mayo</span>
-                                                                      </div>
-                                                                    </div>
-                                                                  )}
-                                  const showSeasonings =
-                                    !excludedCategories.includes(cat) &&
-                                    !isRice &&
-                                    !isNaan;
-                                  if (!showSeasonings) return null;
-                                  const selectedSeasonings = isColeslaw
-                                    ? spices.filter(s => ["Dried Parsley", "Dried Lemon Peel", "Lemon Zest"].includes(s.name))
-                                    : cat === "Sides"
-                                      ? name.includes("fries")
-                                        ? spices.filter(s => [
-                                            "Crushed Red Chilli", "Smoked Paprika", "Cracked Black Pepper", "Mustard Powder", "Dried Parsley"
-                                          ].includes(s.name))
-                                        : name.includes("corn")
-                                          ? spices.filter(s => [
-                                              "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Lemon Zest"
-                                            ].includes(s.name))
-                                          : name.includes("salad") || name.includes("vegetable")
-                                            ? spices.filter(s => ["Dried Parsley", "Lemon Zest", "Dried Lemon Peel"].includes(s.name))
-                                            : spices.filter(s => s.level <= 3).slice(0, 3)
-                                      : cat === "Skewer Platter"
-                                        ? spices.filter(s => [
-                                            "Crushed Red Chilli", "Korean Chilli Flakes", "Smoked Paprika", "Coriander Seed Powder", "Toasted Cumin", "Dried Parsley"
-                                          ].includes(s.name))
-                                        : cat === "Döner"
-                                          ? spices.filter(s => [
-                                              "Crushed Red Chilli", "Smoked Paprika", "Coriander Seed Powder", "Dried Parsley", "Mustard Powder"
-                                            ].includes(s.name))
-                                          : cat === "Wraps"
-                                            ? spices.filter(s => [
-                                                "Crushed Red Chilli", "Smoked Paprika", "Dried Parsley", "Mustard Powder", "Cracked Black Pepper"
-                                              ].includes(s.name))
-                                            : spices.filter(s => s.level >= 2 && s.level <= 6).slice(0, 3);
-                                  if (selectedSeasonings.length === 0) return null;
-                                  return (
-                                    <div className="mb-6">
-                                      <h4 className="font-serif text-sm mb-4 uppercase tracking-wider text-muted-foreground">
-                                        Optional Seasonings
-                                      </h4>
-                                      <div className="space-y-3">
-                                        {selectedSeasonings.map((seasoning) => (
-                                          <button
-                                            key={seasoning.name}
-                                            className="flex items-center gap-4 p-3 rounded-xl bg-secondary/50 border border-primary/10 hover:border-primary/30 transition-colors w-full text-left"
-                                            onClick={() => setModalStack((stack) => [...stack, seasoning])}
-                                          >
-                                            {seasoning.image && (
-                                              <div className="w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden bg-background shadow-sm">
-                                                <img
-                                                  src={seasoning.image}
-                                                  alt={seasoning.name}
-                                                  className="w-full h-full object-cover"
-                                                />
-                                              </div>
-                                            )}
-                                            <div className="flex-1 min-w-0">
-                                              <div className="flex items-center justify-between gap-2 mb-1">
-                                                <span className="text-sm font-semibold truncate">{seasoning.name}</span>
-                                              </div>
-                                              <p className="text-xs text-muted-foreground line-clamp-2">
-                                                {seasoning.description}
-                                              </p>
-                                            </div>
-                                          </button>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  );
-                                })()}
+                                {/* Seasonings/Spices logic removed */}
                                 {/* Customizations Section */}
                                 {Array.isArray(selectedItem.customizations) && selectedItem.customizations.length > 0 && (
                                   <div className="mb-6">
@@ -1221,84 +1047,18 @@ export default function MenuPage() {
                               </>
                             )}
                             {/* If SauceItem (sauce or seasoning), show details */}
-                            {isSauceItem(selectedItem) && (
-                              <>
-                                {/* Heat Level Dots/Flames */}
-                                <div className="mb-6">
-                                  <div
-                                    className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
-                                    style={{
-                                      background: 'linear-gradient(90deg, #1a2c16 0%, #23180f 10%, #23180f 90%, #3a1a1a 100%)',
-                                      boxShadow: '0 1px 8px 0 #1a1a1a inset',
-                                      width: '260px',
-                                      minWidth: '260px',
-                                      maxWidth: '260px',
-                                    }}
-                                  >
-                                    <span className="text-xs font-semibold text-white mr-2">Spice</span>
-                                    {Array.from({ length: 7 }).map((_, i) => {
-                                      let color = 'text-gray-300';
-                                      if (i === 0) color = i < selectedItem.level ? 'text-green-400' : 'text-gray-700';
-                                      else if (i === 1) color = i < selectedItem.level ? 'text-yellow-300' : 'text-gray-700';
-                                      else if (i >= 2 && i <= 5) color = i < selectedItem.level ? 'text-orange-400' : 'text-gray-700';
-                                      else if (i === 6) color = i < selectedItem.level ? 'text-red-500' : 'text-gray-700';
-                                      return (
-                                        <Flame
-                                          key={i}
-                                          size={18}
-                                          strokeWidth={1.5}
-                                          className={color + (i < selectedItem.level ? '' : ' opacity-40')}
-                                          fill={i < selectedItem.level ? 'currentColor' : 'none'}
-                                        />
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                                {/* Allergens Section */}
-                                {Array.isArray(selectedItem.allergens) && selectedItem.allergens.length > 0 && (
-                                  <div className="mb-6 pb-6 border-b border-primary/10">
-                                    <div
-                                      className="flex items-center rounded-xl border border-[#3a2a1a] px-3 py-1.5 gap-2 shadow-inner"
-                                      style={{
-                                        background: 'rgba(35, 24, 15, 0.35)',
-                                        width: '260px',
-                                        minWidth: '260px',
-                                        maxWidth: '260px',
-                                      }}
-                                    >
-                                      <span className="text-xs font-semibold text-white mr-2">
-                                        {selectedItem.allergens.length === 1 ? 'Allergen' : 'Allergens'}
-                                      </span>
-                                      {selectedItem.allergens.map((a) => {
-                                        const Icon = allergenIconMap[a]?.icon;
-                                        if (!Icon) return null;
-                                        return (
-                                          <span key={a} className="flex items-center text-xs">
-                                            <Icon size={18} className="text-red-500" />
-                                          </span>
-                                        );
-                                      })}
-                                    </div>
-                                  </div>
-                                )}
-                              </>
-                            )}
+                            {/* isSauceItem and level logic removed */}
                           </div>
                           {/* Footer with CTA */}
                           <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
-                            <button
+                            <a
                               className="btn-gold w-full py-3 text-base font-semibold"
-                              onClick={() => {
-                                if (isMenuItem(selectedItem)) {
-                                  // Navigate to /order with menu item pre-selected
-                                  navigate(`/order?item=menu-${selectedItem.id}`);
-                                } else {
-                                  navigate('/order');
-                                }
-                              }}
+                              href="https://order.toasttab.com/online/lazzat-mcvean?"
+                              target="_blank"
+                              rel="noopener noreferrer"
                             >
                               Order Now
-                            </button>
+                            </a>
                           </div>
                         </div>
                       </div>

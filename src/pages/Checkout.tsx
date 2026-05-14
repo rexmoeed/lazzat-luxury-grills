@@ -54,11 +54,12 @@ const Checkout = () => {
             <ul className="text-left mb-4">
               {orderItems.map((item) => (
                 <li key={item.id}>
-                  {item.name} <span className="text-muted-foreground">${item.price?.toFixed(2) ?? 'N/A'}</span>
+                  {item.name}
+                  {/* Price hidden intentionally */}
                 </li>
               ))}
             </ul>
-            <div className="font-bold text-lg mb-2">Total: ${total.toFixed(2)}</div>
+            {/* Total price hidden intentionally */}
           </div>
           <button className="btn-gold px-8 py-3 text-lg font-semibold rounded-full" onClick={handleCompleteOrder}>
             Complete Order

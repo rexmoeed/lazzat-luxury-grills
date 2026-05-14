@@ -161,12 +161,14 @@ export const HeroSlider = () => {
   className="flex flex-row items-center justify-center gap-4 animate-fade-up"
   style={{ animationDelay: "600ms" }}
 >
-  <Link
-    to="/order"
+  <a
+    href="https://order.toasttab.com/online/lazzat-mcvean?"
     className="btn-gold pulse-gold w-full sm:w-auto text-center"
+    target="_blank"
+    rel="noopener noreferrer"
   >
     Order Now
-  </Link>
+  </a>
 
   <Link
     to="/menu"

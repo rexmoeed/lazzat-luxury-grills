@@ -9,7 +9,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   {
     id: 1,
     name: "Chicken Breast Cubes",
-    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad. 1-Skewer 11.99 / 2-Skewers 15.99 / 3 Skewers 17.99",
+    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgChicken,
     category: "Skewer Platter",
     heatLevel: 2,
@@ -25,7 +25,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   {
     id: 2,
     name: "Lamb Cubes",
-    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad. 1-Skewer 13.99 / 2-Skewers 17.99 / 3 Skewers 25.99",
+    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgLamb,
     category: "Skewer Platter",
     heatLevel: 3,
@@ -41,7 +41,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   {
     id: 3,
     name: "Goat Cubes",
-    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad. 1-Skewer 13.99 / 2-Skewers 17.99 / 3 Skewers 23.99",
+    description: "Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgGoat,
     category: "Skewer Platter",
     heatLevel: 3,
@@ -56,8 +56,8 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   },
   {
     id: 4,
-    name: "Paneer Cubes",
-    description: "Indian Cheese Cubes. Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad. 1-Skewer 9.99 / 2-Skewers 13.99 / 3 Skewers 17.99",
+    name: "Signature Soft Cheese Platter",
+    description: "Indian Cheese Cubes. Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgPaneer,
     category: "Skewer Platter",
     heatLevel: 1,
@@ -73,7 +73,7 @@ export const proteinCubeSkewerPlatters: MenuItem[] = [
   {
     id: 5,
     name: "Soya Cubes",
-    description: "Plant-Based Cubes. Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad. 1-Skewer 9.99 / 2-Skewers 13.99 / 3 Skewers 17.99",
+    description: "Plant-Based Cubes. Variation: 100G|200G|300G Protein. Served with Seasoned Rice and Salad.",
     image: imgSoya,
     category: "Skewer Platter",
     heatLevel: 2,

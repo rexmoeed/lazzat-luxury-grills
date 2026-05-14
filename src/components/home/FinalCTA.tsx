@@ -32,12 +32,14 @@ export const FinalCTA = () => {
 
         {/* CTA Buttons */}
         <div className="flex flex-row items-center justify-center gap-4 animate-fade-up">
-          <Link
-            to="/order"
+          <a
+            href="https://order.toasttab.com/online/lazzat-mcvean?"
             className="btn-gold w-full pulse-gold sm:w-auto text-center animate-pulse-gold"
+            target="_blank"
+            rel="noopener noreferrer"
           >
             Order Now
-          </Link>
+          </a>
           <Link
             to="/locations"
             className="btn-outline-white w-full pulse-gold sm:w-auto text-center"

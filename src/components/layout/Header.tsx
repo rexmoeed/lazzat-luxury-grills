@@ -119,12 +119,14 @@ export const Header = () => {
               ))}
             </div>
 
-            <Link
-              to="/order"
+            <a
+              href="https://order.toasttab.com/online/lazzat-mcvean?"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden md:block btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-6"
             >
               Order
-            </Link>
+            </a>
 
             {/* Mobile Toggle */}
             <button
@@ -153,12 +155,14 @@ export const Header = () => {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                to="/order"
+              <a
+                href="https://order.toasttab.com/online/lazzat-mcvean?"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-8 mt-2"
               >
                 Order
-              </Link>
+              </a>
             </div>
           </div>
         </div>
