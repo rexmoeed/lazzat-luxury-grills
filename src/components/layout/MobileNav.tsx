@@ -7,7 +7,6 @@ const navItems = [
   { href: "/menu", icon: UtensilsCrossed, label: "Menu" },
   { href: "/flavours", icon: Flame, label: "Flavours" },
   { href: "/locations", icon: MapPin, label: "Locations" },
-  { href: "https://order.toasttab.com/online/lazzat-mcvean?", icon: ShoppingBag, label: "Order" },
 ];
 
 export const MobileNav = () => {
