@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import {
   quickFilters,
   dietaryFilters,
@@ -1050,14 +1051,12 @@ export default function MenuPage() {
                           </div>
                           {/* Footer with CTA */}
                           <div className="p-6 md:p-8 pt-4 border-t border-primary/10 bg-secondary/30">
-                            <a
+                            <Link
                               className="btn-gold w-full py-3 text-base font-semibold"
-                              href="https://order.toasttab.com/online/lazzat-mcvean?"
-                              target="_blank"
-                              rel="noopener noreferrer"
+                              to="/order"
                             >
                               Order Now
-                            </a>
+                            </Link>
                           </div>
                         </div>
                       </div>

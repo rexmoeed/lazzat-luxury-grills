@@ -87,6 +87,7 @@ export const Footer = () => {
               <Mail size={12} className="text-primary" />
               Email
             </a>
+            <a href="/order" className="footer-link">Order</a>
           </div>
         </div>
 

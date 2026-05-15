@@ -120,12 +120,10 @@ export const Header = () => {
             </div>
 
             <a
-              href="https://order.toasttab.com/online/lazzat-mcvean?"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden md:block btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-6"
+              href="/order"
+              className="hidden md:inline-flex items-center justify-center btn-gold text-sm tracking-widest uppercase leading-none !py-3 !px-7 min-w-[150px]"
             >
-              Order
+              Order Now
             </a>
 
             {/* Mobile Toggle */}
@@ -156,9 +154,7 @@ export const Header = () => {
                 </Link>
               ))}
               <a
-                href="https://order.toasttab.com/online/lazzat-mcvean?"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/order"
                 className="btn-gold pulse-gold text-sm tracking-widest uppercase py-3 px-8 mt-2"
               >
                 Order
