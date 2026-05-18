@@ -19,6 +19,7 @@ const Flavours = lazy(() => import("./pages/Flavours"));
 const Feedback = lazy(() => import("./pages/Feedback"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
+const Links = lazy(() => import("./pages/Links"));
 
 
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
@@ -51,6 +52,7 @@ const App = () => (
             <Route path="/thank-you" element={<ThankYou />} />
             <Route path="/flavours" element={<Flavours />} />
             <Route path="/feedback" element={<Feedback />} />
+            <Route path="/links" element={<Links />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogDetail />} />
             <Route path="/privacy" element={<Privacy />} />
