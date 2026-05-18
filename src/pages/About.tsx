@@ -15,7 +15,7 @@ const About = () => {
   const pageTitle = "About Us | Lazzat Grill & Shakes";
   const pageDescription = "Learn about the story, mission, and values of Lazzat Grill & Shakes. Discover our passion for uniting cultures through food in Brampton.";
   return (
-    <>
+    <Layout>
       <Helmet>
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
@@ -258,7 +258,7 @@ const About = () => {
           </div>
         </div>
       </section>
-    </>
+    </Layout>
   );
 };
 
