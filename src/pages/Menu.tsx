@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import {
   menuItemsFlat,
 } from "@/lib/menu-data";
-// ...removed sauces import
+import { sauces } from "@/lib/sauces-data";
 import type { MenuItem } from "@/lib/menu-types";
 import { findSauce } from "@/lib/find-sauce";
 
@@ -49,6 +49,7 @@ function parseInitialCategory(search: string): string {
     "Salads",
     "Desserts",
     "Drinks",
+    "Sauces",
   ];
   return validCategories.includes(value) ? value : "All";
 }
@@ -328,6 +329,16 @@ export default function MenuPage() {
     return defaultSidePairingsByCategory[item.category] || [];
   };
 
+  const sauceToMenuItem = (sauce: (typeof sauces)[number], idx: number): MenuItem => ({
+    id: 1000 + idx,
+    name: sauce.name,
+    description: sauce.description,
+    image: sauce.image || "/placeholder.svg",
+    category: "Sauces",
+    heatLevel: sauce.level,
+    allergens: sauce.allergens,
+  });
+
   const sideRecommendations = isMenuItem(selectedItem)
     ? getSidePairings(selectedItem)
     : [];
@@ -341,6 +352,7 @@ export default function MenuPage() {
     "Salads",
     "Desserts",
     "Drinks",
+    "Sauces",
   ];
 
   const clearAllFilters = () => {
@@ -409,7 +421,9 @@ export default function MenuPage() {
   }, [activeCategory, selectedFilters, effectiveMenuItems]);
 
 
-  return (
+
+
+    return (
       <>
         <Helmet>
           <title>{pageTitle}</title>
@@ -460,21 +474,21 @@ export default function MenuPage() {
               {/* Category Filters */}
               <div className="overflow-hidden md:block max-h-none">
                 <div className="flex flex-wrap gap-2 md:gap-3 items-center justify-between">
-                  <div className="w-full md:w-auto">
+                  <div className="w-full md:flex-1 md:min-w-0">
                     {/* SLIDER ROW (arrows aligned to this only) */}
                     <div className="relative">
-                      {/* LEFT ARROW — mobile only */}
+                      {/* LEFT ARROW */}
                       <button
                         type="button"
                         onClick={() => scrollCategories("left")}
-                        className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+                        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
                       >
                         <ChevronLeft size={16} />
                       </button>
                       {/* SCROLLABLE CATEGORY PILLS */}
                       <div
                         ref={categoryScrollRef}
-                        className="flex gap-2 md:gap-3 px-0 overflow-x-auto whitespace-nowrap scrollbar-hide"
+                        className="flex gap-2 md:gap-3 px-10 overflow-x-auto whitespace-nowrap scrollbar-hide"
                       >
                         {categories.map((category) => (
                           <button
@@ -491,11 +505,11 @@ export default function MenuPage() {
                           </button>
                         ))}
                       </div>
-                      {/* RIGHT ARROW — mobile only */}
+                      {/* RIGHT ARROW */}
                       <button
                         type="button"
                         onClick={() => scrollCategories("right")}
-                        className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
+                        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/90 border border-primary/20 rounded-full shadow"
                       >
                         <ChevronRight size={16} />
                       </button>
@@ -547,9 +561,48 @@ export default function MenuPage() {
                     <CategoryHeading category={activeCategory} />
                     {/* Sides Tabs and Filtering */}
                     {/* No tabs for salads */}
-                    {/* ...removed Sauces Filter Dropdown */}
-                    {/* Grid for Sides or other single category */}
-{activeCategory === "Drinks" ? (
+                    {/* Sauces tab custom rendering */}
+                    {activeCategory === "Sauces" ? (
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {sauces.map((sauce, idx) => (
+                          <div
+                            key={sauce.name}
+                            tabIndex={0}
+                            role="button"
+                            aria-label={`View details for ${sauce.name}`}
+                            onClick={() => setModalStack([sauceToMenuItem(sauce, idx)])}
+                            onKeyDown={(e) =>
+                              (e.key === "Enter" || e.key === " ") &&
+                              setModalStack([sauceToMenuItem(sauce, idx)])
+                            }
+                            className="card-luxury cursor-pointer group focus:outline-none focus:ring-2 focus:ring-primary"
+                          >
+                            {sauce.image && (
+                              <div className="relative aspect-[4/3] overflow-hidden">
+                                <img
+                                  src={sauce.image}
+                                  alt={sauce.name}
+                                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-background/80 to-transparent" />
+                              </div>
+                            )}
+                            <div className="p-6">
+                              <h3 className="font-serif text-xl group-hover:text-primary transition-colors">{sauce.name}</h3>
+                              <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{sauce.description}</p>
+                              <div className="mt-3 text-xs text-primary uppercase tracking-wider">
+                                Heat Level: {sauce.level}
+                              </div>
+                              {Array.isArray(sauce.allergens) && sauce.allergens.length > 0 && (
+                                <div className="mt-2 text-xs text-red-500">
+                                  Contains: {sauce.allergens.join(", ")}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : activeCategory === "Drinks" ? (
   (() => {
     const shakeCard = (item: MenuItem) => (
       <div
@@ -694,7 +747,7 @@ export default function MenuPage() {
                     </div>
                     )}
                     {/* No items found */}
-                    {filteredItems.length === 0 && (
+                    {activeCategory !== "Sauces" && filteredItems.length === 0 && (
                       <div className="text-center py-16">
                         <p className="text-muted-foreground">
                           No items found in this category.

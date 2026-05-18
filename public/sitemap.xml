@@ -6,12 +6,27 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://lazzat.ca/allergenguide</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://lazzat.ca/blog</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://lazzat.ca/blogdetail</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lazzat.ca/catering</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lazzat.ca/checkout</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -57,6 +72,11 @@
   </url>
   <url>
     <loc>https://lazzat.ca/terms</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://lazzat.ca/thankyou</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

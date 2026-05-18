@@ -2,8 +2,9 @@
 import { SauceItem } from "./menu-types";
 
 /* IMAGE IMPORTS */
-// Removed unused image imports
 import imgBBQ from "@/assets/bbq-sauce.jpeg";
+import imgMango from "@/assets/mango-sauce.jpg";
+import imgSecret from "@/assets/lazzat-secret-sauce.jpg";
 
 export const sauces: SauceItem[] = [
   {
@@ -14,5 +15,19 @@ export const sauces: SauceItem[] = [
 // ...existing code...
     image: imgBBQ,
     allergens: ["soy"], // soya sauce
+  },
+  {
+    name: "Mango Sauce",
+    level: 2,
+    description: "Fresh mango puree, mild spices, a touch of sweetness. Pairs well with grilled chicken and rice.",
+    image: imgMango,
+    allergens: [],
+  },
+  {
+    name: "Lazzat Secret Sauce",
+    level: 4,
+    description: "A house-made creamy sauce with a blend of spices. Perfect with any platter. (Ingredients secret)",
+    image: imgSecret,
+    allergens: [],
   },
 ];
