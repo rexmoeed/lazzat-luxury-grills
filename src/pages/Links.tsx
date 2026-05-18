@@ -123,7 +123,7 @@ export default function LinksPage() {
               </div>
 
               <a
-                href="https://share.google/gYfPEChSjyrDaxPIm"
+                href="https://g.page/r/CVwtJ3fTJ1K7EAI/review"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-6 w-full max-w-sm rounded-xl border border-primary/35 bg-black/35 backdrop-blur-sm px-5 py-4 text-center hover:bg-primary/20 hover:border-primary transition-all"
