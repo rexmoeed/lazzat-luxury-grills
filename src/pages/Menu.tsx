@@ -38,11 +38,12 @@ const isSideTab = (value: string): value is "carb" | "green" =>
 function parseInitialCategory(search: string): string {
   const value = new URLSearchParams(search).get("category");
   if (!value) return "All";
+  if (value === "Family Platters") return "Slow Roasted Chicken";
   // categories is defined later, so hardcode here for initial parse
   const validCategories = [
     "All",
     "Signature Protein Platters",
-    "Family Platters",
+    "Slow Roasted Chicken",
     "Combos",
     "Kids Menu",
     "Salads",
@@ -334,7 +335,7 @@ export default function MenuPage() {
   const categories = [
     "All",
     "Signature Protein Platters",
-    "Family Platters",
+    "Slow Roasted Chicken",
     "Combos",
     "Kids Menu",
     "Salads",

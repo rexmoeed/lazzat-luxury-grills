@@ -2,7 +2,7 @@
 import { MenuItem } from "./menu-types";
 
 import { proteinCubeSkewerPlatters } from "./protein-cube-skewer-platter-data.ts";
-import { familyPlatters } from "./family-platters-data";
+import { slowRoastedChicken } from "./slow-roasted-chicken-data";
 import { desserts } from "./desserts-data";
 import { shakesAndJuices } from "./shakes-juices-data";
 import { sidesItems } from "./sides-data";
@@ -12,7 +12,7 @@ import { combosMenu } from "./combos-menu-data";
 /* Grouped Menu data */
 export const menuItemsGrouped: Record<string, MenuItem[]> = {
   "Signature Protein Platters": proteinCubeSkewerPlatters,
-  "Family Platters": familyPlatters,
+  "Slow Roasted Chicken": slowRoastedChicken,
   "Combos": combosMenu,
   "Kids Menu": kidsMenu,
   "Desserts": Object.values(desserts).flat(),

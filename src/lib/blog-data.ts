@@ -435,7 +435,7 @@ Yes. Lazzat is available on DoorDash for delivery. And direct food pickup in Bra
 What are good dinner takeaway ideas from Lazzat?
 The platters are the most complete option for dinner. They include rice, salad, and sauce in one order. You can customise them and make your own meal along with your preferred sauce.
 Does Lazzat work well for family takeaway meals?
-It's well-suited to it. The portions are generous, and there's enough variety across the menu for different preferences. For families, they have their signature family platters with chicken and rice options that you can share.
+It's well-suited to it. The portions are generous, and there's enough variety across the menu for different preferences. For families, they have their signature slow roasted chicken platters with chicken and rice options that you can share.
 How do I find the best takeaway food near me in Brampton?
 If you want grilled food and customisable platters, Lazzat on McVean Drive is a consistent option. The full menu is at lazzat.ca, and delivery is available through DoorDash for anyone searching for fast takeaway meals or nearby takeaway in the area.`,
     author: "Lazzat Team",
