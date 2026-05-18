@@ -93,7 +93,7 @@ export const Header = () => {
         <div className="container-luxury">
           <nav className="flex items-center justify-between h-16 md:h-20 px-4 md:px-8">
             {/* Logo */}
-            <Link to="/" className="flex items-center h-12 md:h-16">
+            <Link to="/" className="flex items-center h-16 md:h-24">
               <img
                 src="/Lazzat logo 02.png"
                 alt="Lazzat Grill & Shakes"
