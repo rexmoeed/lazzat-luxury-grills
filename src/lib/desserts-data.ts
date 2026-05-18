@@ -10,8 +10,10 @@ import imgBiscoffTiramisu from "@/assets/biscoff-tiramisu.jpeg";
 import imgCoconutTiramisu from "@/assets/coconut-tiramisu.jpeg";
 import imgBlueberryTiramisu from "@/assets/blueberry-tiramisu.jpeg";
 import imgClassicTiramisu from "@/assets/classic-tiramisu.jpeg";
+import imgStrawberryCheesecake from "@/assets/strawberry-cheesecake.jpeg";
 
 export const desserts: Record<string, MenuItem[]> = {
+  // ============ CHEESECAKES ============
   Cheesecakes: [
     {
       id: 40,
@@ -58,7 +60,24 @@ export const desserts: Record<string, MenuItem[]> = {
       allergens: ["milk", "eggs", "gluten", "tree-nuts"],
       dietary: ["vegetarian"],
     },
+    {
+      id: 43,
+      name: "Strawberry Cheesecake",
+      description:
+        "Cheesecake topped with strawberry. 133g. Contains milk, egg, gluten.",
+      price: 5.99,
+      image: imgStrawberryCheesecake,
+      category: "Desserts",
+      subCategory: "Cheesecakes",
+      heatLevel: 0,
+      saucePairings: [],
+      customizations: [],
+      allergens: ["milk", "eggs", "gluten"],
+      dietary: ["vegetarian", "nut-free"],
+    },
   ],
+
+  // ============ TIRAMISU ============
   Tiramisu: [
     {
       id: 50,
